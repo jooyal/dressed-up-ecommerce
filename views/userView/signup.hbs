@@ -1,0 +1,53 @@
+
+    <section class="wrapper pt-3">
+		<div class="container">
+			<div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 text-center">
+				{{!-- <div class="logo">
+					<img src="images/logo.png" class="img-fluid" alt="logo">
+				</div> --}}
+				<form class="rounded bg-white shadow p-5" method="post" action="">
+					<h3 class="text-dark fw-bolder fs-4 mb-2">Create an Account</h3>
+
+					<div class="fw-normal text-muted mb-2">
+						Already have an account ? <a style="font-size: 15px;" href="/login" class="text-primary fw-bold text-decoration-none">Log in here</a>
+					</div>
+
+                    <div class="text-center text-muted text-uppercase mb-2">or</div>
+
+					{{!-- <a href="#" class="btn btn-light login_with w-100 mb-4">
+						<img src="images/google-icon.svg" class="img-fluid me-3">Sign in with Google</a>
+					</a>  --}}
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingFirstName" name="fullName" placeholder="name@example.com">
+                        <label for="floatingFirstName">Full Name</label>
+                    </div>
+					<div class="form-floating mb-3">
+						<input type="email" class="form-control" id="floatingInput" name="userEmail" placeholder="name@example.com">
+						<label for="floatingInput">Email address</label>
+					</div>
+					<div class="form-floating mb-3">
+						<input type="number" class="form-control" id="floatingInput" name="userMobile" placeholder="9876543210">
+						<label for="floatingInput">Mobile No.</label>
+					</div>
+					<div class="form-floating mb-3">
+						<input type="password" class="form-control" id="floatingPassword" name="userPassword" placeholder="Password">
+						<label for="floatingPassword">Password</label>
+					</div> 
+                    <div class="form-floating mb-3">
+						<input type="password" class="form-control" id="floatingPassword" name="confirmUserPassword" placeholder="Password">
+						<label for="floatingPassword">Confirm Password</label>
+						<span class="password-info mt-2">Use minimum 8 or more characters with a mix of letters, numbers & symbols.</span>
+					</div> 
+                    <div class="form-check d-flex align-items-center">
+                        <input class="form-check-input" name="termsCheckBox" type="checkbox" id="gridCheck" checked>
+                        <label class="form-check-label ms-2" for="gridCheck">
+                          I Agree to <a style="font-size: 15px;" href="#">Terms and conditions</a>.
+                        </label>
+                    </div>
+					<button type="submit" class="btn btn-primary submit_btn w-100 my-4">Continue</button> 
+				</form>
+			</div>
+		</div>
+	</section>
+
+

@@ -149,11 +149,6 @@ body {
 
 /* Home Page*/
 
-.logo-font {
-  font-family: 'great-vibes';
-  font-size: 2rem !important;
-  color: #088178;
-}
 
 #hero {
   
@@ -976,6 +971,14 @@ th:last-child {
 
 /* Start Media Query*/
 
+@media (max-width: 9999px) {
+  .logo-font {
+    font-family: 'great-vibes';
+    font-size: 2rem !important;
+    color: #088178;
+  }
+}
+
 @media (max-width: 799px) {
   .section-p1 {
     padding: 0px 40px;
@@ -1079,6 +1082,11 @@ th:last-child {
   }
   #form-details form {
     width: 50%;
+  }
+  .logo-font {
+    font-family: 'great-vibes';
+    font-size: 2rem !important;
+    color: #088178;
   }
 }
 
@@ -1239,6 +1247,11 @@ th:last-child {
   .to-top {
     padding-right: 18px;
   }
+  .logo-font {
+    font-family: 'great-vibes';
+    font-size: 1.4rem !important;
+    color: #088178;
+  }
 }
 
 .carousel-small img {
@@ -1247,3 +1260,63 @@ th:last-child {
   object-fit: cover;
   object-position: center;
 }
+
+/* Variables */
+:root{
+    --primary-font-family: 'whitney', sans-serif;
+    --light-white:#f5f8fa;
+    --gray:#5e6278;
+    --gray-1:#e3e3e3;
+}
+body{
+    font-family:var(--primary-font-family);
+    font-size: 14px;
+} 
+
+/* Main CSS */ 
+.wrapper{
+    padding:0 0 100px;
+    background-image:url("images/bg.png");
+    background-position:bottom center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-attachment: fixed;
+    min-height: 100%;
+}
+.wrapper .logo img{
+    max-width:40%;
+}
+.wrapper input{
+    background-color:var(--light-white);
+    border-color:var(--light-white);
+    color:var(--gray);
+}
+.wrapper input:focus{
+    box-shadow: none;
+}
+.wrapper .password-info{
+    font-size:10px;
+}
+.wrapper .submit_btn{
+    padding:10px 15px;
+    font-weight:500;
+}
+.wrapper .login_with{
+    padding:8px 15px;
+    font-size:13px;
+    font-weight: 500;
+    transition:0.3s ease-in-out;
+}
+.wrapper .submit_btn:focus,
+.wrapper .login_with:focus{
+    box-shadow: none;
+}
+.wrapper .login_with:hover{
+    background-color:var(--gray-1);
+    border-color:var(--gray-1);
+}
+.wrapper .login_with img{
+    max-width:7%;
+}
+        
+      
