@@ -1318,5 +1318,9 @@ body{
 .wrapper .login_with img{
     max-width:7%;
 }
-        
+
+
+.shopping-icon :hover {
+  color: #088178 !important;
+}
       
