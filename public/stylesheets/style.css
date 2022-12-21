@@ -6,6 +6,27 @@
 }
 
 @font-face {
+  font-family: 'whitney';
+  src: url('../fonts/whitneylight.otf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'whitney';
+  src:url('../fonts/whitneybold.otf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'whitney';
+  src: url('../fonts/whitneymedium.otf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'great-vibes';
   src: url('../fonts/great-vibes.regular.ttf') format('truetype');
   font-weight: normal;
@@ -1323,4 +1344,6 @@ body{
 .shopping-icon :hover {
   color: #088178 !important;
 }
-      
+ 
+/* checkout page(place-order) */
+

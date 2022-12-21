@@ -22,5 +22,29 @@ module.exports = {
     },
     viewProducts : (req,res)=> {
         res.render('userView/view-products',{user:true})
+    },
+    productDetails : (req,res)=> {
+        res.render('userView/product-details',{user:true})
+    },
+    getCart : (req,res)=>{
+        res.render('userView/cart',{user:true})
+    },
+    placeOrder : (req,res)=> {
+        res.render('userView/place-order',{user:true})
+    },
+    getOrderHistory : (req,res)=> {
+        res.render('userView/order-history',{user:true})
+    },
+    getOrderItems : (req,res)=> {
+        res.render('userView/order-history-items',{user:true})
+    },
+    getOrderConfirmed : (req,res)=> {
+        res.render('userView/order-confirmed',{user:true})
+    },
+    get404error : (req,res)=> {
+        res.render('404-error',{user:true})
+    },
+    getAccessDenied : (req,res)=> {
+        res.render('access-denied',{user:true})
     }
 }
