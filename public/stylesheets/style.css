@@ -1345,5 +1345,8 @@ body{
   color: #088178 !important;
 }
  
-/* checkout page(place-order) */
+lottie-player {
+  margin: 0 auto;
+  height: 10px;
+}
 
