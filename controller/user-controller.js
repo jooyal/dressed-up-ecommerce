@@ -46,5 +46,23 @@ module.exports = {
     },
     getAccessDenied : (req,res)=> {
         res.render('access-denied',{user:true})
+    },
+    getContactUs : (req,res)=> {
+        res.render('userView/contactus',{user:true})
+    },
+    getWishlist :(req,res)=> {
+        res.render('userView/wishlist',{user:true})
+    },
+    getUserHelp :(req,res)=> {
+        res.render('userView/user-help',{user:true})
+    },
+    getAboutUs :(req,res)=> {
+        res.render('userView/about-us',{user:true})
+    },
+    getDeliveryInformation :(req,res)=> {
+        res.render('userView/delivery-information',{user:true})
+    },
+    getPrivacyPolicy :(req,res)=> {
+        res.render('userView/privacy-policy',{user:true})
     }
 }
