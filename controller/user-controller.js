@@ -64,5 +64,11 @@ module.exports = {
     },
     getPrivacyPolicy :(req,res)=> {
         res.render('userView/privacy-policy',{user:true})
+    },
+    getUserProfile :(req,res)=> {
+        res.render('userView/user-profile',{user:true})
+    },
+    getChangeUserInfo :(req,res)=> {
+        res.render('userView/change-user-info',{user:true})
     }
 }

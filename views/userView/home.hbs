@@ -1,7 +1,14 @@
-    <!-- body starts -->
+      <!-- body starts -->
+
+    {{!-- Item added to cart popup --}}
+    <div class="alert-added-to-cart">
+      <div class="cart-alert-card">
+        <lottie-player class="align-items-center" src="/lottieFiles/greentick.json"  background="transparent"  speed=".9" style="width: 200px; height: 200px;" autoplay></lottie-player>
+        <h3 class="text-warning text-center">Item Added To Cart<br/>Successfully!</h3>
+      </div>
+    </div>
 
     <!-- carousel 1 -->
-    
     <section>
         <div id="carousel1" class="carousel slide carousel-small" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -67,8 +74,10 @@
         
         <div class="pro-container">
             
-            <div class="pro" onclick="window.location.href='sproduct.html'">
-                <img src="/productImages/f2.jpg" alt="">
+            <div class="pro">
+                <a href="/add-to-cart/{{this.id}}">
+                  <img src="/productImages/f2.jpg" alt="">
+                </a>
                 <div class="des">
                     <span>Adiddas</span>
                     <h5>Cotton shirts pure cotton</h5>
@@ -81,8 +90,8 @@
                     </div> --}}
                     <div class="d-flex ">
                     <h4>$78</h4>
-                    <a href="/add-to-wishlist/{{this.id}}" class="shopping-icon"><i style="margin-left: 135px; margin-top: 10px;" class="fa-solid fa-heart"></i></a>
-                    <a href="/add-to-cart/{{this.id}}" class="shopping-icon" ><i style="margin-left: 25px; margin-top: 10px; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
+                    <a href="/add-to-wishlist/{{this.id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
+                    <a href="/add-to-cart/{{this.id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
                     </div>
                 </div>
             </div>
@@ -134,8 +143,10 @@
         <p>Summer Collection</p>
         <div class="pro-container">
             
-            <div class="pro" onclick="window.location.href='sproduct.html'">
-                <img src="/productImages/f2.jpg" alt="">
+            <div class="pro">
+                <a href="/add-to-cart/{{this.id}}">
+                  <img src="/productImages/f2.jpg" alt="">
+                </a>
                 <div class="des">
                     <span>Adiddas</span>
                     <h5>Cotton shirts pure cotton</h5>
@@ -148,7 +159,8 @@
                     </div> --}}
                     <div class="d-flex ">
                     <h4>$78</h4>
-                    <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
+                    <a href="/add-to-wishlist/{{this.id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
+                    <a href="/add-to-cart/{{this.id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
                     </div>
                 </div>
             </div>
@@ -201,25 +213,27 @@
     <p>For Kids</p>
     <div class="pro-container">
         
-        <div class="pro" onclick="window.location.href='sproduct.html'">
+      <div class="pro">
+          <a href="/add-to-cart/{{this.id}}">
             <img src="/productImages/f2.jpg" alt="">
-            <div class="des">
-                <span>Adiddas</span>
-                <h5>Cotton shirts pure cotton</h5>
-                {{!-- <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div> --}}
-                <div class="d-flex ">
-                <h4>$78</h4>
-                <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                </div>
-            </div>
-        </div>
-        
+          </a>
+          <div class="des">
+              <span>Adiddas</span>
+              <h5>Cotton shirts pure cotton</h5>
+              {{!-- <div class="star">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+              </div> --}}
+              <div class="d-flex ">
+              <h4>$78</h4>
+              <a href="/add-to-wishlist/{{this.id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
+              <a href="/add-to-cart/{{this.id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
+              </div>
+          </div>
+      </div>       
         
     </div>
     <a href="" class="btn btn-success mt-3">Explore All Products</a>
@@ -278,8 +292,10 @@
         
         <div class="pro-container">
             
-            <div class="pro" onclick="window.location.href='sproduct.html'">
-                <img src="/productImages/f2.jpg" alt="">
+            <div class="pro">
+                <a href="/add-to-cart/{{this.id}}">
+                  <img src="/productImages/f2.jpg" alt="">
+                </a>
                 <div class="des">
                     <span>Adiddas</span>
                     <h5>Cotton shirts pure cotton</h5>
@@ -292,7 +308,8 @@
                     </div> --}}
                     <div class="d-flex ">
                     <h4>$78</h4>
-                    <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
+                    <a href="/add-to-wishlist/{{this.id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
+                    <a href="/add-to-cart/{{this.id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
                     </div>
                 </div>
             </div>

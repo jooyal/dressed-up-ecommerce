@@ -118,7 +118,7 @@ body {
   padding: 20px 80px;
   background: #d7d4f3;
   box-shadow: 0 15px 15px rgba(0, 0, 0, 0.06);
-  z-index: 999;
+  z-index: 99;
   position: sticky;
   top: 0;
   left: 0;
@@ -1350,3 +1350,73 @@ lottie-player {
   height: 10px;
 }
 
+.loader {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255, 238, 255);
+  z-index: 99991;
+  transition: opacity 0.75s, visibility 0.75s;
+}
+
+.loader-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+/* .loader::after {
+  width: 50px;
+  height: 50px;
+  border: 15px solid #dddddd;
+  border-radius: 50%;
+  border-top: #000000;
+  animation: loading 0.75s ease infinite;
+  z-index: 99992;
+}
+
+@keyframes loading {
+  from{
+    transform: rotate(0turn);
+  }
+  to{
+    transform: rotate(1turn);
+  }
+} */
+
+
+.alert-added-to-cart {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  z-index: 99992;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s ease-in-out;
+}
+
+.cart-alert-card {
+
+  width: 350px;
+  height: 350px;
+  border-radius: 25px;
+  border:solid,#04746c;
+  background-color: rgb(255, 242, 217);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-added-to-cart-appear {
+  opacity: 100 !important;
+}

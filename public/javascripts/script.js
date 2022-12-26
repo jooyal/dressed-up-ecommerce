@@ -24,3 +24,11 @@ if (close) {
 //         toTop.classList.remove("active");
 //     }
 // })
+
+let popupAppear = ()=>{
+    console.log('Working');
+    document.querySelector('.alert-added-to-cart').classList.add('alert-added-to-cart-appear');
+        setTimeout(()=>{
+            document.querySelector('.alert-added-to-cart').classList.remove('alert-added-to-cart-appear');
+        },1000)
+}
