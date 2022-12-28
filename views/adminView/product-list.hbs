@@ -1,0 +1,60 @@
+    <!-- cart items details-->
+    <div class="small-container">
+      <table>
+        {{#each products}}
+        <tr>
+          <th>Product Id</th>
+          <th>Product Category</th>
+          <th>Product Type</th>
+          <th>Product Name</th>
+          <th>Brand Name</th>
+          <th>Size / Quantity</th>
+          <th class="mx-3" style="width: 50px;">Price</th>
+          <th>Photos</th>
+          <th>Options</th>
+        </tr>
+        <tr>
+          <td>
+            <p>{{this._id}}</p>
+          </td>
+          <td>
+            {{this.productCategory}}
+          </td>
+          <td>
+            {{this.productType}}
+          </td>
+          <td>
+            {{this.productName}}
+          </td>
+          <td>
+            {{this.productBrand}}
+          </td>
+          <td>
+            S - {{this.productSizeSmall}}<br/>
+            M - {{this.productSizeMedium}}<br/>
+            L - {{this.productSizeLarge}}<br/>
+            XL - {{this.productSizeXLarge}}<br/>
+            XXL - {{this.productSizeXXLarge}}
+          </td>
+          <td> 
+            <p>&#8377; {{this.productPrice}}</p>
+          </td>
+          <td>
+            <img style="height: 75px; width: 50px;" class="py-1"  src="/productImages/{{this.image1}}" alt="">
+            <img style="height: 75px; width: 50px;" class="py-1" src="/productImages/{{this.image2}}" alt="">
+            <img style="height: 75px; width: 50px;" class="py-1" src="/productImages/{{this.image3}}" alt="">
+            <img style="height: 75px; width: 50px;" class="py-1" src="/productImages/{{this.image4}}" alt="">
+          </td>
+          <td>
+            <a href="/view-order-items/{{this._id}}" class="btn btn-warning my-3">Edit</a>
+            <a href="/view-order-items/{{this._id}}" class="btn btn-danger">Delete</a>
+          </td>
+        </tr>
+        {{/each}}
+      </table>
+
+    
+      </div>
+    </div>
+
+    

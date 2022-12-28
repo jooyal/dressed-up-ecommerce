@@ -1,11 +1,44 @@
 const db = require('./dbConnection/connection.js');
-const {} = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
 
 module.exports = {
-  addProduct:(product)=>{
+  addProduct : (product)=>{
+    return new Promise(async (resolve, reject) => {
+      product.top = (product.top==='true')
+      product.bottom = (product.bottom==='true')
+      //console.log(product)
+      let inserted = await db.get().collection(PRODUCT_COLLECTION).insertOne(product)
+      //console.log(inserted)
+      if(inserted) {
+        resolve(inserted.insertedId)
+      }else {
+        reject('Product was not added to Database, Error occured!')
+      }
+    })
+  },
+  addProductImage : (id,img1,img2,img3,img4)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+          let inserted = await db.get().collection(PRODUCT_COLLECTION).updateOne({_id:ObjectId(id)},
+        {$push:{image1:img1, image2:img2, image3:img3, image4:img4}})
+
+        if(inserted){
+          resolve(true)
+        }
+      } catch (error) {
+        reject (error)
+      }
+    })
+  },
+  fetchAllProducts : ()=>{
     return new Promise((resolve, reject) => {
-      product
+      try {
+        let products = db.get().collection(PRODUCT_COLLECTION).find().toArray()
+        resolve(products)
+      } catch (error) {
+        reject(error)
+      }
     })
   }
 }
