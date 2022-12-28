@@ -1,19 +1,19 @@
 <section id="prodetails" class="section-p1">
         <div class="single-pro-image">
-            <img src="/productImages/f2.jpg" width="100%" id="MainImg" alt="">
+            <img src="/productImages/f2.jpg" width="100%" id="mainImg" alt="">
 
             <div class="small-img-group pt-1">
                 <div class="small-img-col">
-                    <img src="/productImages/f2.jpg" width="100%" class="small-img" alt="">
+                    <img src="/productImages/f2.jpg" width="100%" id="smallImg1" class="small-img" alt="">
                 </div>
                 <div class="small-img-col">
-                    <img src="/productImages/f2.jpg" width="100%" class="small-img" alt="">
+                    <img src="/productImages/f3.webp" width="100%" id="smallImg2" class="small-img" alt="">
                 </div>
                 <div class="small-img-col">
-                    <img src="/productImages/f2.jpg" width="100%" class="small-img" alt="">
+                    <img src="/productImages/f2.jpg" width="100%" id="smallImg3" class="small-img" alt="">
                 </div>
                 <div class="small-img-col">
-                    <img src="/productImages/f2.jpg" width="100%" class="small-img" alt="">
+                    <img src="/productImages/f2.jpg" width="100%" id="smallImg4" class="small-img" alt="">
                 </div>
             </div>
         </div>
@@ -25,14 +25,14 @@
                 <h1>&#8377 139</h1> <span style="text-decoration: line-through;">MRP : 1390</span><span style="color: rgb(253, 39, 253);"> 90% OFF</span>
             </div>
             <span>Select Size</span><select name="size">
-                {{#if shirt}}
+                {{#if top}}
                 <option value="small">S</option>
                 <option value="medium">M</option>
                 <option value="large">L</option>
                 <option value="xlarge">XL</option>
                 <option value="xxlarge">XXL</option>
                 {{/if}}
-                {{#if pants}}
+                {{#if bottom}}
                 <option value="32">32</option>
                 <option value="34">34</option>
                 <option value="36">36</option>
@@ -60,79 +60,29 @@
     <section id="product1" class="section-p1 mt-5">
         <h2 style="font-weight: 300;">Products you may like</h2>
         <div class="pro-container">
-            <div class="pro" onclick="window.location.href='sproduct.html'">
-                <img src="/productImages/f2.jpg" alt="">
-                <div class="des">
-                    <span>Adiddas</span>
-                    <h5>Cotton shirts pure cotton</h5>
-                    {{!-- <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div> --}}
-                    <div class="d-flex ">
-                    <h4>$78</h4>
-                    <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="pro" onclick="window.location.href='sproduct.html'">
-                <img src="/productImages/f2.jpg" alt="">
-                <div class="des">
-                    <span>Adiddas</span>
-                    <h5>Cotton shirts pure cotton</h5>
-                    {{!-- <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div> --}}
-                    <div class="d-flex ">
-                    <h4>$78</h4>
-                    <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="pro" onclick="window.location.href='sproduct.html'">
-                <img src="/productImages/f2.jpg" alt="">
-                <div class="des">
-                    <span>Adiddas</span>
-                    <h5>Cotton shirts pure cotton</h5>
-                    {{!-- <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div> --}}
-                    <div class="d-flex ">
-                    <h4>$78</h4>
-                    <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="pro" onclick="window.location.href='sproduct.html'">
-                <img src="/productImages/f2.jpg" alt="">
-                <div class="des">
-                    <span>Adiddas</span>
-                    <h5>Cotton shirts pure cotton</h5>
-                    {{!-- <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div> --}}
-                    <div class="d-flex ">
-                    <h4>$78</h4>
-                    <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                    </div>
-                </div>
-            </div>
+            
             
         </div>
 
     </section>
+
+    <script>
+        imgMain = document.querySelector('#mainImg')
+        smallImg1 = document.querySelector('#smallImg1')
+        smallImg2 = document.querySelector('#smallImg2')
+        smallImg3 = document.querySelector('#smallImg3')
+        smallImg4 = document.querySelector('#smallImg4')
+
+        smallImg1.addEventListener('click',()=>{
+            imgMain.src = smallImg1.src
+        })
+        smallImg2.addEventListener('click',()=>{
+            imgMain.src = smallImg2.src
+        })
+        smallImg3.addEventListener('click',()=>{
+            imgMain.src = smallImg3.src
+        })
+        smallImg4.addEventListener('click',()=>{
+            imgMain.src = smallImg4.src
+        })
+    </script>

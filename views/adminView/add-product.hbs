@@ -1,0 +1,198 @@
+<h1 class="m-4 text-center">Add Product</h1>
+
+<form class="px-5 py-5" action="/admin/add-product" method="post" enctype="multipart/form-data" >
+  <div class="mb-3">
+    <label for="productName" class="form-label">Product Name</label>
+    <input type="text" class="form-control" name="productName" id="productName" aria-describedby="productNamelHelp" max="50" >
+    <div id="productNameHelp" class="form-text">Includes the model description, max 50 characters. Do not include the Brand Name here.</div>
+  </div>
+  <div class="mb-3">
+    <label for="productBrand" class="form-label">Product Brand</label>
+    <input type="text"  name="productBrand" class="form-control" id="productBrand" aria-describedby="productBrandHelp" max="15" >
+    <div id="productBrandHelp" class="form-text">Enter the Brand Name. Max 15 characters.</div>
+  </div>
+
+  <h6>Select The Product Category</h6>
+  <div class="mb-3 ms-3">
+    <label for="productCategoryMen" class="form-label">Men</label>
+    <input type="radio" name="productCategory" value="men" id="productCategoryMen">
+    <br/>
+    <label for="productCategoryWomen" class="form-label">Women</label>
+    <input type="radio" name="productCategory" value="women" id="productCategoryWomen">
+    <br/>
+    <label for="productCategoryAccessories" class="form-label">Accessories</label>
+    <input type="radio" name="productCategory" value="accessories" id="productCategoryAccessories">
+    <br/>
+    <label for="productCategoryLiving" class="form-label">Living</label>
+    <input type="radio" name="productCategory" value="living" id="productCategoryLiving">
+    </input>
+  </div>
+
+  <h6>Select The Product Type</h6>
+  <div class="mb-3 ms-3">
+    <label for="productTypeShirt" class="form-label">Shirt</label>
+    <input type="radio" name="productType" value="shirt" id="productTypeShirt">
+    <br/>
+    <label for="productTypePants" class="form-label">Pants</label>
+    <input type="radio" name="productType" value="pants" id="productTypePants">
+    <br/>
+    <label for="productTypeJeans" class="form-label">Jeans</label>
+    <input type="radio" name="productType" value="jeans" id="productTypeJeans">
+    <br/>
+    <label for="productTypeKurta" class="form-label">Kurta</label>
+    <input type="radio" name="productType" value="kurta" id="productTypeKurta">
+    </input>
+    <br/>
+    <label for="productType" class="form-label">Bag</label>
+    <input type="radio" name="productType" value="bag" id="productTypeBag">
+    </input>
+    <br/>
+    <label for="productTypeWallet" class="form-label">Wallet</label>
+    <input type="radio" name="productType" value="wallet" id="productTypeWallet">
+    </input>
+    <br/>
+    <label for="productTypeJewellery" class="form-label">Jewellery</label>
+    <input type="radio" name="productType" value="jewellery" id="productTypeJewellery">
+    </input>
+  </div>
+
+  <div id="typeConfirmButton">
+      <i onclick="selectSize()" class="btn btn-warning">Select Size</i> <br>  <br>
+      <div id="type-confirm-error" class="text-danger"></div>
+  </div>
+
+  <div class="mb-3 item-display-none" id="sizeSelectionForTop">
+    <p>Select The Product Sizes Available & Their Quantity.</p>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productSizeSmall" class="pt-2">Small</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeSmall" id="productSizeSmall" min="0">
+    </div>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productSizeMedium" class="pt-2">Medium</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeMedium" id="productSizeMedium" min="0">
+    </div>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productSizeLarge" class="pt-2">Large</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeLarge" id="productSizeLarge" min="0">
+    </div>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productSizeXLarge" class="pt-2">X Large</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeXLarge" id="productSizeXLarge" min="0">
+    </div>
+    <div class="d-flex flex-row ms-5 mb-2">
+        <label for="productSizeXXLarge" class="pt-2">XX Large</label>
+        <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeXXLarge" id="productSizeXXLarge" min="0">
+    </div>
+    <input id="topValue" type="text" name="top" value="false" hidden>
+  </div> 
+
+  <div class="mb-3 item-display-none" id="sizeSelectionForBottom">
+    <p>Select The Product Sizes Available & Their Quantity.</p>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productSize32" class="pt-2">32</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize32" id="productSize32" min="0">
+    </div>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productSize34" class="pt-2">34</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize34" id="productSize34" min="0">
+    </div>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productSize36" class="pt-2">36</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize36" id="productSize36" min="0">
+    </div>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productSize38" class="pt-2">38</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize38" id="productSize38" min="0">
+    </div>
+    <div class="d-flex flex-row ms-5 mb-2">
+        <label for="productSize40" class="pt-2">40</label>
+        <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize40" id="productSize40" min="0">
+    </div>
+    <input id="bottomValue" type="text" name="bottom" value="false" hidden>
+  </div>
+
+  <div class="mb-3 item-display-none" id="sizeSelectionForOther">
+    <p>Select The Product Sizes Available & Their Quantity.</p>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productFreeSize" class="pt-2">FreeSize</label>
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productFreeSize" id="productFreeSize" min="0">
+    </div>
+  </div>
+
+  <div class="mb-3 item-display-none" id="priceAndPhoto">
+    <p>Enter the product price</p>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productPrice" class="pt-2">&#8377;</label>
+      <input type="number" style="width: 100px;" class="form-control ms-3" name="productPrice" id="productPrice" min="0" >
+    </div>
+
+    <p>Upload the product photos</p>
+    <label for="productImage1">Image 1</label>
+    <input type="file" name="productImage1"  onchange="viewImage(event,'productImage1')" id="productImage1" accept="image/png, image/webp" size="" />
+    <br/>
+    <label for="productImage2">Image 2</label>
+    <input type="file" name="productImage2"  onchange="viewImage(event,'productImage2')" id="productImage2" accept="image/png, image/webp" size="" />
+    <br/>
+    <label for="productImage3">Image 3</label>
+    <input type="file" name="productImage3"  onchange="viewImage(event,'productImage3')" id="productImage3" accept="image/png, image/webp" size="" />
+    <br/>
+    <label for="productImage4">Image 4</label>
+    <input type="file" name="productImage4"  onchange="viewImage(event,'productImage4')" id="productImage4" accept="image/png, image/webp" size="" /> <!--"application/pdf"-->
+
+    <div id="imageDisplay" class="d-flex flex-row">
+      <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage1Show" src="" alt=""><label>Image-1</label></div>
+      <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage2Show" src="" alt=""><label>Image-2</label></div>
+      <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage3Show" src="" alt=""><label>Image-3</label></div>
+      <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage4Show" src="" alt=""><label>Image-4</label></div>
+    </div>
+   </div>
+
+  <button style="display: none;" type="submit" id="product-submit" class="btn btn-primary mt-5">Submit</button>
+</form>
+
+<script>
+  function selectSize() {
+    categoryMen = document.querySelector('#productCategoryMen').checked
+    categoryWomen = document.querySelector('#productCategoryWomen').checked
+    categoryAccessories = document.querySelector('#productCategoryAccessories').checked
+    categoryLiving = document.querySelector('#productCategoryLiving').checked
+
+    selectedShirt = document.querySelector('#productTypeShirt').checked
+    selectedPants = document.querySelector('#productTypePants').checked
+    selectedJeans = document.querySelector('#productTypeJeans').checked
+    selectedKurta = document.querySelector('#productTypeKurta').checked
+    selectedBag = document.querySelector('#productTypeBag').checked
+    selectedWallet = document.querySelector('#productTypeWallet').checked
+    selectedJewellery = document.querySelector('#productTypeJewellery').checked
+
+    if((categoryAccessories && categoryLiving && categoryWomen && categoryMen) === false) {
+      document.querySelector('#type-confirm-error').innerHTML = 'Please select a product type and category to continue.'
+    }
+
+    if(selectedShirt===true || selectedKurta===true) {
+      document.querySelector('#sizeSelectionForTop').classList.add('item-display-true')
+      document.querySelector('#typeConfirmButton').classList.add('item-display-none')
+      document.querySelector('#priceAndPhoto').classList.add('item-display-true')
+      document.querySelector('#product-submit').classList.add('item-display-true')
+      document.querySelector('#topValue').value = true
+
+    } else if(selectedPants===true || selectedJeans===true) {
+      document.querySelector('#sizeSelectionForBottom').classList.add('item-display-true')
+      document.querySelector('#typeConfirmButton').classList.add('item-display-none')
+      document.querySelector('#priceAndPhoto').classList.add('item-display-true')
+      document.querySelector('#product-submit').classList.add('item-display-true')
+      document.querySelector('#bottomValue').value = true
+
+    } else if(selectedBag===true || selectedWallet===true || selectedJewellery===true) {
+      document.querySelector('#sizeSelectionForOther').classList.add('item-display-true')
+      document.querySelector('#typeConfirmButton').classList.add('item-display-none')
+      document.querySelector('#priceAndPhoto').classList.add('item-display-true')
+      document.querySelector('#product-submit').classList.add('item-display-true')
+
+    }
+  }
+
+  let viewImage = (event,id)=>{
+        document.getElementById(id+'Show').src = URL.createObjectURL(event.target.files[0])
+    }
+</script>

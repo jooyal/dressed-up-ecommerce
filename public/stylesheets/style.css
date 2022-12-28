@@ -1420,3 +1420,11 @@ lottie-player {
 .alert-added-to-cart-appear {
   opacity: 100 !important;
 }
+
+.item-display-none{
+  display: none;
+}
+
+.item-display-true {
+  display: block !important;
+}

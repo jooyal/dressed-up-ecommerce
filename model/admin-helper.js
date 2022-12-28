@@ -1,8 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const { getAdminHome } = require('../controller/admin-controller')
+const db = require('./dbConnection/connection.js');
+const {} = require('./dbConnection/collection.js')
+const {ObjectId} = require('mongodb')
 
-/* GET home page. */
-router.get('/',getAdminHome)
-
-module.exports = router;
+module.exports = {
+  addProduct:(product)=>{
+    return new Promise((resolve, reject) => {
+      product
+    })
+  }
+}

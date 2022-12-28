@@ -4,9 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var adminRouter = require('./model/admin-helper');
-var userRouter = require('./model/user-helper');
+var adminRouter = require('./route/admin');
+var userRouter = require('./route/user');
 var hbs = require('express-handlebars')
+var fileUpload = require('express-fileupload');
 const db = require('./model/dbConnection/connection.js')
 
 var app = express();
@@ -18,9 +19,11 @@ app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'layout',layoutsDir:(__
 
 app.use(logger('dev'));
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUpload());
 app.use(function(req, res, next) { 
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');//to clear cache, to avoid going to cached login page after hitting back button after logging in.
   next(); 
