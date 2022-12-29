@@ -1,21 +1,32 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+    
+    <h2 class="my-5 text-center">Product List</h2>
+    
+    
     <!-- cart items details-->
-    <div class="small-container">
-      <table>
-        {{#each products}}
+    <div class="mx-4 my-2 mb-5">
+      <table id="productListTable">
+        <thead>
         <tr>
           <th>Product Id</th>
           <th>Product Category</th>
           <th>Product Type</th>
           <th>Product Name</th>
           <th>Brand Name</th>
+          <th>Color</th>
           <th>Size / Quantity</th>
-          <th class="mx-3" style="width: 50px;">Price</th>
+          <th >Price</th>
           <th>Photos</th>
           <th>Options</th>
         </tr>
+        </thead>
+        <tbody>
+          {{#each products}}
         <tr>
-          <td>
-            <p>{{this._id}}</p>
+          <td style="font-size: .75em;">
+            {{this._id}}
           </td>
           <td>
             {{this.productCategory}}
@@ -30,11 +41,37 @@
             {{this.productBrand}}
           </td>
           <td>
+            {{this.productColor}}
+          </td>
+          <td>
+            
+            {{!-- <script>
+                //if(topValue.innerHTML==true){
+                  //document.getElementById('topSize').classList.add('item-display-true')
+                //}else if(bottomValue.innerHTML==true){
+                  //document.getElementById('bottomSize').classList.add('item-display-true')
+                //}else if(topValue.innerHTML==false && bottomValue.innerHTML==false){
+                  //document.getElementById('freeSize').classList.add('item-display-true')
+                }
+              </script> --}}
+            <div id="topSize">
             S - {{this.productSizeSmall}}<br/>
             M - {{this.productSizeMedium}}<br/>
             L - {{this.productSizeLarge}}<br/>
             XL - {{this.productSizeXLarge}}<br/>
             XXL - {{this.productSizeXXLarge}}
+            </div>
+            <div id="bottomSize">
+              32 - {{this.productSize32}}<br/>
+              34 - {{this.productSize34}}<br/>
+              36 - {{this.productSize36}}<br/>
+              38 - {{this.productSize38}}<br/>
+              40 - {{this.productSize40}}
+            </div>
+            <div id="freeSize">
+              Free Size - {{this.productFreeSize}}
+            </div>
+    
           </td>
           <td> 
             <p>&#8377; {{this.productPrice}}</p>
@@ -51,10 +88,24 @@
           </td>
         </tr>
         {{/each}}
+        </tbody>
       </table>
 
     
       </div>
     </div>
 
-    
+    <script>
+      $(document).ready( function () {
+      $('#productListTable').DataTable();
+      } );
+
+      let topSize = document.querySelector('#topSize')
+      let bottomSize = document.querySelector('#bottomSize')
+      let freeSize = document.querySelector('#freeSize')
+
+      let topValue = document.querySelector('#topValue')
+      let bottomValue = document.querySelector('#bottomValue')
+
+      
+    </script>

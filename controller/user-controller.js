@@ -1,4 +1,4 @@
-
+const { fetchHomeProducts } = require('../model/user-helper.js')
 
 
 module.exports = {
@@ -17,7 +17,12 @@ module.exports = {
     otpLoginVerification : (req,res)=> {
         res.render('userView/OTP-login-verification',{title:'Enter the One Time Password sent to your account.'})
     },
-    userHome : (req,res)=> {
+    userHome : async(req,res)=> {
+        let menProducts = await fetchHomeProducts('men')
+        let womenProducts = await fetchHomeProducts('women')
+        let HomeProducts = await fetchHomeProducts('home')
+
+        // console.log(menProducts);
         res.render('userView/home', { title: 'Explore Latest Styles For You and your Home - Dressed Up', user:true});
     },
     viewProducts : (req,res)=> {

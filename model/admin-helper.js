@@ -7,6 +7,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       product.top = (product.top==='true')
       product.bottom = (product.bottom==='true')
+      product.date = new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})
       //console.log(product)
       let inserted = await db.get().collection(PRODUCT_COLLECTION).insertOne(product)
       //console.log(inserted)

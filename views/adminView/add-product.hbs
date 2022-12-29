@@ -65,23 +65,23 @@
     <p>Select The Product Sizes Available & Their Quantity.</p>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productSizeSmall" class="pt-2">Small</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeSmall" id="productSizeSmall" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeSmall" id="productSizeSmall" placeholder="Qty" min="0">
     </div>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productSizeMedium" class="pt-2">Medium</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeMedium" id="productSizeMedium" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeMedium" id="productSizeMedium" placeholder="Qty" min="0">
     </div>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productSizeLarge" class="pt-2">Large</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeLarge" id="productSizeLarge" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeLarge" id="productSizeLarge" placeholder="Qty" min="0">
     </div>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productSizeXLarge" class="pt-2">X Large</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeXLarge" id="productSizeXLarge" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeXLarge" id="productSizeXLarge" placeholder="Qty" min="0">
     </div>
     <div class="d-flex flex-row ms-5 mb-2">
         <label for="productSizeXXLarge" class="pt-2">XX Large</label>
-        <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeXXLarge" id="productSizeXXLarge" min="0">
+        <input type="number" style="width: 75px;" class="form-control ms-3" name="productSizeXXLarge" id="productSizeXXLarge" placeholder="Qty" min="0">
     </div>
     <input id="topValue" type="text" name="top" value="false" hidden>
   </div> 
@@ -90,23 +90,23 @@
     <p>Select The Product Sizes Available & Their Quantity.</p>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productSize32" class="pt-2">32</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize32" id="productSize32" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize32" id="productSize32" placeholder="Qty" min="0">
     </div>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productSize34" class="pt-2">34</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize34" id="productSize34" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize34" id="productSize34" placeholder="Qty" min="0">
     </div>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productSize36" class="pt-2">36</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize36" id="productSize36" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize36" id="productSize36" placeholder="Qty" min="0">
     </div>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productSize38" class="pt-2">38</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize38" id="productSize38" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize38" id="productSize38" placeholder="Qty" min="0">
     </div>
     <div class="d-flex flex-row ms-5 mb-2">
         <label for="productSize40" class="pt-2">40</label>
-        <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize40" id="productSize40" min="0">
+        <input type="number" style="width: 75px;" class="form-control ms-3" name="productSize40" id="productSize40" placeholder="Qty" min="0">
     </div>
     <input id="bottomValue" type="text" name="bottom" value="false" hidden>
   </div>
@@ -115,8 +115,37 @@
     <p>Select The Product Sizes Available & Their Quantity.</p>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productFreeSize" class="pt-2">FreeSize</label>
-      <input type="number" style="width: 75px;" class="form-control ms-3" name="productFreeSize" id="productFreeSize" min="0">
+      <input type="number" style="width: 75px;" class="form-control ms-3" name="productFreeSize" id="productFreeSize" placeholder="Qty" min="0">
     </div>
+  </div>
+
+
+  <div class="mb-3 item-display-none" id="productColorSelection">
+  <h6>Select the Product Color</h6>
+    <label for="productColorBlack" class="ms-2 form-label">Black</label>
+    <input type="radio" name="productColor" value="black" id="productColorBlack">
+    <br/>
+    <label for="productColorWhite" class="ms-2 form-label">White</label>
+    <input type="radio" name="productColor" value="white" id="productColorWhite">
+    <br/>
+    <label for="productColorGreen" class="ms-2 form-label">Green</label>
+    <input type="radio" name="productColor" value="green" id="productColorGreen">
+    <br/>
+    <label for="productColorYellow" class="ms-2 form-label">Yellow</label>
+    <input type="radio" name="productColor" value="yellow" id="productColorYellow">
+    <br/>
+    <label for="productColorOrange" class="ms-2 form-label">Orange</label>
+    <input type="radio" name="productColor" value="orange" id="productColorOrange">
+    <br/>
+    <label for="productColorRed" class="ms-2 form-label">Red</label>
+    <input type="radio" name="productColor" value="red" id="productColorRed">
+    <br/>
+    <label for="productColorBlue" class="ms-2 form-label">Blue</label>
+    <input type="radio" name="productColor" value="blue" id="productColorBlue">
+    <br/>
+    <label for="productColorPink" class="ms-2 form-label">Pink</label>
+    <input type="radio" name="productColor" value="pink" id="productColorPink">
+    <br/>
   </div>
 
   <div class="mb-3 item-display-none" id="priceAndPhoto">
@@ -128,16 +157,16 @@
 
     <p>Upload the product photos</p>
     <label for="productImage1">Image 1</label>
-    <input type="file" name="productImage1"  onchange="viewImage(event,'productImage1')" id="productImage1" accept="image/png, image/webp, image/jpg" size="" />
+    <input type="file" name="productImage1"  onchange="viewImage(event,'productImage1')" id="productImage1" accept="image/png, image/webp, image/jpeg" size="" />
     <br/>
     <label for="productImage2">Image 2</label>
-    <input type="file" name="productImage2"  onchange="viewImage(event,'productImage2')" id="productImage2" accept="image/png, image/webp, image/jpg" size="" />
+    <input type="file" name="productImage2"  onchange="viewImage(event,'productImage2')" id="productImage2" accept="image/png, image/webp, image/jpeg" size="" />
     <br/>
     <label for="productImage3">Image 3</label>
-    <input type="file" name="productImage3"  onchange="viewImage(event,'productImage3')" id="productImage3" accept="image/png, image/webp, image/jpg" size="" />
+    <input type="file" name="productImage3"  onchange="viewImage(event,'productImage3')" id="productImage3" accept="image/png, image/webp, image/jpeg" size="" />
     <br/>
     <label for="productImage4">Image 4</label>
-    <input type="file" name="productImage4"  onchange="viewImage(event,'productImage4')" id="productImage4" accept="image/png, image/webp, image/jpg" size="" /> <!--"application/pdf"-->
+    <input type="file" name="productImage4"  onchange="viewImage(event,'productImage4')" id="productImage4" accept="image/png, image/webp, image/jpeg" size="" /> <!--"application/pdf"-->
 
     <div id="imageDisplay" class="d-flex flex-row">
       <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage1Show" src="" alt=""><label>Image-1</label></div>
@@ -172,6 +201,7 @@
     if(selectedShirt===true || selectedKurta===true) {
       document.querySelector('#sizeSelectionForTop').classList.add('item-display-true')
       document.querySelector('#typeConfirmButton').classList.add('item-display-none')
+      document.querySelector('#productColorSelection').classList.add('item-display-true')
       document.querySelector('#priceAndPhoto').classList.add('item-display-true')
       document.querySelector('#product-submit').classList.add('item-display-true')
       document.querySelector('#topValue').value = true
@@ -179,6 +209,7 @@
     } else if(selectedPants===true || selectedJeans===true) {
       document.querySelector('#sizeSelectionForBottom').classList.add('item-display-true')
       document.querySelector('#typeConfirmButton').classList.add('item-display-none')
+      document.querySelector('#productColorSelection').classList.add('item-display-true')
       document.querySelector('#priceAndPhoto').classList.add('item-display-true')
       document.querySelector('#product-submit').classList.add('item-display-true')
       document.querySelector('#bottomValue').value = true
@@ -186,6 +217,7 @@
     } else if(selectedBag===true || selectedWallet===true || selectedJewellery===true) {
       document.querySelector('#sizeSelectionForOther').classList.add('item-display-true')
       document.querySelector('#typeConfirmButton').classList.add('item-display-none')
+      document.querySelector('#productColorSelection').classList.add('item-display-true')
       document.querySelector('#priceAndPhoto').classList.add('item-display-true')
       document.querySelector('#product-submit').classList.add('item-display-true')
 
@@ -193,6 +225,6 @@
   }
 
   let viewImage = (event,id)=>{
-        document.getElementById(id+'Show').src = URL.createObjectURL(event.target.files[0])
+      document.getElementById(id+'Show').src = URL.createObjectURL(event.target.files[0])
     }
 </script>
