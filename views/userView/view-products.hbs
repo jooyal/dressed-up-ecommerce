@@ -1,5 +1,7 @@
+{{!-- Left Part --}}
+
 <section id="product1" class=" d-flex">
-        <div style=" position:fixed; z-index: 9; width:18%;">
+    <div style=" position:fixed; z-index: 9; width:18%;">
             <div class="accordion" id="accordionExample">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
@@ -100,228 +102,35 @@
                 </div>
             </div>
             </div>
-        </div>
+    </div>
+
+{{!-- Right Part --}}
 
         <div style="position: relative; margin-left: 20%; width: 80%;">
             <div class="pro-container">
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
+            {{#each allProducts}}
+            <div class="pro">
+                <a href="/product-details/{{this._id}}">
+                  <img src="/productImages/{{this.image1}}" alt="">
+                </a>
+                <div class="des">
+                    <span>{{this.productBrand}}</span>
+                    <h5>{{this.productName}}</h5>
+                    {{!-- <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div> --}}
+                    <div class="d-flex ">
+                    <h4>&#8377; {{this.productPrice}}</h4>
+                    <a href="/add-to-wishlist/{{this._id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
+                    <a href="/add-to-cart/{{this._id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
                     </div>
                 </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="pro" onclick="window.location.href='sproduct.html'">
-                    <img src="/productImages/f2.jpg" alt="">
-                    <div class="des">
-                        <span>Adiddas</span>
-                        <h5>Cotton shirts pure cotton</h5>
-                        {{!-- <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div> --}}
-                        <div class="d-flex ">
-                        <h4>$78</h4>
-                        <a href="#" class=" shopping-icon" ><i style="margin-left: 170px; margin-top: 10px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
-                        </div>
-                    </div>
-                </div>
-
+            </div>
+            {{/each}}
             </div>
         </div>
-
-    </section>
+</section>

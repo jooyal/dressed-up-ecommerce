@@ -1,4 +1,4 @@
-const { fetchHomeProducts } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType } = require('../model/user-helper.js')
 
 
 module.exports = {
@@ -18,18 +18,92 @@ module.exports = {
         res.render('userView/OTP-login-verification',{title:'Enter the One Time Password sent to your account.'})
     },
     userHome : async(req,res)=> {
-        let menProducts = await fetchHomeProducts('men')
-        let womenProducts = await fetchHomeProducts('women')
-        let HomeProducts = await fetchHomeProducts('home')
+        try {
+            let menProducts = await fetchHomeProducts('men')
+            let womenProducts = await fetchHomeProducts('women')
+            let livingProducts = await fetchHomeProducts('living')
 
-        // console.log(menProducts);
-        res.render('userView/home', { title: 'Explore Latest Styles For You and your Home - Dressed Up', user:true});
+            // console.log(menProducts);
+            res.render('userView/home', { title: 'Explore Latest Styles For You and your Home - Dressed Up', user:true, menProducts, womenProducts, livingProducts });
+        } catch (error) {
+            console.log(error);
+        }
+        
+    },
+    getMenProducts : async (req,res)=> {
+        try {
+            let allProducts = await fetchCategoryProducts('men')
+            res.render('userView/view-products',{user:true, allProducts})
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    getWomenProducts : async (req,res)=>{
+        try {
+            let allProducts = await fetchCategoryProducts('women')
+            res.render('userView/view-products',{user:true, allProducts})
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    getLivingProducts : async (req,res)=>{
+        try {
+            let allProducts = await fetchCategoryProducts('living')
+            res.render('userView/view-products',{user:true, allProducts})
+        } catch (error) {
+            console.log(error);
+        }
     },
     viewProducts : (req,res)=> {
         res.render('userView/view-products',{user:true})
     },
-    productDetails : (req,res)=> {
-        res.render('userView/product-details',{user:true})
+    productDetails : async (req,res)=> {
+        try {
+            //to get product details to be shown in product-details page
+            let proDetails = await fetchProductDetails(req.params.id)
+            //to see the category and type of the current product, searched using _id.
+            let recItem = await fetchRecCategoryAndType(req.params.id)
+
+            let recommendType //to assign new recommended type based on current product being shown
+
+            if (recItem.category=='men'){
+                if (recItem.type=='shirt'){
+                    recommendType = 'jeans'
+                }else if(recItem.type=='jeans'){
+                    recommendType = 'shirt'
+                }else if(recItem.type=='pants'){
+                    recommendType = 'shirt'
+                }else if(recItem.type=='wallet'){
+                    recommendType = 'bag'
+                }else if(recItem.type=='bag'){
+                    recommendType = 'wallet'
+                }
+            }else if (recItem.category=='women'){
+                if(recItem.type=='shirt'){
+                    recommendType = 'pants'
+                }else if(recItem.type=='pants'){
+                    recommendType = 'jeans'
+                }else if(recItem.type=='jeans'){
+                    recommendType = 'shirt'
+                }else if(recItem.type=='kurta'){
+                    recommendType = 'jewellery'
+                }else if(recItem.type=='jewellery'){
+                    recommendType = 'bag'
+                }else if(recItem.type=='bag'){
+                    recommendType = 'kurta'
+                }
+            }else if (recItem.category=='living'){
+                recommendType = 'bag'
+                recItem.category = 'men'//as there is no bags listed in living category, we take the bags listed in men.
+            }
+
+
+            //to get items to be shown in recommend products below the page
+            let bottomProducts = await fetchProDetailPageRecommend(recItem.category,recommendType)
+            res.render('userView/product-details',{user:true, proDetails, bottomProducts })
+        } catch (error) {
+            console.log(error);
+        }
     },
     getCart : (req,res)=>{
         res.render('userView/cart',{user:true})

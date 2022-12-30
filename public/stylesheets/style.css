@@ -251,7 +251,7 @@ body {
 }
 
 #feature .fe-box {
-  width: 180px;
+  width: 260px;
   height: 250px;
   text-align: center;
   padding: 25px 15px;
@@ -275,7 +275,7 @@ body {
   line-height: 1;
   border-radius: 4px;
   color: #fff;
-  background-color: #79b5bd;
+  background-color: #bfa9f0;
 }
 
 #feature .fe-box:nth-child(2) h6 {

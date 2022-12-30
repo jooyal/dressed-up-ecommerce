@@ -54,6 +54,10 @@
     <label for="productTypeJewellery" class="form-label">Jewellery</label>
     <input type="radio" name="productType" value="jewellery" id="productTypeJewellery">
     </input>
+    <br/>
+    <label for="productTypeOther" class="form-label">Other</label>
+    <input type="radio" name="productType" value="other" id="productTypeOther">
+    </input>
   </div>
 
   <div id="typeConfirmButton">
@@ -116,6 +120,7 @@
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productFreeSize" class="pt-2">FreeSize</label>
       <input type="number" style="width: 75px;" class="form-control ms-3" name="productFreeSize" id="productFreeSize" placeholder="Qty" min="0">
+      <input id="freeSizeValue" type="text" name="nosize" value="false" hidden>
     </div>
   </div>
 
@@ -149,7 +154,13 @@
   </div>
 
   <div class="mb-3 item-display-none" id="priceAndPhoto">
-    <p>Enter the product price</p>
+    <p>Enter the product MRP (Before Discount)</p>
+    <div class="d-flex flex-row ms-5 mb-2">
+      <label for="productMRP" class="pt-2">&#8377;</label>
+      <input type="number" style="width: 100px;" class="form-control ms-3" name="productMRP" id="productMRP" min="0" >
+    </div>
+
+    <p class="text-success">Enter the product price (After Discount)</p>
     <div class="d-flex flex-row ms-5 mb-2">
       <label for="productPrice" class="pt-2">&#8377;</label>
       <input type="number" style="width: 100px;" class="form-control ms-3" name="productPrice" id="productPrice" min="0" >
@@ -193,6 +204,7 @@
     selectedBag = document.querySelector('#productTypeBag').checked
     selectedWallet = document.querySelector('#productTypeWallet').checked
     selectedJewellery = document.querySelector('#productTypeJewellery').checked
+    selectedOther = document.querySelector('#productTypeOther').checked
 
     if((categoryAccessories && categoryLiving && categoryWomen && categoryMen) === false) {
       document.querySelector('#type-confirm-error').innerHTML = 'Please select a product type and category to continue.'
@@ -214,13 +226,13 @@
       document.querySelector('#product-submit').classList.add('item-display-true')
       document.querySelector('#bottomValue').value = true
 
-    } else if(selectedBag===true || selectedWallet===true || selectedJewellery===true) {
+    } else if(selectedBag===true || selectedWallet===true || selectedJewellery===true || selectedOther===true) {
       document.querySelector('#sizeSelectionForOther').classList.add('item-display-true')
       document.querySelector('#typeConfirmButton').classList.add('item-display-none')
       document.querySelector('#productColorSelection').classList.add('item-display-true')
       document.querySelector('#priceAndPhoto').classList.add('item-display-true')
       document.querySelector('#product-submit').classList.add('item-display-true')
-
+      document.querySelector('#freeSizeValue').value = true
     }
   }
 

@@ -1,66 +1,82 @@
 <section id="prodetails" class="section-p1">
         <div class="single-pro-image">
-            <img src="/productImages/f2.jpg" width="100%" id="mainImg" alt="">
+            <img src="/productImages/{{proDetails.image1}}" width="100%" id="mainImg" alt="">
 
             <div class="small-img-group pt-1">
                 <div class="small-img-col">
-                    <img src="/productImages/f2.jpg" width="100%" id="smallImg1" class="small-img" alt="">
+                    <img src="/productImages/{{proDetails.image1}}" width="100%" id="smallImg1" class="small-img" alt="">
                 </div>
                 <div class="small-img-col">
-                    <img src="/productImages/f3.webp" width="100%" id="smallImg2" class="small-img" alt="">
+                    <img src="/productImages/{{proDetails.image2}}" width="100%" id="smallImg2" class="small-img" alt="">
                 </div>
                 <div class="small-img-col">
-                    <img src="/productImages/f2.jpg" width="100%" id="smallImg3" class="small-img" alt="">
+                    <img src="/productImages/{{proDetails.image3}}" width="100%" id="smallImg3" class="small-img" alt="">
                 </div>
                 <div class="small-img-col">
-                    <img src="/productImages/f2.jpg" width="100%" id="smallImg4" class="small-img" alt="">
+                    <img src="/productImages/{{proDetails.image4}}" width="100%" id="smallImg4" class="small-img" alt="">
                 </div>
             </div>
         </div>
 
         <div class="single-pro-details">
-            <h3 style="font-weight: bold;">ADDIDAS</h3>
-            <p style="font-size: x-large; font-weight: 300;">Men Teal & Orange Colourblocked Hooded Sweatshirt</p>
+            <h3 style="font-weight: bold;">{{proDetails.productBrand}}</h3>
+            <p style="font-size: x-large; font-weight: 300;">{{proDetails.productName}}</p>
             <div class="py-3">
-                <h1>&#8377 139</h1> <span style="text-decoration: line-through;">MRP : 1390</span><span style="color: rgb(253, 39, 253);"> 90% OFF</span>
+                <h1>&#8377 {{proDetails.productPrice}}</h1> <span style="text-decoration: line-through;">MRP : {{proDetails.productMRP}}</span><span style="color: rgb(253, 39, 253);"> {{proDetails.productDiscount}}% OFF</span>
             </div>
             <span>Select Size</span><select name="size">
-                {{#if top}}
+                {{#if proDetails.top}}
                 <option value="small">S</option>
                 <option value="medium">M</option>
                 <option value="large">L</option>
                 <option value="xlarge">XL</option>
                 <option value="xxlarge">XXL</option>
                 {{/if}}
-                {{#if bottom}}
+                {{#if proDetails.bottom}}
                 <option value="32">32</option>
                 <option value="34">34</option>
                 <option value="36">36</option>
                 <option value="38">38</option>
                 <option value="40">40</option>
-                {{else}}
+                {{/if}}
+                {{#if proDetails.nosize}}
                 <option value="freesize">freesize</option>
                 {{/if}}
 
             </select>
             <input type="number" min="1" max="5" value="1">
-            <button class="normal">Add to cart</button>
+            <button class="normal" href="/add-to-cart/{{proDetails._id}}">Add to cart</button>
             <h4 style="font-weight: 300;">Product Details</h4>
-            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quis molestiae
-                 ullam distinctio minus quisquam cupiditate vero in laboriosam optio. ipsum dolor sit amet consectetur adipisicing elit. 
-                Magni quo a dignissimos quasi, incidunt quae. Omnis 
-                sapiente beatae totam asperiores nemo laudantium 
-                 doloribus autem culpa enim.
-                 ipsum dolor sit, amet consectetur
-                 adipisicing elit. Maiores non tempore tempora laborum
-                 accusantium fuga, est et laboriosam. Et, tempore.</span>
+            <span>{{proDetails.productDescription}}</span>
         </div>
     </section>
 
     <section id="product1" class="section-p1 mt-5">
         <h2 style="font-weight: 300;">Products you may like</h2>
         <div class="pro-container">
-            
+            {{#each bottomProducts}}
+            <div class="pro">
+                <a href="/product-details/{{this._id}}">
+                  <img src="/productImages/{{this.image1}}" alt="">
+                </a>
+                <div class="des">
+                    <span>{{this.productBrand}}</span>
+                    <h5>{{this.productName}}</h5>
+                    {{!-- <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div> --}}
+                    <div class="d-flex ">
+                    <h4>&#8377; {{this.productPrice}}</h4>
+                    <a href="/add-to-wishlist/{{this._id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
+                    <a href="/add-to-cart/{{this._id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
             
         </div>
 
