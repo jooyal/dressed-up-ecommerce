@@ -2,8 +2,18 @@ const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProD
 
 
 module.exports = {
-    landingPage : (req, res, next)=> {
-        res.render('userView/landing-page', { title: 'Explore Latest Styles For You and your Home - Dressed Up'});
+    landingPage : async (req, res, next)=> {
+        try {
+            let title = 'Explore Latest Styles For You and your Home - Dressed Up'
+
+            let menProducts = await fetchHomeProducts('men')
+            let womenProducts = await fetchHomeProducts('women')
+            let livingProducts = await fetchHomeProducts('living')
+
+            res.render('userView/landing-page', {title, menProducts, womenProducts, livingProducts, user:false, admin:false});
+        } catch (error) {
+            
+        }
     },
     signupPage : (req,res)=> {
         res.render('userView/signup', {title: 'Create an account | Dressed Up'})
@@ -19,12 +29,14 @@ module.exports = {
     },
     userHome : async(req,res)=> {
         try {
+            let title = 'Explore Latest Styles For You and your Home - Dressed Up'
+
             let menProducts = await fetchHomeProducts('men')
             let womenProducts = await fetchHomeProducts('women')
             let livingProducts = await fetchHomeProducts('living')
 
             // console.log(menProducts);
-            res.render('userView/home', { title: 'Explore Latest Styles For You and your Home - Dressed Up', user:true, menProducts, womenProducts, livingProducts });
+            res.render('userView/home', { title, user:true, menProducts, womenProducts, livingProducts });
         } catch (error) {
             console.log(error);
         }
@@ -97,10 +109,10 @@ module.exports = {
                 recItem.category = 'men'//as there is no bags listed in living category, we take the bags listed in men.
             }
 
-
             //to get items to be shown in recommend products below the page
             let bottomProducts = await fetchProDetailPageRecommend(recItem.category,recommendType)
             res.render('userView/product-details',{user:true, proDetails, bottomProducts })
+            
         } catch (error) {
             console.log(error);
         }
