@@ -1,43 +1,85 @@
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doLogIn } = require('../model/user-helper.js')
 
 
 module.exports = {
-    landingPage : async (req, res, next)=> {
-        try {
-            let title = 'Explore Latest Styles For You and your Home - Dressed Up'
+  landingPage : async (req, res, next)=> {
+    try {
+        let title = 'Explore Latest Styles For You and your Home - Dressed Up'
 
-            let menProducts = await fetchHomeProducts('men')
-            let womenProducts = await fetchHomeProducts('women')
-            let livingProducts = await fetchHomeProducts('living')
+        let menProducts = await fetchHomeProducts('men')
+        let womenProducts = await fetchHomeProducts('women')
+        let livingProducts = await fetchHomeProducts('living')
 
-            res.render('userView/landing-page', {title, menProducts, womenProducts, livingProducts, user:false, admin:false});
-        } catch (error) {
-            
-        }
-    },
+        res.render('userView/landing-page', {title, menProducts, womenProducts, livingProducts, user:false, admin:false});
+    } catch (error) {
+        
+    }
+  },
+
     signupPage : (req,res)=> {
-
         let title = 'Create an account | Dressed Up'
+
         res.render('userView/signup', {title})
     },
-    postSignUp : ()=> {
+
+    postSignUp : async (req,res)=> {
+        let signupError
+        let title = 'Create an account | Dressed Up'
+
+        if(!req.body.fullName || !req.body.userEmail || !req.body.userMobile 
+            || !req.body.userPassword || !req.body.confirmUserPassword){
+
+            signupError = 'Please enter all the required details to continue'
+            res.render('userView/signup', {title, signupError})
+            signupError = null;
+
+        } else if(req.body.userPassword !== req.body.confirmUserPassword){
+
+            signupError = 'Passwords does not match!'
+            res.render('userView/signup', {title, signupError})
+            signupError = null;
+
+        } else if((req.body.userMobile).length !== 10){
+
+            signupError = 'Mobile number is not valid! Enter a valid number. Hint: Only enter the 10 digit number, no need for country code.'
+            res.render('userView/signup', {title, signupError})
+            signupError = null;
+
+        } else if(req.body.termsCheckBox !== 'on'){
+
+            signupError = 'Please agree to the privacy policy to continue'
+            res.render('userView/signup', {title, signupError})
+            signupError = null;
+
+        } else{
+            try {
+                let response = await doLogIn(req.body)
+
+            } catch (error) {
+                
+            }
+        }
 
     },
+
     loginPage : (req,res)=> {
 
         let title = 'Log In to your Account | Dressed Up'
         res.render('userView/login',{title})
     },
+
     otpLogin : (req,res)=> {
 
         let title = 'Log In to your Account | Dressed Up'
         res.render('userView/OTP-login',{title})
     },
+
     otpLoginVerification : (req,res)=> {
 
         let title = 'Enter the One Time Password sent to your account.'
         res.render('userView/OTP-login-verification',{title})
     },
+
     userHome : async(req,res)=> {
         try {
             let title = 'Explore Latest Styles For You and your Home - Dressed Up'
@@ -46,13 +88,13 @@ module.exports = {
             let womenProducts = await fetchHomeProducts('women')
             let livingProducts = await fetchHomeProducts('living')
 
-            // console.log(menProducts);
             res.render('userView/home', { title, user:true, menProducts, womenProducts, livingProducts });
         } catch (error) {
             console.log(error);
         }
         
     },
+
     getMenProducts : async (req,res)=> {
         try {
             let title = 'Explore All Products | Men'
@@ -62,6 +104,7 @@ module.exports = {
             console.log(error);
         }
     },
+
     getWomenProducts : async (req,res)=>{
         try {
             let title = 'Explore All Products | Women'
@@ -71,6 +114,7 @@ module.exports = {
             console.log(error);
         }
     },
+
     getLivingProducts : async (req,res)=>{
         try {
             let title = 'Explore All Products | Living & Home'
@@ -80,17 +124,19 @@ module.exports = {
             console.log(error);
         }
     },
+
     // viewProducts : async (req,res)=> {
 
     //     let title = 'Explore All Products | Dressed-Up'
     //     let allProducts = await 
     //     res.render('userView/view-products',{user:true, title})
     // },
+
     productDetails : async (req,res)=> {
         try {
-            //to get product details to be shown in product-details page
+                //to get product details to be shown in product-details page
             let proDetails = await fetchProductDetails(req.params.id)
-            //to see the category and type of the current product, searched using _id.
+                //to see the category and type of the current product, searched using _id.
             let recItem = await fetchRecCategoryAndType(req.params.id)
 
             let recommendType //to assign new recommended type based on current product being shown
@@ -127,7 +173,7 @@ module.exports = {
             }
 
             let title = 'View Product Details | '+ proDetails.productName + ' | Dressed Up'
-            //to get items to be shown in recommend products below the page
+                //to get items to be shown in recommend products below the page
             let bottomProducts = await fetchProDetailPageRecommend(recItem.category,recommendType)
             res.render('userView/product-details',{user:true, proDetails, bottomProducts, title})
 

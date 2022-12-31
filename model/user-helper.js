@@ -76,5 +76,11 @@ module.exports = {
         reject(error)
       }
     })
+  },
+
+  doLogIn : ()=>{
+    return new Promise((resolve, reject) => {
+      
+    })
   }
 }

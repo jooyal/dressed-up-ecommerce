@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp } = require('../controller/user-controller')
 
 /* GET home page. */
 router.get('/',landingPage);
 router.get('/home',userHome)
 router.get('/signup', signupPage)
-router.post('/signup',)
+router.post('/signup',postSignUp)
 router.get('/login',loginPage)
 router.get('/OTP-login',otpLogin)
 router.get('/OTP-login-verification',otpLoginVerification)
@@ -19,7 +19,7 @@ router.get('/view-order-items',getOrderItems)
 router.get('/order-confirmed',getOrderConfirmed)
 router.get('/404-error',get404error)
 router.get('/access-denied',getAccessDenied)
-router.get('/sign-out')
+router.get('/signout')
 router.get('/wishlist',getWishlist)
 router.get('/contact-us',getContactUs)
 router.get('/delivery-information',getDeliveryInformation)
