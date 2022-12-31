@@ -6,10 +6,11 @@ const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userH
 router.get('/',landingPage);
 router.get('/home',userHome)
 router.get('/signup', signupPage)
+router.post('/signup',)
 router.get('/login',loginPage)
 router.get('/OTP-login',otpLogin)
 router.get('/OTP-login-verification',otpLoginVerification)
-router.get('/view-products',viewProducts)
+// router.get('/view-products',viewProducts) all products cant be viewed, only category view is enabled.
 router.get('/product-details/:id',productDetails)
 router.get('/cart',getCart)
 router.get('/place-order',placeOrder)

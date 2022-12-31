@@ -16,16 +16,27 @@ module.exports = {
         }
     },
     signupPage : (req,res)=> {
-        res.render('userView/signup', {title: 'Create an account | Dressed Up'})
+
+        let title = 'Create an account | Dressed Up'
+        res.render('userView/signup', {title})
+    },
+    postSignUp : ()=> {
+
     },
     loginPage : (req,res)=> {
-        res.render('userView/login',{title:'Log In to your Account | Dressed Up'})
+
+        let title = 'Log In to your Account | Dressed Up'
+        res.render('userView/login',{title})
     },
     otpLogin : (req,res)=> {
-        res.render('userView/OTP-login',{title:'Log In to your Account | Dressed Up'})
+
+        let title = 'Log In to your Account | Dressed Up'
+        res.render('userView/OTP-login',{title})
     },
     otpLoginVerification : (req,res)=> {
-        res.render('userView/OTP-login-verification',{title:'Enter the One Time Password sent to your account.'})
+
+        let title = 'Enter the One Time Password sent to your account.'
+        res.render('userView/OTP-login-verification',{title})
     },
     userHome : async(req,res)=> {
         try {
@@ -44,31 +55,37 @@ module.exports = {
     },
     getMenProducts : async (req,res)=> {
         try {
+            let title = 'Explore All Products | Men'
             let allProducts = await fetchCategoryProducts('men')
-            res.render('userView/view-products',{user:true, allProducts})
+            res.render('userView/view-products',{user:true, allProducts, title})
         } catch (error) {
             console.log(error);
         }
     },
     getWomenProducts : async (req,res)=>{
         try {
+            let title = 'Explore All Products | Women'
             let allProducts = await fetchCategoryProducts('women')
-            res.render('userView/view-products',{user:true, allProducts})
+            res.render('userView/view-products',{user:true, allProducts, title})
         } catch (error) {
             console.log(error);
         }
     },
     getLivingProducts : async (req,res)=>{
         try {
+            let title = 'Explore All Products | Living & Home'
             let allProducts = await fetchCategoryProducts('living')
-            res.render('userView/view-products',{user:true, allProducts})
+            res.render('userView/view-products',{user:true, allProducts, title})
         } catch (error) {
             console.log(error);
         }
     },
-    viewProducts : (req,res)=> {
-        res.render('userView/view-products',{user:true})
-    },
+    // viewProducts : async (req,res)=> {
+
+    //     let title = 'Explore All Products | Dressed-Up'
+    //     let allProducts = await 
+    //     res.render('userView/view-products',{user:true, title})
+    // },
     productDetails : async (req,res)=> {
         try {
             //to get product details to be shown in product-details page
@@ -109,10 +126,11 @@ module.exports = {
                 recItem.category = 'men'//as there is no bags listed in living category, we take the bags listed in men.
             }
 
+            let title = 'View Product Details | '+ proDetails.productName + ' | Dressed Up'
             //to get items to be shown in recommend products below the page
             let bottomProducts = await fetchProDetailPageRecommend(recItem.category,recommendType)
-            res.render('userView/product-details',{user:true, proDetails, bottomProducts })
-            
+            res.render('userView/product-details',{user:true, proDetails, bottomProducts, title})
+
         } catch (error) {
             console.log(error);
         }

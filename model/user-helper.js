@@ -4,19 +4,28 @@ const {ObjectId} = require('mongodb')
 
 module.exports = {
   fetchHomeProducts : (category)=>{
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
       try {
-        let homeProducts = db.get().collection(PRODUCT_COLLECTION).find({productCategory:category}).limit(4).toArray()
+        let homeProducts = await db.get().collection(PRODUCT_COLLECTION).find({productCategory:category}).limit(4).toArray()
         resolve(homeProducts)
       } catch (error) {
         reject(error)
       }
     })
   },
+  // fetchAllCategoryProducts : ()=>{
+  //   return new Promise((resolve, reject) => {
+  //     try {
+        
+  //     } catch (error) {
+        
+  //     }
+  //   })
+  // },
   fetchCategoryProducts : (category)=>{
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
       try {
-        let allProducts = db.get().collection(PRODUCT_COLLECTION).find({productCategory : category}).toArray()
+        let allProducts = await db.get().collection(PRODUCT_COLLECTION).find({productCategory : category}).toArray()
         resolve(allProducts)
       } catch (error) {
         reject (error)
