@@ -1,6 +1,7 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION } = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION, USER_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
+const bcrypt = require('bcrypt');
 
 module.exports = {
   fetchHomeProducts : (category)=>{
@@ -68,9 +69,9 @@ module.exports = {
     })
   },
   fetchProDetailPageRecommend : (category,type)=>{
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
-        let items = db.get().collection(PRODUCT_COLLECTION).find({productCategory : category, productType : type}).limit(4).toArray()
+        let items = await db.get().collection(PRODUCT_COLLECTION).find({productCategory : category, productType : type}).limit(4).toArray()
         resolve(items)
       } catch (error) {
         reject(error)
@@ -78,9 +79,52 @@ module.exports = {
     })
   },
 
-  doLogIn : ()=>{
-    return new Promise((resolve, reject) => {
-      
+  checkIfUserBlocked : (userId)=>{
+    return new Promise( async(resolve, reject) => {
+      let status = await db.get().collection(USER_COLLECTION).findOne({_id:ObjectId(userId)})
+
+      if(status.isBlocked){
+        reject()
+      }else {
+        resolve()
+      }
+    })
+  },
+
+  doSignUp : (data)=>{
+    return new Promise(async (resolve, reject) => {
+      try {
+
+        let checkIfEmailExist = await db.get().collection(USER_COLLECTION).findOne({userEmail:data.userEmail})
+        let checkIfMobileExist = await db.get().collection(USER_COLLECTION).findOne({userMobile:data.userMobile})
+        //console.log(checkIfEmailExist);
+
+        if(checkIfEmailExist !== null) {
+          resolve({status:false, error: 'Account already exist with this email, do sign-in instead.'})
+        }else if(checkIfMobileExist !== null) {
+          resolve({status:false, error: 'Account already exist with this Mobile Number, do sign-in instead.'})
+        }else {
+          data.userMobile = '+91' + data.userMobile
+          data.isBlocked = false
+          data.userAddress = null;
+          delete data.confirmUserPassword
+          delete data.termsCheckBox
+          //hashing password
+          data.userPassword = await bcrypt.hash(data.userPassword,10);
+
+          let response = await db.get().collection(USER_COLLECTION).insertOne(data)
+
+          if(response) {
+            //console.log(response.insertedId);
+            resolve({status:true, userId:response.insertedId})
+          }else {
+            reject({error: "Couldn't insert data to Database"})
+          }
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
     })
   }
 }

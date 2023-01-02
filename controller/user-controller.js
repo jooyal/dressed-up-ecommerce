@@ -1,4 +1,6 @@
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doLogIn } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doLogIn, doSignUp } = require('../model/user-helper.js')
+
+const { userTokenGenerator } = require('../utilities/token')
 
 
 module.exports = {
@@ -12,7 +14,7 @@ module.exports = {
 
         res.render('userView/landing-page', {title, menProducts, womenProducts, livingProducts, user:false, admin:false});
     } catch (error) {
-        
+        console.log(errror);
     }
   },
 
@@ -51,12 +53,37 @@ module.exports = {
             res.render('userView/signup', {title, signupError})
             signupError = null;
 
+        } else if((req.body.userPassword).length < 8){
+
+            signupError = 'Please enter a password that is atleast 8 characters long.'
+            res.render('userView/signup', {title, signupError})
+            signupError = null;
+
         } else{
             try {
-                let response = await doLogIn(req.body)
+                let response = await doSignUp(req.body)
+                
+                    if(response.status === false){
+
+                        signupError = response.error
+                        res.render('userView/signup', {title, signupError})
+                        signupError = null;
+
+                    }else {
+                        const payload = {
+                            userId: response.userId,
+                            userName: req.body.fullName,
+                            userEmail: req.body.userEmail,
+                            userMobile: req.body.userMobile
+                          }
+                        
+                        let accessToken = await userTokenGenerator(payload)
+
+                        res.cookie("authToken", accessToken).redirect('/home')
+                    }
 
             } catch (error) {
-                
+                console.log(error);
             }
         }
 
@@ -78,6 +105,10 @@ module.exports = {
 
         let title = 'Enter the One Time Password sent to your account.'
         res.render('userView/OTP-login-verification',{title})
+    },
+
+    logout : ()=> {
+
     },
 
     userHome : async(req,res)=> {
@@ -200,7 +231,7 @@ module.exports = {
         res.render('404-error',{user:true})
     },
     getAccessDenied : (req,res)=> {
-        res.render('access-denied',{user:true})
+        res.render('access-denied')
     },
     getContactUs : (req,res)=> {
         res.render('userView/contactus',{user:true})

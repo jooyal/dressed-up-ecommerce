@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const { userAuthorization } = require('../Authorization/tokenAuthentication')
 const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp } = require('../controller/user-controller')
 
 /* GET home page. */
 router.get('/',landingPage);
-router.get('/home',userHome)
+router.get('/home', userAuthorization, userHome)
 router.get('/signup', signupPage)
 router.post('/signup',postSignUp)
 router.get('/login',loginPage)
