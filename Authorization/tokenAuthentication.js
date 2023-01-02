@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
 const { checkIfUserBlocked } = require('../model/user-helper');
-const { tokenVerify } = require('../utilities/token')
+const { tokenVerify, checkTokenExpired } = require('../utilities/token')
 
 module.exports = {
   userAuthorization : async (req,res,next)=>{
   
        const token = req.cookies.authToken
   
-       //if no token is present in cookies
-      if(!token){
+       //if no token is present in cookies or if token expired, render login page.
+      if(!token || checkTokenExpired(token)){
         return res.render('userView/login',{title : 'Log In to your Account | Dressed Up',signupError:'Please Log In to continue.'})
       }
         console.log('******** token accessed ********');
@@ -17,9 +17,9 @@ module.exports = {
         const data = await tokenVerify(token)
         
         //if no data is decoded(token might have expired or tampered with)
-        if(data===null){
+        if(!data){
           console.log('no data in token');
-          return res.render('userView/login',{title : 'Log In to your Account | Dressed Up',signupError:'Please Log In to continue.'})
+          return res.status(403).render('userView/login',{title : 'Log In to your Account | Dressed Up',signupError:'Please Log In to continue.'})
         }
 
         console.log(data);
@@ -31,7 +31,7 @@ module.exports = {
             return;
           })
           .catch(()=>{
-            return res.render('access-denied',{title : 'Sorry! user is Blocked, please contact admin to resolve. | Dressed Up',Error:'REASON : User is BLOCKED by Admin!'});
+            return res.status(403).render('access-denied',{title : 'Sorry! user is Blocked, please contact admin to resolve. | Dressed Up',Error:'REASON : User is BLOCKED by Admin!'});
           })
         }
 
