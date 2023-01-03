@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout } = require('../controller/user-controller')
 
 /* GET home page. */
 router.get('/',landingPage);
@@ -21,7 +21,8 @@ router.get('/view-order-items', userAuthorization, getOrderItems)
 router.get('/order-confirmed', userAuthorization, getOrderConfirmed)
 router.get('/404-error',get404error)
 router.get('/access-denied',getAccessDenied)
-router.get('/signout')
+router.get('/signout', userAuthorization, doSignOut)
+router.get('/logout', redirectToSignout)
 router.get('/wishlist', userAuthorization, getWishlist)
 router.get('/contact-us',getContactUs)
 router.get('/delivery-information',getDeliveryInformation)

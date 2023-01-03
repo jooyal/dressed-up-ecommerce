@@ -1,7 +1,6 @@
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doLogIn, doSignUp, doLogin } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin } = require('../model/user-helper.js')
 
 const { userTokenGenerator } = require('../utilities/token')
-
 
 module.exports = {
   landingPage : async (req, res, next)=> {
@@ -14,7 +13,7 @@ module.exports = {
 
         res.render('userView/landing-page', {title, menProducts, womenProducts, livingProducts, user:false, admin:false});
     } catch (error) {
-        console.log(errror);
+        console.log(error);
     }
   },
 
@@ -79,7 +78,9 @@ module.exports = {
                         
                         let accessToken = await userTokenGenerator(payload)
 
-                        res.cookie("authToken", accessToken).redirect('/home')
+                        res.cookie("authToken", accessToken,{
+                            httpOnly: true
+                        }).redirect('/home')
                     }
 
             } catch (error) {
@@ -126,7 +127,9 @@ module.exports = {
 
                     //console.log(accessToken);
 
-                    res.cookie("authToken", accessToken).redirect('/home')
+                    res.cookie("authToken", accessToken, {
+                        httpOnly: true
+                    }).redirect('/home')
                 }
             }
 
@@ -148,7 +151,16 @@ module.exports = {
         res.render('userView/OTP-login-verification',{title})
     },
 
-    logout : ()=> {
+    doSignOut : (req,res)=> {
+//setting cookie value as null when signing out.
+        res.cookie("authToken", null,{
+            httpOnly: true
+        }).redirect('/')
+
+    },
+
+    redirectToSignout : (req,res)=> {
+        res.redirect('/signout')
 
     },
 
