@@ -1,4 +1,4 @@
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doLogIn, doSignUp } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doLogIn, doSignUp, doLogin } = require('../model/user-helper.js')
 
 const { userTokenGenerator } = require('../utilities/token')
 
@@ -93,6 +93,47 @@ module.exports = {
 
         let title = 'Log In to your Account | Dressed Up'
         res.render('userView/login',{title})
+    },
+
+    postLogin : async (req,res)=> {
+
+        try {
+
+            let loginError
+            let title = 'Log In to your Account | Dressed Up'
+
+            //console.log(req.body)
+            if(!req.body.userEmail || !req.body.userPassword || (req.body.userPassword).length < 8) {
+                res.status(401).render('userView/login',{title, loginError:'Enter your username or password to continue!'})
+            
+            }else {
+                let response = await doLogin(req.body)
+
+                if(response.status===false) {
+                    loginError = response.error
+                    res.status(401).render('userView/login',{title, loginError})
+
+                }else if(response.status===true) {
+                    //console.log(response.user);
+                    const payload = {
+                        userId: response.user._id,
+                        userName: response.user.fullName,
+                        userEmail: response.user.userEmail,
+                        userMobile: response.user.userMobile
+                      }
+                    
+                    let accessToken = await userTokenGenerator(payload)
+
+                    //console.log(accessToken);
+
+                    res.cookie("authToken", accessToken).redirect('/home')
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+        
     },
 
     otpLogin : (req,res)=> {

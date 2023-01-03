@@ -3,9 +3,9 @@
 		<div class="container">
 			<div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 text-center">
 				
-				<form class="rounded bg-white shadow p-5">
+				<form class="rounded bg-white shadow p-5" method="post" action="/login">
 					<h3 class="text-dark fw-bolder fs-4 mb-3">Log In</h3>
-
+						<p class="text-danger">{{loginError}}</p> <!--Log In Error Message-->
 					<div class="form-floating mb-3">
 						<input type="email" class="form-control" name="userEmail" id="floatingInput" placeholder="name@example.com">
 						<label class="text-muted" for="floatingInput">Email address</label>

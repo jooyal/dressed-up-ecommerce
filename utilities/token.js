@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const jwtExpired = require('jwt-decode')
 require('dotenv').config();
 
 
@@ -27,14 +26,14 @@ module.exports = {
     checkTokenExpired : async (token)=>{
       try {
         // Decode the token
-        const decodedToken = await jwtExpired(token)
+        const decodedToken = await jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
 
         // Check the expiration date of the token
         const expirationDate = new Date(decodedToken.exp * 1000); // the exp value is in seconds, so convert to milliseconds
 
         if(expirationDate < new Date()) console.log('token expired');
-
-        return expirationDate < new Date();
+        
+        return (expirationDate < new Date().getTime());
 
       } catch (error) {
         console.log(error)

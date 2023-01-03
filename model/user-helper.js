@@ -126,5 +126,31 @@ module.exports = {
         reject(error)
       }
     })
+  },
+  doLogin : (loginData)=> {
+    return new Promise(async (resolve, reject) => {
+
+      try {
+
+        let userData = await db.get().collection(USER_COLLECTION).findOne({userEmail : loginData.userEmail})
+
+        if(!userData) {
+          resolve({status:false, error:'User data does not exist in database. Please create an account to continue.'})
+        } else {
+          let status = await bcrypt.compare(loginData.userPassword,userData.userPassword)
+
+          if(status) {
+            console.log('User login success!');
+            resolve({status: true, user: userData})
+
+          }else {
+            resolve({status:false, error:'Incorrect Password!'})
+          }
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 }
