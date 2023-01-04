@@ -323,6 +323,32 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let products = await fetchCartProducts(decodedData.value.userId)
             let total = await fetchCartTotal(decodedData.value.userId)
+
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].size === 'productSizeSmall') {
+                    products[i].size = 'Small'
+                }else if (products[i].size === 'productSizeMedium') {
+                    products[i].size = 'Medium'
+                }else if (products[i].size === 'productSizeLarge') {
+                    products[i].size = 'Large'
+                }else if (products[i].size === 'productSizeXLarge') {
+                    products[i].size = 'X Large'
+                }else if (products[i].size === 'productSizeXXLarge') {
+                    products[i].size = 'XX Large'
+                }else if (products[i].size === 'productSize32') {
+                    products[i].size = '32'
+                }else if (products[i].size === 'productSize34') {
+                    products[i].size = '34'
+                }else if (products[i].size === 'productSize36') {
+                    products[i].size = '36'
+                }else if (products[i].size === 'productSize38') {
+                    products[i].size = '38'
+                }else if (products[i].size === 'productSize40') {
+                    products[i].size = '40'
+                }else if (products[i].size === 'productFreeSize') {
+                    products[i].size = 'Free-Size'
+                }
+              }
     
             res.render('userView/cart',{user:true, products, total})
 
