@@ -47,7 +47,7 @@ let popupAppear = ()=>{
         },2500)
 }
 
-//function to add a product to cart
+//function to add a product to cart from product card.
 let addToCart = (productId)=>{
     $.ajax({
         url: '/add-to-cart/' + productId,
@@ -55,6 +55,31 @@ let addToCart = (productId)=>{
         success: (response)=>{
             //console.log(response);
             popupAppear();
+        }
+    })
+}
+
+//function to add a product to cart from view-product-details page.
+
+let addToCartFromProPage = (productId)=>{
+    let size = document.querySelector('#productSizeSelection').value
+    let quantity = document.querySelector('#productQuantitySelection').value
+
+    // console.log('Size = '+size+' ;  Quantity = '+quantity);
+
+    $.ajax({
+        url: '/add-to-cart/' + productId,
+        data: {
+            size : size,
+            quantity : quantity
+        },
+        method : 'post',
+        success : (response)=>{
+            popupAppear();
+
+            setTimeout(() => {
+                location.reload()
+            }, 2500);
         }
     })
 }

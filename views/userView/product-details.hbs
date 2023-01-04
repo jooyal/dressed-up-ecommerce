@@ -1,3 +1,13 @@
+    {{!-- Item added to cart popup --}}
+    <div class="alert-added-to-cart">
+      <div class="cart-alert-card">
+        <lottie-player class="align-items-center" src="/lottieFiles/greentick.json" id="lottieAddToCart"  background="transparent"  speed=".9" style="width: 200px; height: 200px;"></lottie-player>
+        <h3 class="text-warning text-center">Item Added To Cart<br/>Successfully!</h3>
+      </div>
+    </div>
+    {{!-- End of the popup --}}
+
+
 <section id="prodetails" class="section-p1">
         <div class="single-pro-image">
             <img src="/productImages/{{proDetails.image1}}" width="100%" id="mainImg" alt="">
@@ -24,9 +34,9 @@
             <div class="py-3">
                 <h1>&#8377 {{proDetails.productPrice}}</h1> <span style="text-decoration: line-through;">MRP : {{proDetails.productMRP}}</span><span style="color: rgb(253, 39, 253);"> {{proDetails.productDiscount}}% OFF</span>
             </div>
-            <form action="/add-to-cart/{{proDetails._id}}" method="post">
+            
             <span>Select Size</span>
-            <select name="size">
+            <select name="size" id="productSizeSelection">
                 {{#if proDetails.top}}
                 <option value="productSizeSmall">S</option>
                 <option value="productSizeMedium">M</option>
@@ -46,15 +56,15 @@
                 {{/if}}
 
             </select>
-            
+
             <div class="d-flex flex-column">
             <span>Select Quantity</span>
-            <input type="number" min="1" max="5" value="1" name="quantity">
+            <input type="number" min="1" max="5" value="1" name="quantity" id="productQuantitySelection">
             </div>
 
-            <button class="normal mt-3" type="submit">Add to cart</button>
+            <button class="normal mt-3" onclick="addToCartFromProPage('{{proDetails._id}}')">Add to cart</button>
             <a style="text-decoration: none; color: white;" href="/add-to-wishlist/{{proDetails._id}}"><button class="normal bg-danger ms-2"><i class="fa-solid fa-heart fa-xl"></i></button></a>
-            </form>
+            
             
             <h4 style="font-weight: 300;">Product Details</h4>
             <span>{{proDetails.productDescription}}</span>
@@ -113,4 +123,8 @@
         smallImg4.addEventListener('click',()=>{
             imgMain.src = smallImg4.src
         })
+
+
+
+
     </script>

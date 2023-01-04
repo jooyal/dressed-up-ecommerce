@@ -169,7 +169,7 @@ module.exports = {
           //if a cart exist which is linked to users id, execute this.
           if(usercart){
             //check if the currently added product previously existed in the cart of the user.
-            let productExistCheck = usercart.products.findIndex((product) => product.item==productId && product==productSize);
+            let productExistCheck = usercart.products.findIndex((product) => product.item==productId && product.size==productSize);
 
             //if product does exist, increase the quantity of the product.
             if(productExistCheck!=-1){
