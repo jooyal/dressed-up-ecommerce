@@ -1,0 +1,6 @@
+04/01/2023 (03:48 PM)
+
+>   Products added to cart after checking for size. If size and productId both doesnot exist-
+    togethor, create a new object with same productId and New size and insert into products array.
+
+>   User can add product to cart from View Product Details page.

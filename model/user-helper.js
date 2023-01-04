@@ -1,5 +1,5 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION, USER_COLLECTION } = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION, USER_COLLECTION, CART_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
 const bcrypt = require('bcrypt');
 
@@ -147,6 +147,156 @@ module.exports = {
             resolve({status:false, error:'Incorrect Password!'})
           }
         }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+  
+  addProductToCart : (userId, productId, productSize, productQuantity)=>{
+
+    let productObject = {
+      item: ObjectId(productId),
+      size: productSize,
+      quantity: (1 || productQuantity)
+    }
+
+    return new Promise(async(resolve, reject) => {
+      try {
+        let usercart = await db.get().collection(CART_COLLECTION).findOne({user: ObjectId(userId)})
+
+          //if a cart exist which is linked to users id, execute this.
+          if(usercart){
+            //check if the currently added product previously existed in the cart of the user.
+            let productExistCheck = usercart.products.findIndex((product) => product.item==productId && product==productSize);
+
+            //if product does exist, increase the quantity of the product.
+            if(productExistCheck!=-1){
+
+                if(!productQuantity){
+
+                    let response = await db.get().collection(CART_COLLECTION).updateOne({'products.item':ObjectId(productId),'user':ObjectId(userId)},
+                                    {
+                                        $inc:{'products.$.quantity':1}
+                                    });
+
+                    if(response){
+                      console.log(response);
+                      resolve(response)
+                    }
+                } else{
+
+                  let response = await db.get().collection(CART_COLLECTION).updateOne({'products.item':ObjectId(productId),'user':ObjectId(userId)},
+                                    {
+                                        $inc:{'products.$.quantity':productQuantity}
+                                    });
+
+                    if(response){
+                      console.log(response);
+                      resolve(response)
+                    }
+                }
+
+              //if product doesn't exist in cart, but cart does exist for the user, make an object
+              //with product-id and its initial quantity as '1' and push the object to the products array.
+                
+            }else {
+              let response = await db.get().collection(CART_COLLECTION)
+                              .updateOne({user:ObjectId(userId)},
+                              {
+
+                                  $push:{products:productObject}
+                              
+                              })
+
+              if(response){
+                console.log(response);
+                resolve(response)
+              }
+            }
+
+            //if a cart doesnot exist, make a cart with users id and add an array named products
+            // and we will push the id of the product and its quantity togather as an object to the array.
+          }else {
+            let cartObj = {
+                user: ObjectId(userId),
+                products : [productObject]
+            }
+            let response = await db.get().collection(CART_COLLECTION).insertOne(cartObj)
+
+            if(response){
+              console.log(response);
+              resolve(response)
+            }
+          }
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  fetchCartProducts : (userId)=> {
+    return new Promise(async(resolve, reject) => {
+      try {
+        
+        let cartProducts = await db.get().collection(CART_COLLECTION).aggregate([
+          {
+            $match : {user: ObjectId(userId)}
+          },
+          {
+            $unwind : '$products'
+          },
+          {
+            $project : {
+              item : '$products.item',
+              quantity : '$products.quantity'
+            }
+          },
+          {
+            $lookup : {
+              from : PRODUCT_COLLECTION,
+              localField : 'item',
+              foreignField : '_id',
+              as : 'productInfo'
+            }
+          },
+          {
+            $project : {
+              item : 1, quantity : 1, product : {$arrayElemAt : ['$productInfo',0]}
+            }
+          }
+        ]).toArray()
+
+        console.log(cartProducts);
+        resolve()
+      } catch (error) {
+
+        reject(error)
+
+      }
+    })
+  },
+
+  checkProductType : (productId)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        
+        let product = await db.get().collection(PRODUCT_COLLECTION).findOne({_id: ObjectId(productId)})
+        let productSizeType
+
+        if(product.top===true){
+          productSizeType = 'top'
+
+        } else if(product.bottom ===true){
+          productSizeType = 'bottom'
+
+        } else if(product.top===false && product.bottom ===false) {
+          productSizeType = 'freesize'
+
+        }
+
+        resolve(productSizeType)
         
       } catch (error) {
         reject(error)

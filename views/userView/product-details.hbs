@@ -24,28 +24,38 @@
             <div class="py-3">
                 <h1>&#8377 {{proDetails.productPrice}}</h1> <span style="text-decoration: line-through;">MRP : {{proDetails.productMRP}}</span><span style="color: rgb(253, 39, 253);"> {{proDetails.productDiscount}}% OFF</span>
             </div>
-            <span>Select Size</span><select name="size">
+            <form action="/add-to-cart/{{proDetails._id}}" method="post">
+            <span>Select Size</span>
+            <select name="size">
                 {{#if proDetails.top}}
-                <option value="small">S</option>
-                <option value="medium">M</option>
-                <option value="large">L</option>
-                <option value="xlarge">XL</option>
-                <option value="xxlarge">XXL</option>
+                <option value="productSizeSmall">S</option>
+                <option value="productSizeMedium">M</option>
+                <option value="productSizeLarge">L</option>
+                <option value="productSizeXLarge">XL</option>
+                <option value="productSizeXXLarge">XXL</option>
                 {{/if}}
                 {{#if proDetails.bottom}}
-                <option value="32">32</option>
-                <option value="34">34</option>
-                <option value="36">36</option>
-                <option value="38">38</option>
-                <option value="40">40</option>
+                <option value="productSize32">32</option>
+                <option value="productSize34">34</option>
+                <option value="productSize36">36</option>
+                <option value="productSize38">38</option>
+                <option value="productSize40">40</option>
                 {{/if}}
                 {{#if proDetails.nosize}}
-                <option value="freesize">freesize</option>
+                <option value="productFreeSize">freesize</option>
                 {{/if}}
 
             </select>
-            <input type="number" min="1" max="5" value="1">
-            <button class="normal" href="/add-to-cart/{{proDetails._id}}">Add to cart</button>
+            
+            <div class="d-flex flex-column">
+            <span>Select Quantity</span>
+            <input type="number" min="1" max="5" value="1" name="quantity">
+            </div>
+
+            <button class="normal mt-3" type="submit">Add to cart</button>
+            <a style="text-decoration: none; color: white;" href="/add-to-wishlist/{{proDetails._id}}"><button class="normal bg-danger ms-2"><i class="fa-solid fa-heart fa-xl"></i></button></a>
+            </form>
+            
             <h4 style="font-weight: 300;">Product Details</h4>
             <span>{{proDetails.productDescription}}</span>
         </div>

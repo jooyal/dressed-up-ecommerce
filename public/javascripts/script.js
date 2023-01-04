@@ -25,10 +25,36 @@ if (close) {
 //     }
 // })
 
+
+//For alert popup to appear after cart product is added.
 let popupAppear = ()=>{
-    console.log('Working');
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieAddToCart')
     document.querySelector('.alert-added-to-cart').classList.add('alert-added-to-cart-appear');
+    let productCard = document.querySelectorAll('.pro-container')
+    for (let i = 0; i < productCard.length; i++) {
+        productCard[i].style.visibility = 'hidden';
+      }
+      
+    lottie.play()
         setTimeout(()=>{
             document.querySelector('.alert-added-to-cart').classList.remove('alert-added-to-cart-appear');
-        },1000)
+            let productCard = document.querySelectorAll('.pro-container')
+            for (let i = 0; i < productCard.length; i++) {
+                productCard[i].style.visibility = 'visible';
+            }
+            lottie.stop()
+        },2500)
+}
+
+//function to add a product to cart
+let addToCart = (productId)=>{
+    $.ajax({
+        url: '/add-to-cart/' + productId,
+        method: 'get',
+        success: (response)=>{
+            //console.log(response);
+            popupAppear();
+        }
+    })
 }

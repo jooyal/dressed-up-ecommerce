@@ -1,6 +1,6 @@
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType } = require('../model/user-helper.js')
 
-const { userTokenGenerator } = require('../utilities/token')
+const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
 module.exports = {
   landingPage : async (req, res, next)=> {
@@ -152,7 +152,7 @@ module.exports = {
     },
 
     doSignOut : (req,res)=> {
-//setting cookie value as null when signing out.
+        //setting cookie value as null when signing out.
         res.cookie("authToken", null,{
             httpOnly: true
         }).redirect('/')
@@ -265,9 +265,78 @@ module.exports = {
             console.log(error);
         }
     },
-    getCart : (req,res)=>{
-        res.render('userView/cart',{user:true})
+
+    getAddProductToCart : async(req,res)=> {
+        try {
+            
+            let productId = req.params.id
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let productSizeType = await checkProductType(productId)
+            let productSize
+
+            if(productSizeType === 'top'){
+                productSize = 'productSizeSmall'
+
+            } else if(productSizeType === 'bottom'){
+                productSize = 'productSizeS32'
+
+            } else if(productSizeType === 'freesize'){
+                productSize = 'productFreeSize'
+
+            }
+
+            let response = await addProductToCart(decodedData.value.userId, productId, productSize)
+
+            if(response){
+                res.json({status:true})
+            }
+        } catch (error) {
+            console.log(error);
+        }
     },
+
+    postAddProductToCart : async (req,res)=> {
+        try {
+            
+             console.log(req.body, req.params.id);
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let productSize = req.body.size;
+            let productId = req.params.id;
+            let productQuantity = parseInt(req.body.quantity)
+
+            let response = await addProductToCart(decodedData.value.userId, productId, productSize, productQuantity)
+
+            if(response){
+                // res.send("<script>alert('Product Added To Cart')</script>").redirect('/product-details/'+productId)
+                // res.location('/product-details/'+productId );
+                res.send("<script>alert('Product Added To Cart')</script>");
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    getCart : async (req,res)=> {
+        try {
+            
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let products = await fetchCartProducts(decodedData.value.userId)
+    
+            res.render('userView/cart',{user:true, products})
+
+        } catch (error) {
+            
+            console.log(error);
+
+        }
+    },
+
+
+
+
+
+
     placeOrder : (req,res)=> {
         res.render('userView/place-order',{user:true})
     },

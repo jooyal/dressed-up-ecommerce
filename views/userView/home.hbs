@@ -3,7 +3,7 @@
     {{!-- Item added to cart popup --}}
     <div class="alert-added-to-cart">
       <div class="cart-alert-card">
-        <lottie-player class="align-items-center" src="/lottieFiles/greentick.json"  background="transparent"  speed=".9" style="width: 200px; height: 200px;" autoplay></lottie-player>
+        <lottie-player class="align-items-center" src="/lottieFiles/greentick.json" id="lottieAddToCart"  background="transparent"  speed=".9" style="width: 200px; height: 200px;"></lottie-player>
         <h3 class="text-warning text-center">Item Added To Cart<br/>Successfully!</h3>
       </div>
     </div>
@@ -63,15 +63,15 @@
     <section id="product1" class="section-p1 mt-5">
         <h2>Featured Products</h2>
         <p>In Men's Category</p>
-        
+        <div class="pro-container">
         <div class="pro-container">
             {{#each menProducts}}
-            <div class="pro">
-                <a href="/product-details/{{this._id}}">
+            <div class="pro" style="padding-bottom: 70px;">
+                <a class="product-card-link" href="/product-details/{{this._id}}">
                   <img src="/productImages/{{this.image1}}" alt="">
                 </a>
                 <div class="des">
-                    <a style="text-decoration: none;" href="/product-details/{{this._id}}">
+                    <a style="text-decoration: none;" class="product-card-link" href="/product-details/{{this._id}}">
                       <span>{{this.productBrand}}</span>
                       <h5>{{this.productName}}</h5>
                     </a>
@@ -82,15 +82,15 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                     </div> --}}
-                    <div class="d-flex ">
+                    <div class="d-flex flex-row" style="position: absolute; bottom: 30px; ">
                     <h4>&#8377; {{this.productPrice}}</h4>
-                    <a href="/add-to-wishlist/{{this._id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
-                    <a href="/add-to-cart/{{this._id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
+                    <button style="border: none; background-color: white; margin-left: 7em; padding-bottom: 10px; height: 20px;" onclick="addToWishlist('{{this._id}}')" href="/add-to-wishlist/{{this._id}}" id="iconInsideProCardLink" class="shopping-icon"><i class="fa-solid fa-heart" id="iconInsideProCard"></i></button>
+                    <button style="border: none; background-color: white; margin-left: 2em; padding-bottom: 10px; height: 20px;" onclick="addToCart('{{this._id}}')" href="/add-to-cart/{{this._id}}" id="iconInsideProCardLink" class="shopping-icon" ><i class=" fa-sharp fa-solid fa-cart-shopping" id="iconInsideProCard"></i></button>
                     </div>
                 </div>
             </div>
             {{/each}}
-            
+          </div>
         </div>
         <a href="/men" class="btn btn-success mt-3">Explore All Products</a>
 
@@ -139,12 +139,12 @@
             
           <div class="pro-container">
             {{#each womenProducts}}
-            <div class="pro">
-                <a href="/product-details/{{this._id}}">
+            <div class="pro" style="padding-bottom: 70px;">
+                <a class="product-card-link" href="/product-details/{{this._id}}">
                   <img src="/productImages/{{this.image1}}" alt="">
                 </a>
                 <div class="des">
-                    <a style="text-decoration: none;" href="/product-details/{{this._id}}">
+                    <a style="text-decoration: none;" class="product-card-link" href="/product-details/{{this._id}}">
                       <span>{{this.productBrand}}</span>
                       <h5>{{this.productName}}</h5>
                     </a>
@@ -155,10 +155,10 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                     </div> --}}
-                    <div class="d-flex ">
+                    <div class="d-flex flex-row" style="position: absolute; bottom: 30px; ">
                     <h4>&#8377; {{this.productPrice}}</h4>
-                    <a href="/add-to-wishlist/{{this._id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
-                    <a href="/add-to-cart/{{this._id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
+                    <button style="border: none; background-color: white; margin-left: 7em; padding-bottom: 10px; height: 20px;" onclick="addToWishlist('{{this._id}}')" href="/add-to-wishlist/{{this._id}}" id="iconInsideProCardLink" class="shopping-icon"><i class="fa-solid fa-heart" id="iconInsideProCard"></i></button>
+                    <button style="border: none; background-color: white; margin-left: 2em; padding-bottom: 10px; height: 20px;" onclick="addToCart('{{this._id}}')" href="/add-to-cart/{{this._id}}" id="iconInsideProCardLink" class="shopping-icon" ><i class=" fa-sharp fa-solid fa-cart-shopping" id="iconInsideProCard"></i></button>
                     </div>
                 </div>
             </div>
@@ -216,12 +216,12 @@
             
           <div class="pro-container">
             {{#each livingProducts}}
-            <div class="pro">
-                <a href="/product-details/{{this._id}}">
+            <div class="pro" style="padding-bottom: 70px;">
+                <a class="product-card-link" href="/product-details/{{this._id}}">
                   <img src="/productImages/{{this.image1}}" alt="">
                 </a>
                 <div class="des">
-                    <a style="text-decoration: none;" href="/product-details/{{this._id}}">
+                    <a style="text-decoration: none;" class="product-card-link" href="/product-details/{{this._id}}">
                       <span>{{this.productBrand}}</span>
                       <h5>{{this.productName}}</h5>
                     </a>
@@ -232,10 +232,10 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                     </div> --}}
-                    <div class="d-flex ">
+                    <div class="d-flex flex-row" style="position: absolute; bottom: 30px; ">
                     <h4>&#8377; {{this.productPrice}}</h4>
-                    <a href="/add-to-wishlist/{{this._id}}" class="shopping-icon"><i style="margin-left:9.5em; margin-top: .75em;" class="fa-solid fa-heart"></i></a>
-                    <a href="/add-to-cart/{{this._id}}" class="shopping-icon" ><i style="margin-left: 2.5em; margin-top: .75em; padding-top: .5px;" class=" fa-sharp fa-solid fa-cart-shopping"></i></a>
+                    <button style="border: none; background-color: white; margin-left: 7em; padding-bottom: 10px; height: 20px;" onclick="addToWishlist('{{this._id}}')" href="/add-to-wishlist/{{this._id}}" id="iconInsideProCardLink" class="shopping-icon"><i class="fa-solid fa-heart" id="iconInsideProCard"></i></button>
+                    <button style="border: none; background-color: white; margin-left: 2em; padding-bottom: 10px; height: 20px;" onclick="addToCart('{{this._id}}')" href="/add-to-cart/{{this._id}}" id="iconInsideProCardLink" class="shopping-icon" ><i class=" fa-sharp fa-solid fa-cart-shopping" id="iconInsideProCard"></i></button>
                     </div>
                 </div>
             </div>

@@ -1429,3 +1429,11 @@ lottie-player {
 .item-display-true {
   display: block !important;
 }
+
+.top-notification-badge {
+  border-radius: 10px !important;
+  margin-bottom: -5px;
+  margin-right: -10px;
+  z-index: 9;
+  font-size: .7em !important;
+}
