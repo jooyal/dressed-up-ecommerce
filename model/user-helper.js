@@ -250,6 +250,55 @@ module.exports = {
           {
             $project : {
               item : '$products.item',
+              quantity : '$products.quantity',
+              size : '$products.size'
+            }
+          },
+          {
+            $lookup : {
+              from : PRODUCT_COLLECTION,
+              localField : 'item',
+              foreignField : '_id',
+              as : 'productInfo'
+            }
+          },
+          {
+            $project : {
+              item : 1, quantity : 1, size : 1, product : {$arrayElemAt : ['$productInfo',0]}
+            }
+          },
+          {
+            $project : {
+              item : 1, quantity : 1, size : 1, product : 1
+              , subTotal: {
+                $multiply: ['$quantity', {$toInt :'$product.productPrice'}]
+              }
+            }
+          }
+        ]).toArray()
+
+        //console.log(cartProducts);
+        resolve(cartProducts)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  fetchCartTotal : (userId)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        
+        let total = await db.get().collection(CART_COLLECTION).aggregate([
+          {
+            $match : {user : ObjectId(userId)}
+          },
+          {
+            $unwind : '$products'
+          },
+          {
+            $project : {
+              item : '$products.item',
               quantity : '$products.quantity'
             }
           },
@@ -263,17 +312,37 @@ module.exports = {
           },
           {
             $project : {
-              item : 1, quantity : 1, product : {$arrayElemAt : ['$productInfo',0]}
+              quantity : 1, product : {$arrayElemAt:['$productInfo',0]}
+            }
+          },
+          {
+            $project : {
+              quantity : 1, productPrice : {$toInt :'$product.productPrice'}
+            }
+          },
+          {
+            $group : {
+              _id : null,
+              sumTotal : {$sum : {$multiply : ['$quantity', '$productPrice']}}
+            }
+          },
+          {
+            $project : {
+              sumTotal : 1,
+              taxAmount : {$multiply : [{$divide : ['$sumTotal',100]}, 12]}, //12 is here because GST for clothes are 12%
+            }
+          },
+          {
+            $project : {
+              _id : 0, sumTotal : 1, taxAmount : 1, grandTotal : {$sum : ["$sumTotal", "$taxAmount"]}
             }
           }
         ]).toArray()
 
-        console.log(cartProducts);
-        resolve()
+        resolve(total[0]);
+
       } catch (error) {
-
         reject(error)
-
       }
     })
   },

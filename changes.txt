@@ -5,9 +5,21 @@
 
 >   User can add product to cart from View Product Details page.
 
+--------------------------------------------------------------------------------------------------
+
 04/01/2023 (04:39 PM)
 
 >   An error in user helpers rectified.
 
 >   Changed the POST request from the Product Details page from "Form" to AJAX.
+
+--------------------------------------------------------------------------------------------------
+
+04/01/2023 (09:28 PM)
+
+>   Cart products and Total price displayed in the cart page.
+
+--------------------------------------------------------------------------------------------------
+
+
 

@@ -1,4 +1,4 @@
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -322,8 +322,9 @@ module.exports = {
             
             let decodedData = await tokenVerify(req.cookies.authToken)
             let products = await fetchCartProducts(decodedData.value.userId)
+            let total = await fetchCartTotal(decodedData.value.userId)
     
-            res.render('userView/cart',{user:true, products})
+            res.render('userView/cart',{user:true, products, total})
 
         } catch (error) {
             
