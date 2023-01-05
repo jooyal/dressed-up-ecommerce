@@ -280,10 +280,12 @@ module.exports = {
         ]).toArray()
 
         let cartExistCheck = await db.get().collection(CART_COLLECTION).findOne({user : ObjectId(userId)})
-        // console.log(cartProducts);
+        //  console.log(cartExistCheck);
 
-        if(cartExistCheck){
+        if(cartExistCheck && cartExistCheck.products[0]!==undefined){
           resolve(cartProducts)
+        }else if(cartExistCheck.products[0] === undefined) {
+          resolve({cartExist:false})
         }else {
           resolve({cartExist:false})
         }
@@ -351,10 +353,21 @@ module.exports = {
 
         let totalAmtObject = total[0]
 
-        totalAmtObject.taxAmount = Math.round(totalAmtObject.taxAmount)
-        totalAmtObject.grandTotal = Math.round(totalAmtObject.grandTotal)
+        if(totalAmtObject !== undefined){
+          totalAmtObject.taxAmount = Math.round(totalAmtObject.taxAmount)
+          totalAmtObject.grandTotal = Math.round(totalAmtObject.grandTotal)
+  
+          resolve(totalAmtObject);
+          
+        }else {
+          let dummyOut = {}
+          dummyOut.sumTotal = 0
+          dummyOut.taxAmount = 0
+          dummyOut.grandTotal = 0
+          resolve(dummyOut)
+        }
 
-        resolve(totalAmtObject);
+        
 
       } catch (error) {
         reject(error)
@@ -392,30 +405,30 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
 
-        if(details.count==-1 && details.quantity==1) {
+        if(details.count=='-1' && details.quantity=='1') {
           console.log();
           let response = await db.get().collection(CART_COLLECTION)
-                            .updateOne({$and:[{_id:ObjectId(details.cart)},{ 'products.time': parseInt(details.time)}]},
+                            .updateOne({_id:ObjectId(details.cart)},
                             {
                               $pull : {
-                                products : {item : ObjectId(details.item)}
+                                products : {time : parseInt(details.time)}
                               }
                             });
           if(response){
-            console.log(response);
+            //console.log(response);
             resolve({removeProduct:true})
           }
 
         }else {
           let response = await db.get().collection(CART_COLLECTION)
-                            .updateOne({_id:ObjectId(details.cart),'products.time': details.time},
+                            .updateOne({_id:ObjectId(details.cart),'products.time': parseInt(details.time)},
                             {
                               $inc : {
                                 'products.$.quantity' : parseInt(details.count)
                               }
                             });
           if(response){
-            console.log(response);
+            //console.log(response);
             resolve({removeProduct:false})
           }
         }

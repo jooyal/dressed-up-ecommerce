@@ -108,8 +108,8 @@ let changeProQuantity = (userId, cartId, productId, firstAddedTime, productSize,
                 alert('Product removed from cart!')
                 location.reload()
             }else {
-                console.log(response);
-                document.getElementById(firstAddedTime).innerHTML = qty+parseInt(count);
+                //console.log(response)
+                document.getElementById(firstAddedTime).value = qty+parseInt(count);
                 document.getElementById('sumTotalId').innerHTML = response.total.sumTotal;
                 document.getElementById('taxAmountId').innerHTML = response.total.taxAmount;
                 document.getElementById('grandTotalId').innerHTML = response.total.grandTotal;

@@ -309,7 +309,7 @@ module.exports = {
             if(response){
                 // res.send("<script>alert('Product Added To Cart')</script>").redirect('/product-details/'+productId)
                 // res.location('/product-details/'+productId );
-                res.send("<script>alert('Product Added To Cart')</script>");
+                res.json({status:true});
             }
 
         } catch (error) {
@@ -322,11 +322,11 @@ module.exports = {
             
             let decodedData = await tokenVerify(req.cookies.authToken)
             let products = await fetchCartProducts(decodedData.value.userId)
+            // console.log(products); 
             if(products.cartExist===false){
                 res.json({msg :'cart is empty'})
             }else {
                 let total = await fetchCartTotal(decodedData.value.userId)
-            
 
                 for (let i = 0; i < products.length; i++) {
                     if (products[i].size === 'productSizeSmall') {
@@ -371,6 +371,7 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
 
             if(response) {
+
                 response.total = await fetchCartTotal(decodedData.value.userId)
 
                 res.json(response)
