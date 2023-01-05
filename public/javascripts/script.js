@@ -53,7 +53,6 @@ let addToCart = (productId)=>{
         url: '/add-to-cart/' + productId,
         method: 'get',
         success: (response)=>{
-            //console.log(response);
             popupAppear();
         }
     })
@@ -107,8 +106,8 @@ let changeProQuantity = (userId, cartId, productId, firstAddedTime, productSize,
             if(response.removeProduct){
                 alert('Product removed from cart!')
                 location.reload()
-            }else {
-                //console.log(response)
+            }else { 
+                
                 document.getElementById(firstAddedTime).value = qty+parseInt(count);
                 document.getElementById('sumTotalId').innerHTML = response.total.sumTotal;
                 document.getElementById('taxAmountId').innerHTML = response.total.taxAmount;

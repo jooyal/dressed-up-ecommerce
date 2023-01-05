@@ -1,4 +1,4 @@
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -6,7 +6,7 @@ module.exports = {
   landingPage : async (req, res, next)=> {
     try {
         let title = 'Explore Latest Styles For You and your Home - Dressed Up'
-
+ 
         let menProducts = await fetchHomeProducts('men')
         let womenProducts = await fetchHomeProducts('women')
         let livingProducts = await fetchHomeProducts('living')
@@ -288,7 +288,7 @@ module.exports = {
             let response = await addProductToCart(decodedData.value.userId, productId, productSize)
 
             if(response){
-                res.json({status:true})
+                res.status(200).json({message:'added to cart'})
             }
         } catch (error) {
             console.log(error);
@@ -373,6 +373,7 @@ module.exports = {
             if(response) {
 
                 response.total = await fetchCartTotal(decodedData.value.userId)
+                // response.productSumTotal = await fetchIndividualProSumTotal(decodedData.value.userId,req.body.time)
 
                 res.json(response)
             }

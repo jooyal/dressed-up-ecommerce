@@ -280,11 +280,13 @@ module.exports = {
         ]).toArray()
 
         let cartExistCheck = await db.get().collection(CART_COLLECTION).findOne({user : ObjectId(userId)})
-        //  console.log(cartExistCheck);
+          console.log(cartExistCheck);
 
         if(cartExistCheck && cartExistCheck.products[0]!==undefined){
           resolve(cartProducts)
-        }else if(cartExistCheck.products[0] === undefined) {
+        }else if(!cartExistCheck) {
+          resolve({cartExist:false})
+        }else if(cartExistCheck.products === undefined) {
           resolve({cartExist:false})
         }else {
           resolve({cartExist:false})
@@ -439,7 +441,52 @@ module.exports = {
     })
   },
 
+  // fetchIndividualProSumTotal : (userId, productAddedTime)=>{
+  //   return new Promise(async(resolve, reject) => {
+  //     try {
+        
+  //       let response = await db.get().collection(CART_COLLECTION).aggregate([
+  //         {
+  //           $match : {user: ObjectId(userId)}
+  //         }, 
+  //         {
+  //           $unwind : '$products'
+  //         },
+  //         {
+  //           $match: {'products.time': parseInt(productAddedTime)}
+  //         },
+  //         {
+  //           $lookup : {
+  //             from : PRODUCT_COLLECTION,
+  //             localField : 'products.item',
+  //             foreignField : '_id',
+  //             as : 'productInfo'
+  //           }
+  //         },
+  //         {
+  //           $project : {
+  //             quantity : '$products.quantity', product : {$arrayElemAt:['$productInfo',0]}
+  //           }
+  //         },
+  //         {
+  //           $project : {
+  //             quantity : 1, price : '$product.productPrice'
+  //           }
+  //         },
+  //         {
+  //           $project : {
+  //             productSumTotal : {$multiply:['$quantity',{$toInt: '$price'}]}
+  //           }
+  //         }
+  //       ]).toArray()
+        
+  //       resolve(response[0].productSumTotal)
 
+  //     } catch (error) {
+  //       reject(error)
+  //     }
+  //   })
+  // }
 
 
 
