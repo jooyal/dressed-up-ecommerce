@@ -279,8 +279,16 @@ module.exports = {
           }
         ]).toArray()
 
+        let cartExistCheck = await db.get().collection(CART_COLLECTION).findOne({user : ObjectId(userId)})
         // console.log(cartProducts);
-        resolve(cartProducts)
+
+        if(cartExistCheck){
+          resolve(cartProducts)
+        }else {
+          resolve({cartExist:false})
+        }
+
+        
       } catch (error) {
         reject(error)
       }
@@ -341,7 +349,12 @@ module.exports = {
           }
         ]).toArray()
 
-        resolve(total[0]);
+        let totalAmtObject = total[0]
+
+        totalAmtObject.taxAmount = Math.round(totalAmtObject.taxAmount)
+        totalAmtObject.grandTotal = Math.round(totalAmtObject.grandTotal)
+
+        resolve(totalAmtObject);
 
       } catch (error) {
         reject(error)
@@ -373,5 +386,49 @@ module.exports = {
         reject(error)
       }
     })
-  }
+  },
+
+  changeProductCount : (details)=>{
+    return new Promise(async (resolve, reject) => {
+      try {
+
+        if(details.count==-1 && details.quantity==1) {
+          console.log();
+          let response = await db.get().collection(CART_COLLECTION)
+                            .updateOne({$and:[{_id:ObjectId(details.cart)},{ 'products.time': parseInt(details.time)}]},
+                            {
+                              $pull : {
+                                products : {item : ObjectId(details.item)}
+                              }
+                            });
+          if(response){
+            console.log(response);
+            resolve({removeProduct:true})
+          }
+
+        }else {
+          let response = await db.get().collection(CART_COLLECTION)
+                            .updateOne({_id:ObjectId(details.cart),'products.time': details.time},
+                            {
+                              $inc : {
+                                'products.$.quantity' : parseInt(details.count)
+                              }
+                            });
+          if(response){
+            console.log(response);
+            resolve({removeProduct:false})
+          }
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+
+
+
+
+
 }

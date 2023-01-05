@@ -84,9 +84,9 @@ let addToCartFromProPage = (productId)=>{
 }
 
 //change Product Quantity when user clicks + and - buttons in cart page.
-let changeProQuantity = (userId, cartId, productId, firstAddedTime, count)=>{
+let changeProQuantity = (userId, cartId, productId, firstAddedTime, productSize, count)=>{
     
-    let qty = parseInt(document.getElementById(firstAddedTime).innerHTML)
+    let qty = parseInt(document.getElementById(firstAddedTime).value)
 
     $.ajax({
         url : '/change-product-quantity',
@@ -95,11 +95,25 @@ let changeProQuantity = (userId, cartId, productId, firstAddedTime, count)=>{
             cart : cartId,
             product : productId,
             count : count,
-            quantity : qty
+            quantity : qty,
+            time : parseInt(firstAddedTime),
+            size : productSize
         },
         method : 'post',
         success : (response)=>{
-            
+            //if there is no product being removed, change count and change total through ajax.
+            //if product is removed, as page is then reloaded, there is no need for changing via
+            //ajax, the count will be automatically changed after refresh
+            if(response.removeProduct){
+                alert('Product removed from cart!')
+                location.reload()
+            }else {
+                console.log(response);
+                document.getElementById(firstAddedTime).innerHTML = qty+parseInt(count);
+                document.getElementById('sumTotalId').innerHTML = response.total.sumTotal;
+                document.getElementById('taxAmountId').innerHTML = response.total.taxAmount;
+                document.getElementById('grandTotalId').innerHTML = response.total.grandTotal;
+            }
         }
     })
 }
