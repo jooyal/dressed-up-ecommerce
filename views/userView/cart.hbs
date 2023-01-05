@@ -17,12 +17,12 @@
           </td>
           <td>
             <div class="cart-info">
-              <img style="width: 110px; height: 147.5px;" src="/productImages/{{this.product.image1}}" alt="Tshirt" />
+              <a href="/product-details/{{this.item}}"><img style="width: 110px; height: 147.5px;" src="/productImages/{{this.product.image1}}" alt="Tshirt" /></a>
               <div>
                 <p>{{this.product.productName}}</p>
-                <small>&#8377 {{this.product.productPrice}}</small>
+                <small>Price : &#8377 {{this.product.productPrice}}</small>
                 <br />
-                <a href="#" class="bg-danger text-white px-2 py-1 rounded">Remove</a>
+                <a><button style="border: none;" class="bg-danger text-white px-2 py-1 mt-2 rounded" onclick="">Remove</button></a>
               </div>
             </div>
           </td>
@@ -30,9 +30,9 @@
             {{this.size}}
           </td>
           <td>
-            <a href="" class="btn-danger px-2 py-1 rounded">-</a>
-            <input type="number" value="{{this.quantity}}" disabled />
-            <a href="" class="btn-success px-2 py-1 rounded">+</a>
+            <button class="btn-danger px-2 rounded" onclick="changeProQuantity('{{../userId}}','{{this._id}}','{{this.item}}','{{this.time}}',-1)">-</button>
+            <input id='{{this.time}}' class="blablablahh" type="number" value="{{this.quantity}}" disabled />
+            <button class="btn-success px-2 rounded" onclick="changeProQuantity('{{../userId}}','{{this._id}}','{{this.item}}','{{this.time}}',1)">+</button>
           </td>
           <td>&#8377 {{this.subTotal}}</td>
         </tr>

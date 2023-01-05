@@ -21,12 +21,21 @@
 
 --------------------------------------------------------------------------------------------------
 
-
 04/01/2023 (10:30 PM)
 
 >   Product-Size name changed from database default name to readable name.
 
 --------------------------------------------------------------------------------------------------
 
+05/01/2023 (12:50 PM)
 
+>   Fixed an error in user-helpers where i forgot to add product size as a parameter which need
+    to be checked before updating count.
+
+>   When user add a product to cart, a new key:value pair is created for date. This is included -
+    so that if user need to change quantity of a product, A unique Id could be assigned to it, -
+    as unlike the shopping cart project where products were unisize, and product Id could be used-
+    as the Id, here, there can be different products which differ in size having same product Id.
+
+--------------------------------------------------------------------------------------------------
 

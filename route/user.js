@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity } = require('../controller/user-controller')
 
 /* GET home page. */
 router.get('/',landingPage);
@@ -17,6 +17,7 @@ router.get('/product-details/:id', userAuthorization, productDetails)
 router.get('/cart', userAuthorization, getCart)
 router.get('/add-to-cart/:id', userAuthorization, getAddProductToCart)
 router.post('/add-to-cart/:id', userAuthorization, postAddProductToCart)
+router.post('/change-product-quantity', postChangeProQuantity)
 router.get('/place-order', userAuthorization, placeOrder)
 router.get('/order-history', userAuthorization, getOrderHistory)
 router.get('/view-order-items', userAuthorization, getOrderItems)

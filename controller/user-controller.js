@@ -350,7 +350,7 @@ module.exports = {
                 }
               }
     
-            res.render('userView/cart',{user:true, products, total})
+            res.render('userView/cart',{user:true, products, total, userId:decodedData.value.userId})
 
         } catch (error) {
             
@@ -359,7 +359,13 @@ module.exports = {
         }
     },
 
-
+    postChangeProQuantity : async(req,res)=>{
+        try {
+            
+        } catch (error) {
+            
+        }
+    },
 
 
 

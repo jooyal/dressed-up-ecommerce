@@ -159,9 +159,10 @@ module.exports = {
     let productObject = {
       item: ObjectId(productId),
       size: productSize,
-      quantity: (1 || productQuantity)
+      quantity: (productQuantity || 1),
+      time: new Date().getTime()
     }
-
+    console.log(productObject);
     return new Promise(async(resolve, reject) => {
       try {
         let usercart = await db.get().collection(CART_COLLECTION).findOne({user: ObjectId(userId)})
@@ -187,7 +188,7 @@ module.exports = {
                     }
                 } else{
 
-                  let response = await db.get().collection(CART_COLLECTION).updateOne({'products.item':ObjectId(productId),'user':ObjectId(userId)},
+                  let response = await db.get().collection(CART_COLLECTION).updateOne({'products.item':ObjectId(productId),'user':ObjectId(userId), 'products.size':productSize},
                                     {
                                         $inc:{'products.$.quantity':productQuantity}
                                     });
@@ -251,7 +252,8 @@ module.exports = {
             $project : {
               item : '$products.item',
               quantity : '$products.quantity',
-              size : '$products.size'
+              size : '$products.size',
+              time: '$products.time'
             }
           },
           {
@@ -264,20 +266,20 @@ module.exports = {
           },
           {
             $project : {
-              item : 1, quantity : 1, size : 1, product : {$arrayElemAt : ['$productInfo',0]}
+              item : 1, quantity : 1, size : 1, time:1, product : {$arrayElemAt : ['$productInfo',0]}
             }
           },
           {
             $project : {
-              item : 1, quantity : 1, size : 1, product : 1
-              , subTotal: {
+              item : 1, quantity : 1, size : 1, product : 1, time : 1,
+              subTotal: {
                 $multiply: ['$quantity', {$toInt :'$product.productPrice'}]
               }
             }
           }
         ]).toArray()
 
-        //console.log(cartProducts);
+        // console.log(cartProducts);
         resolve(cartProducts)
       } catch (error) {
         reject(error)

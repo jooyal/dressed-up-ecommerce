@@ -60,7 +60,6 @@ let addToCart = (productId)=>{
 }
 
 //function to add a product to cart from view-product-details page.
-
 let addToCartFromProPage = (productId)=>{
     let size = document.querySelector('#productSizeSelection').value
     let quantity = document.querySelector('#productQuantitySelection').value
@@ -80,6 +79,27 @@ let addToCartFromProPage = (productId)=>{
             setTimeout(() => {
                 location.reload()
             }, 2500);
+        }
+    })
+}
+
+//change Product Quantity when user clicks + and - buttons in cart page.
+let changeProQuantity = (userId, cartId, productId, firstAddedTime, count)=>{
+    
+    let qty = parseInt(document.getElementById(firstAddedTime).innerHTML)
+
+    $.ajax({
+        url : '/change-product-quantity',
+        data : {
+            user : userId,
+            cart : cartId,
+            product : productId,
+            count : count,
+            quantity : qty
+        },
+        method : 'post',
+        success : (response)=>{
+            
         }
     })
 }
