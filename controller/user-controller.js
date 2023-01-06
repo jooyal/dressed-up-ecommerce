@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -462,8 +462,63 @@ module.exports = {
         }
     },
     
+    postAddProducToWishlist : async(req,res)=>{
+        try {
 
+            let productId = req.params.id
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let productSize = req.body.size
 
+            let response = await addProductToWishlist(decodedData.value.userId, productId, productSize)
+            if(response){
+                res.status(200).json({message:'added to wishlist'})
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    getWishlist : async(req, res)=>{
+        try {
+
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+
+            let products = await fetchWishlistProducts(decodedData.value.userId)
+            
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].size === 'productSizeSmall') {
+                    products[i].size = 'Small'
+                }else if (products[i].size === 'productSizeMedium') {
+                    products[i].size = 'Medium'
+                }else if (products[i].size === 'productSizeLarge') {
+                    products[i].size = 'Large'
+                }else if (products[i].size === 'productSizeXLarge') {
+                    products[i].size = 'X Large'
+                }else if (products[i].size === 'productSizeXXLarge') {
+                    products[i].size = 'XX Large'
+                }else if (products[i].size === 'productSize32') {
+                    products[i].size = '32'
+                }else if (products[i].size === 'productSize34') {
+                    products[i].size = '34'
+                }else if (products[i].size === 'productSize36') {
+                    products[i].size = '36'
+                }else if (products[i].size === 'productSize38') {
+                    products[i].size = '38'
+                }else if (products[i].size === 'productSize40') {
+                    products[i].size = '40'
+                }else if (products[i].size === 'productFreeSize') {
+                    products[i].size = 'Free-Size'
+                }
+            }
+
+            res.render('userView/wishlist',{user:true, cartCount, products})
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
     
     
     
@@ -489,11 +544,6 @@ module.exports = {
     },
     getContactUs : (req,res)=> {
         res.render('userView/contactus',{user:true})
-    },
-    getWishlist :async(req,res)=> {
-        let decodedData = await tokenVerify(req.cookies.authToken)
-        let cartCount = await fetchCartCount(decodedData.value.userId)
-        res.render('userView/wishlist',{user:true, cartCount})
     },
     getUserHelp :(req,res)=> {
         res.render('userView/user-help',{user:true})

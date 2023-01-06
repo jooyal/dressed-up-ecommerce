@@ -594,6 +594,59 @@ addProductToWishlist : (userId, productId, productSize)=>{
       reject(error)
     }
   })
+},
+
+fetchWishlistProducts : (userId)=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+
+      let wishlistProducts = await db.get().collection(WISHLIST_COLLECTION).aggregate([
+        {
+          $match : {
+            user: ObjectId(userId)
+          }
+        },
+        {
+          $unwind : '$products'
+        },
+        {
+          $project : {
+            item : '$products.item',
+            size : '$products.size',
+            time : '$products.time'
+          }
+        },
+        {
+          $lookup : {
+            from : PRODUCT_COLLECTION,
+            localField : 'item',
+            foreignField : '_id',
+            as : 'productInfo'
+          }
+        },
+        {
+          $project : {
+            item : 1, size : 1, time:1, product : {$arrayElemAt : ['$productInfo',0]}
+          }
+        }
+      ]).toArray()
+
+      let wishlistExistCheck = await db.get().collection(WISHLIST_COLLECTION).findOne({user : ObjectId(userId)})
+
+      if(wishlistExistCheck && wishlistExistCheck.products[0]!==undefined){
+        resolve(wishlistProducts)
+      }else if(!wishlistExistCheck) {
+        resolve({wishlistExist:false})
+      }else if(wishlistExistCheck.products === undefined) {
+        resolve({wishlistExist:false})
+      }else {
+        resolve({wishlistExist:false})
+      }
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 

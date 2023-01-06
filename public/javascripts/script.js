@@ -151,7 +151,25 @@ let addToWishlist = (productId)=>{
         success: (response)=>{
             alert('Product added to wishlist!')
             // wishlistPopupAppear();
-            // document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
+            // document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
+        }
+    })
+}
+
+//function to add product to wishlist from product details page
+
+let addToWishlistFromProPage = (productId)=>{
+    let size = document.querySelector('#productSizeSelection').value
+    $.ajax({
+        url: '/add-to-wishlist/' + productId,
+        method: 'post',
+        data : {
+            size : size
+        },
+        success: (response)=>{
+            alert('Product added to wishlist!')
+            // wishlistPopupAppear();
+            // document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
         }
     })
 }

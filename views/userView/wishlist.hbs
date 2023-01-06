@@ -5,32 +5,41 @@
         <tr>
           <th>#</th>
           <th>Product</th>
+          <th>Brand</th>
           <th>Name</th>
-          <th>Size</th>
-          <th>Price</th>
-          <th>Options</th>
+          <th >Size</th>
+          <th style="width: 90px;">Price</th>
+          <th style="width: 150px;">Options</th>
         </tr>
+
+        {{#each products}}
+
         <tr>
           <td>
-            no.
+            {{inc @index}}
           </td>
           <td>
-            <img style="width: 110px; height: 147.5px;" src="/productImages/f2.jpg" alt="">
+            <img style="width: 110px; height: 147.5px;" src="/productImages/{{this.product.image1}}" alt="">
           </td>
           <td>
-            Adidas Shirt
+            <small>{{this.product.productBrand}}</small>
           </td>
           <td>
-            sizeSm
+            {{this.product.productName}}
+          </td>
+          <td>
+            {{this.size}}
           </td>
           <td> 
-            &#8377; 879
+            &#8377; {{this.product.productPrice}}
           </td>
           <td>
-            <a href="" class="btn btn-success">Add to cart</a>
-            <a href="" class="btn btn-warning">Remove</a>
+            <button onclick="" class="btn btn-success">Move To Cart</button>
+            <button onclick="" style="padding-left: 30px; padding-right: 30px;" class="btn btn-warning mt-2">Remove</button>
           </td>
         </tr>
+
+        {{/each}}
         
       </table>
 
