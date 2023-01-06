@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist } = require('../controller/user-controller')
 
 /* GET home page. */
 router.get('/',landingPage);
@@ -17,6 +17,8 @@ router.get('/product-details/:id', userAuthorization, productDetails)
 router.get('/cart', userAuthorization, getCart)
 router.get('/add-to-cart/:id', userAuthorization, getAddProductToCart)
 router.post('/add-to-cart/:id', userAuthorization, postAddProductToCart)
+router.get('/add-to-wishlist/:id', userAuthorization, getAddProducToWishlist)
+router.post('/add-to-wishlist/:id',)
 router.post('/change-product-quantity', userAuthorization, postChangeProQuantity)
 router.post('/remove-cart-product', userAuthorization, postRemoveProduct)
 router.get('/place-order', userAuthorization, placeOrder)

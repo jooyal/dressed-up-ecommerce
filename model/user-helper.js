@@ -1,5 +1,5 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION, USER_COLLECTION, CART_COLLECTION } = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION, USER_COLLECTION, CART_COLLECTION, WISHLIST_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
 const bcrypt = require('bcrypt');
 
@@ -194,7 +194,7 @@ module.exports = {
       quantity: (productQuantity || 1),
       time: new Date().getTime()
     }
-    console.log(productObject);
+    //console.log(productObject);
     return new Promise(async(resolve, reject) => {
       try {
         let usercart = await db.get().collection(CART_COLLECTION).findOne({user: ObjectId(userId)})
@@ -542,6 +542,58 @@ removeCartProduct : (details)=>{
         reject(error)
       }
     })
+},
+
+addProductToWishlist : (userId, productId, productSize)=>{
+  let productObject = {
+    item: ObjectId(productId),
+    size: productSize,
+    time: new Date().getTime()
+  }
+
+  return new Promise(async(resolve, reject) => {
+    try {
+      //check if userwishlist document already exist for the user.
+      let userWishlist = await db.get().collection(WISHLIST_COLLECTION).findOne({user:ObjectId(userId)})
+      
+      //if wishlist document for the user exist, execute this.
+      if(userWishlist){
+        let productExistCheck = userWishlist.products.findIndex((product)=>product.item==productId && product.size==productSize)
+
+        //if product already present with given size in wishlist, execute this.
+        if(productExistCheck != -1) {
+          resolve({msg: 'product already present in wishlist'})
+        }else {
+          //if product doesnot exist in wishlist or product present but with different size, execute this.
+          let response = await db.get().collection(WISHLIST_COLLECTION)
+                                .updateOne({user : ObjectId(userId)},
+                                {
+                                  $push : {products: productObject}
+                                })
+          if(response){
+            console.log(response);
+            resolve(response)
+          }
+        }
+      }else {
+        //if a wishlist document doeesnot exist for the user, create one.
+
+        let wishObj = {
+          user: ObjectId(userId),
+          products : [productObject]
+        }
+        let response = await db.get().collection(WISHLIST_COLLECTION).insertOne(wishObj)
+
+        if(response){
+          console.log(response);
+          resolve(response)
+        }
+      }
+
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 

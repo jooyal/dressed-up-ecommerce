@@ -141,3 +141,18 @@ let removeCartProduct = (cartId, firstAddedTime, productName)=>{
         })
     }
 }
+
+//function to add product to wishlist from product card
+
+let addToWishlist = (productId)=>{
+    $.ajax({
+        url: '/add-to-wishlist/' + productId,
+        method: 'get',
+        success: (response)=>{
+            alert('Product added to wishlist!')
+            // wishlistPopupAppear();
+            // document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
+        }
+    })
+}
+

@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -332,7 +332,7 @@ module.exports = {
     postAddProductToCart : async (req,res)=> {
         try {
             
-             console.log(req.body, req.params.id);
+            //  console.log(req.body, req.params.id);
             let decodedData = await tokenVerify(req.cookies.authToken)
             let productSize = req.body.size;
             let productId = req.params.id;
@@ -433,8 +433,37 @@ module.exports = {
         }
     },
 
+    getAddProducToWishlist : async(req,res)=>{
+        try {
+            
+            let productId = req.params.id
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let productSizeType = await checkProductType(productId)
+            let productSize
 
+            if(productSizeType === 'top'){
+                productSize = 'productSizeSmall'
+
+            } else if(productSizeType === 'bottom'){
+                productSize = 'productSize32'
+
+            } else if(productSizeType === 'freesize'){
+                productSize = 'productFreeSize'
+
+            }
+
+            let response = await addProductToWishlist(decodedData.value.userId, productId, productSize)
+            if(response){
+                res.status(200).json({message:'added to wishlist'})
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    },
     
+
+
     
     
     
