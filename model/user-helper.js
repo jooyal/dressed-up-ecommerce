@@ -91,6 +91,38 @@ module.exports = {
     })
   },
 
+  fetchCartCount : (userId)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        let count = 0
+        let cart = db.get().collection(CART_COLLECTION).findOne({user : ObjectId(userId)})
+        if(cart) {
+          count = await db.get().collection(CART_COLLECTION).aggregate([
+            {
+              $match : {user : ObjectId(userId)}
+            },
+            {
+              $project : {
+                '_id': 0,//no need for id in output.
+                'totalQuantity' : {$sum:'$products.quantity'}
+              }
+            }
+
+          ]).toArray()
+        }
+
+        if(count[0]){
+          resolve(count[0].totalQuantity)
+        }else {
+          resolve(0)
+        }
+
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
   doSignUp : (data)=>{
     return new Promise(async (resolve, reject) => {
       try {
@@ -280,7 +312,7 @@ module.exports = {
         ]).toArray()
 
         let cartExistCheck = await db.get().collection(CART_COLLECTION).findOne({user : ObjectId(userId)})
-          console.log(cartExistCheck);
+          //console.log(cartExistCheck);
 
         if(cartExistCheck && cartExistCheck.products[0]!==undefined){
           resolve(cartProducts)
@@ -488,7 +520,29 @@ module.exports = {
   //   })
   // }
 
+removeCartProduct : (details)=>{
+    return new Promise( async(resolve, reject) => {
+      try {
+        
+        let response = await db.get().collection(CART_COLLECTION)
+                              .updateOne({_id:ObjectId(details.cart)},
+                              {
+                                $pull : {
+                                  products : {time : parseInt(details.time)}
+                                }
+                              });
+        
+        if(response.modifiedCount === 1){
+          resolve(true)
+        }else {
+          reject({msg: 'Error removing the product. modifiedCount !== 1'})
+        }
 
+      } catch (error) {
+        reject(error)
+      }
+    })
+}
 
 
 }

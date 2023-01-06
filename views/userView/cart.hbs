@@ -22,7 +22,7 @@
                 <p>{{this.product.productName}}</p>
                 <small>Price : &#8377 {{this.product.productPrice}}</small>
                 <br />
-                <a><button style="border: none;" class="bg-danger text-white px-2 py-1 mt-2 rounded" onclick="">Remove</button></a>
+                <a><button style="border: none;" class="bg-danger text-white px-2 py-1 mt-2 rounded" onclick="removeCartProduct('{{this._id}}', '{{this.time}}', '{{this.product.productName}}')">Remove</button></a>
               </div>
             </div>
           </td>

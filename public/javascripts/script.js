@@ -54,6 +54,7 @@ let addToCart = (productId)=>{
         method: 'get',
         success: (response)=>{
             popupAppear();
+            document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
         }
     })
 }
@@ -74,7 +75,7 @@ let addToCartFromProPage = (productId)=>{
         method : 'post',
         success : (response)=>{
             popupAppear();
-
+            document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + parseInt(quantity)
             setTimeout(() => {
                 location.reload()
             }, 2500);
@@ -109,10 +110,34 @@ let changeProQuantity = (userId, cartId, productId, firstAddedTime, productSize,
             }else { 
                 
                 document.getElementById(firstAddedTime).value = qty+parseInt(count);
+                document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML)+parseInt(count)
                 document.getElementById('sumTotalId').innerHTML = response.total.sumTotal;
                 document.getElementById('taxAmountId').innerHTML = response.total.taxAmount;
                 document.getElementById('grandTotalId').innerHTML = response.total.grandTotal;
             }
         }
     })
+}
+
+//function to remove a product from cart
+
+let removeCartProduct = (cartId, firstAddedTime, productName)=>{
+    let confirmation = confirm("Are you sure you want to remove ' "+productName+" ' from cart?");
+
+    if(confirmation == true){
+        $.ajax({
+            url : '/remove-cart-product',
+            method : 'post',
+            data : {
+                cart : cartId,
+                time : firstAddedTime
+            },
+            success : (response)=>{
+                if(response){
+                    alert('Product removed from cart!')
+                    location.reload()
+                }
+            }
+        })
+    }
 }

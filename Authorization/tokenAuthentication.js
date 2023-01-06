@@ -9,7 +9,7 @@ module.exports = {
 
        //if no token is present in cookies or if token expired, render login page.
 
-      if(!token || checkTokenExpired(token)===false){
+      if(!token || checkTokenExpired(token)===true){
         return res.render('userView/login',{title : 'Log In to your Account | Dressed Up',loginError:'Please Log In to continue.'})
       }
 
@@ -45,5 +45,17 @@ module.exports = {
           console.log(error);
           return res.render('userView/login',{title : 'Log In to your Account | Dressed Up',loginError:'Please Log In to continue.'})
       }
+  },
+
+  checkIfValidTokenExist : (req)=>{
+    const token = req.cookies.authToken
+
+    //if no token is present in cookies or if token expired, render login page.
+
+    if(!token || checkTokenExpired(token)===true){
+      return false
+    }else {
+      return true
+    }
   }
 }

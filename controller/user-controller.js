@@ -1,26 +1,38 @@
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal } = require('../model/user-helper.js')
+const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
 module.exports = {
   landingPage : async (req, res, next)=> {
     try {
-        let title = 'Explore Latest Styles For You and your Home - Dressed Up'
+        if(checkIfValidTokenExist(req)===false){
+            let title = 'Explore Latest Styles For You and your Home - Dressed Up'
  
-        let menProducts = await fetchHomeProducts('men')
-        let womenProducts = await fetchHomeProducts('women')
-        let livingProducts = await fetchHomeProducts('living')
-
-        res.render('userView/landing-page', {title, menProducts, womenProducts, livingProducts, user:false, admin:false});
+            let menProducts = await fetchHomeProducts('men')
+            let womenProducts = await fetchHomeProducts('women')
+            let livingProducts = await fetchHomeProducts('living')
+    
+            res.render('userView/landing-page', {title, menProducts, womenProducts, livingProducts, user:false, admin:false});
+        
+        }else {
+            res.redirect('/home')
+        }
+        
     } catch (error) {
         console.log(error);
     }
   },
 
     signupPage : (req,res)=> {
-        let title = 'Create an account | Dressed Up'
 
-        res.render('userView/signup', {title})
+        if(checkIfValidTokenExist(req)===true){
+            res.redirect('/home')
+        }else {
+            let title = 'Create an account | Dressed Up'
+
+            res.render('userView/signup', {title})
+        }
     },
 
     postSignUp : async (req,res)=> {
@@ -92,8 +104,12 @@ module.exports = {
 
     loginPage : (req,res)=> {
 
-        let title = 'Log In to your Account | Dressed Up'
-        res.render('userView/login',{title})
+        if(checkIfValidTokenExist(req)){
+            res.redirect('/home')
+        }else {
+            let title = 'Log In to your Account | Dressed Up'
+            res.render('userView/login',{title})
+        }
     },
 
     postLogin : async (req,res)=> {
@@ -141,14 +157,22 @@ module.exports = {
 
     otpLogin : (req,res)=> {
 
-        let title = 'Log In to your Account | Dressed Up'
-        res.render('userView/OTP-login',{title})
+        if(checkIfValidTokenExist(req)===true){
+            res.redirect('/home')
+        }else {
+            let title = 'Log In to your Account | Dressed Up'
+            res.render('userView/OTP-login',{title})
+        }
     },
 
     otpLoginVerification : (req,res)=> {
 
-        let title = 'Enter the One Time Password sent to your account.'
-        res.render('userView/OTP-login-verification',{title})
+        if(checkIfValidTokenExist(req)===true){
+            res.redirect('/home')
+        }else {
+            let title = 'Enter the One Time Password sent to your account.'
+            res.render('userView/OTP-login-verification',{title})
+        }
     },
 
     doSignOut : (req,res)=> {
@@ -167,12 +191,14 @@ module.exports = {
     userHome : async(req,res)=> {
         try {
             let title = 'Explore Latest Styles For You and your Home - Dressed Up'
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
 
             let menProducts = await fetchHomeProducts('men')
             let womenProducts = await fetchHomeProducts('women')
             let livingProducts = await fetchHomeProducts('living')
 
-            res.render('userView/home', { title, user:true, menProducts, womenProducts, livingProducts });
+            res.render('userView/home', { title, user:true, menProducts, womenProducts, livingProducts, cartCount });
         } catch (error) {
             console.log(error);
         }
@@ -182,8 +208,10 @@ module.exports = {
     getMenProducts : async (req,res)=> {
         try {
             let title = 'Explore All Products | Men'
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
             let allProducts = await fetchCategoryProducts('men')
-            res.render('userView/view-products',{user:true, allProducts, title})
+            res.render('userView/view-products',{user:true, allProducts, title, cartCount})
         } catch (error) {
             console.log(error);
         }
@@ -192,8 +220,10 @@ module.exports = {
     getWomenProducts : async (req,res)=>{
         try {
             let title = 'Explore All Products | Women'
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
             let allProducts = await fetchCategoryProducts('women')
-            res.render('userView/view-products',{user:true, allProducts, title})
+            res.render('userView/view-products',{user:true, allProducts, title, cartCount})
         } catch (error) {
             console.log(error);
         }
@@ -202,8 +232,10 @@ module.exports = {
     getLivingProducts : async (req,res)=>{
         try {
             let title = 'Explore All Products | Living & Home'
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
             let allProducts = await fetchCategoryProducts('living')
-            res.render('userView/view-products',{user:true, allProducts, title})
+            res.render('userView/view-products',{user:true, allProducts, title, cartCount})
         } catch (error) {
             console.log(error);
         }
@@ -222,6 +254,8 @@ module.exports = {
             let proDetails = await fetchProductDetails(req.params.id)
                 //to see the category and type of the current product, searched using _id.
             let recItem = await fetchRecCategoryAndType(req.params.id)
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
 
             let recommendType //to assign new recommended type based on current product being shown
 
@@ -259,7 +293,7 @@ module.exports = {
             let title = 'View Product Details | '+ proDetails.productName + ' | Dressed Up'
                 //to get items to be shown in recommend products below the page
             let bottomProducts = await fetchProDetailPageRecommend(recItem.category,recommendType)
-            res.render('userView/product-details',{user:true, proDetails, bottomProducts, title})
+            res.render('userView/product-details',{user:true, proDetails, bottomProducts, title, cartCount})
 
         } catch (error) {
             console.log(error);
@@ -319,7 +353,7 @@ module.exports = {
 
     getCart : async (req,res)=> {
         try {
-            
+            let title = 'Cart | DressedUp'
             let decodedData = await tokenVerify(req.cookies.authToken)
             let products = await fetchCartProducts(decodedData.value.userId)
             // console.log(products); 
@@ -327,6 +361,7 @@ module.exports = {
                 res.json({msg :'cart is empty'})
             }else {
                 let total = await fetchCartTotal(decodedData.value.userId)
+                let cartCount = await fetchCartCount(decodedData.value.userId)
 
                 for (let i = 0; i < products.length; i++) {
                     if (products[i].size === 'productSizeSmall') {
@@ -353,8 +388,8 @@ module.exports = {
                         products[i].size = 'Free-Size'
                     }
                 }
-        
-                res.render('userView/cart',{user:true, products, total, userId:decodedData.value.userId})
+        // console.log(products);
+                res.render('userView/cart',{user:true, products, total, userId:decodedData.value.userId, title, cartCount})
             }
 
         } catch (error) {
@@ -383,14 +418,33 @@ module.exports = {
         }
     },
 
+    postRemoveProduct : async(req,res)=>{
+        // console.log(req.body);
+        try {
+            
+            let response = await removeCartProduct(req.body)
+
+            if(response){
+                res.json(response)
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    },
 
 
-
+    
+    
+    
+    
     placeOrder : (req,res)=> {
         res.render('userView/place-order',{user:true})
     },
-    getOrderHistory : (req,res)=> {
-        res.render('userView/order-history',{user:true})
+    getOrderHistory : async(req,res)=> {
+        let decodedData = await tokenVerify(req.cookies.authToken)
+        let cartCount = await fetchCartCount(decodedData.value.userId)
+        res.render('userView/order-history',{user:true, cartCount})
     },
     getOrderItems : (req,res)=> {
         res.render('userView/order-history-items',{user:true})
@@ -407,8 +461,10 @@ module.exports = {
     getContactUs : (req,res)=> {
         res.render('userView/contactus',{user:true})
     },
-    getWishlist :(req,res)=> {
-        res.render('userView/wishlist',{user:true})
+    getWishlist :async(req,res)=> {
+        let decodedData = await tokenVerify(req.cookies.authToken)
+        let cartCount = await fetchCartCount(decodedData.value.userId)
+        res.render('userView/wishlist',{user:true, cartCount})
     },
     getUserHelp :(req,res)=> {
         res.render('userView/user-help',{user:true})
