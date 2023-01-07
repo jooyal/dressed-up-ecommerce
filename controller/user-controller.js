@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -193,12 +193,13 @@ module.exports = {
             let title = 'Explore Latest Styles For You and your Home - Dressed Up'
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
 
             let menProducts = await fetchHomeProducts('men')
             let womenProducts = await fetchHomeProducts('women')
             let livingProducts = await fetchHomeProducts('living')
 
-            res.render('userView/home', { title, user:true, menProducts, womenProducts, livingProducts, cartCount });
+            res.render('userView/home', { title, user:true, menProducts, womenProducts, livingProducts, cartCount, wishlistCount });
         } catch (error) {
             console.log(error);
         }
@@ -210,8 +211,9 @@ module.exports = {
             let title = 'Explore All Products | Men'
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
             let allProducts = await fetchCategoryProducts('men')
-            res.render('userView/view-products',{user:true, allProducts, title, cartCount})
+            res.render('userView/view-products',{user:true, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }
@@ -222,8 +224,9 @@ module.exports = {
             let title = 'Explore All Products | Women'
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
             let allProducts = await fetchCategoryProducts('women')
-            res.render('userView/view-products',{user:true, allProducts, title, cartCount})
+            res.render('userView/view-products',{user:true, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }
@@ -234,8 +237,9 @@ module.exports = {
             let title = 'Explore All Products | Living & Home'
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
             let allProducts = await fetchCategoryProducts('living')
-            res.render('userView/view-products',{user:true, allProducts, title, cartCount})
+            res.render('userView/view-products',{user:true, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }
@@ -256,6 +260,7 @@ module.exports = {
             let recItem = await fetchRecCategoryAndType(req.params.id)
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
 
             let recommendType //to assign new recommended type based on current product being shown
 
@@ -293,7 +298,7 @@ module.exports = {
             let title = 'View Product Details | '+ proDetails.productName + ' | Dressed Up'
                 //to get items to be shown in recommend products below the page
             let bottomProducts = await fetchProDetailPageRecommend(recItem.category,recommendType)
-            res.render('userView/product-details',{user:true, proDetails, bottomProducts, title, cartCount})
+            res.render('userView/product-details',{user:true, proDetails, bottomProducts, title, cartCount, wishlistCount})
 
         } catch (error) {
             console.log(error);
@@ -362,6 +367,7 @@ module.exports = {
             }else {
                 let total = await fetchCartTotal(decodedData.value.userId)
                 let cartCount = await fetchCartCount(decodedData.value.userId)
+                let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
 
                 for (let i = 0; i < products.length; i++) {
                     if (products[i].size === 'productSizeSmall') {
@@ -389,7 +395,7 @@ module.exports = {
                     }
                 }
         // console.log(products);
-                res.render('userView/cart',{user:true, products, total, userId:decodedData.value.userId, title, cartCount})
+                res.render('userView/cart',{user:true, products, total, userId:decodedData.value.userId, title, cartCount, wishlistCount})
             }
 
         } catch (error) {
@@ -454,7 +460,7 @@ module.exports = {
 
             let response = await addProductToWishlist(decodedData.value.userId, productId, productSize)
             if(response){
-                res.status(200).json({message:'added to wishlist'})
+                res.status(200).json({message:response.msg, status:response.status})
             }
 
         } catch (error) {
@@ -484,6 +490,7 @@ module.exports = {
 
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
 
             let products = await fetchWishlistProducts(decodedData.value.userId)
             
@@ -519,8 +526,8 @@ module.exports = {
                         products[i].size = 'Free-Size'
                     }
                 }
-
-                res.render('userView/wishlist',{user:true, cartCount, products})
+                // console.log(products);
+                res.render('userView/wishlist',{user:true, cartCount, products, wishlistCount})
 
             }           
             
@@ -529,9 +536,75 @@ module.exports = {
         }
     },
     
+    postMoveProductFromWishlist : async(req, res)=>{
+        try {
 
-    
-    
+            let decodedData = await tokenVerify(req.cookies.authToken)
+
+            //replacing size value to match with the value in database.
+                if (req.body.size === 'Small') {
+                    req.body.size = 'productSizeSmall'
+                }else if (req.body.size === 'Medium') {
+                    req.body.size = 'productSizeMedium'
+                }else if (req.body.size === 'Large') {
+                    req.body.size = 'productSizeLarge'
+                }else if (req.body.size === 'X Large') {
+                    req.body.size = 'productSizeXLarge'
+                }else if (req.body.size === 'XX Large') {
+                    req.body.size = 'productSizeXXLarge'
+                }else if (req.body.size === '32') {
+                    req.body.size = 'productSize32'
+                }else if (req.body.size === '34') {
+                    req.body.size = 'productSize34'
+                }else if (req.body.size === '36') {
+                    req.body.size = 'productSize36'
+                }else if (req.body.size === '38') {
+                    req.body.size = 'productSize38'
+                }else if (req.body.size === '40') {
+                    req.body.size = 'productSize40'
+                }else if (req.body.size === 'Free-Size') {
+                    req.body.size = 'productFreeSize'
+                }
+
+                let wishlistId = req.body.wishlistId;
+                let productAddedTime = req.body.time
+                let productId = req.body.item;
+                let size = req.body.size;
+                let userId = decodedData.value.userId;
+                let quantity = 1;
+                let cartResponse = await addProductToCart(userId, productId, size, quantity)
+                
+                if(cartResponse){
+                    let wishlistResponse = await removeFromWishlist(wishlistId, productAddedTime)
+
+                    if(wishlistResponse){
+                        res.status(200).json({status : true})
+                    }
+                }
+
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    postRemoveProductFromWishlist : async(req, res)=>{
+        try {
+
+            let wishlistId = req.body.wishlistId;
+            let productAddedTime = req.body.time
+
+            let response = await removeFromWishlist(wishlistId, productAddedTime)
+
+            if(response){
+                res.status(200).json({status: true})
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+
     
     placeOrder : (req,res)=> {
         res.render('userView/place-order',{user:true})
@@ -539,7 +612,8 @@ module.exports = {
     getOrderHistory : async(req,res)=> {
         let decodedData = await tokenVerify(req.cookies.authToken)
         let cartCount = await fetchCartCount(decodedData.value.userId)
-        res.render('userView/order-history',{user:true, cartCount})
+        let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+        res.render('userView/order-history',{user:true, cartCount, wishlistCount})
     },
     getOrderItems : (req,res)=> {
         res.render('userView/order-history-items',{user:true})

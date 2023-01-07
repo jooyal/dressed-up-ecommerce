@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist } = require('../controller/user-controller')
 
 /* GET home page. */
 router.get('/',landingPage);
@@ -19,7 +19,8 @@ router.get('/add-to-cart/:id', userAuthorization, getAddProductToCart)
 router.post('/add-to-cart/:id', userAuthorization, postAddProductToCart)
 router.get('/add-to-wishlist/:id', userAuthorization, getAddProducToWishlist)
 router.post('/add-to-wishlist/:id', userAuthorization, postAddProducToWishlist)
-router.post('/add-to-wishlist/:id',)
+router.post('/move-to-cart-from-wishlist', userAuthorization, postMoveProductFromWishlist)
+router.post('/remove-from-wishlist', userAuthorization, postRemoveProductFromWishlist)
 router.post('/change-product-quantity', userAuthorization, postChangeProQuantity)
 router.post('/remove-cart-product', userAuthorization, postRemoveProduct)
 router.get('/place-order', userAuthorization, placeOrder)

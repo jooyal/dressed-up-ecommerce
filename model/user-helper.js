@@ -187,14 +187,14 @@ module.exports = {
   },
   
   addProductToCart : (userId, productId, productSize, productQuantity)=>{
-
+    // console.log('accessed');
     let productObject = {
       item: ObjectId(productId),
       size: productSize,
       quantity: (productQuantity || 1),
       time: new Date().getTime()
     }
-    //console.log(productObject);
+    // console.log(productObject);
     return new Promise(async(resolve, reject) => {
       try {
         let usercart = await db.get().collection(CART_COLLECTION).findOne({user: ObjectId(userId)})
@@ -563,7 +563,7 @@ addProductToWishlist : (userId, productId, productSize)=>{
 
         //if product already present with given size in wishlist, execute this.
         if(productExistCheck != -1) {
-          resolve({msg: 'product already present in wishlist'})
+          resolve({msg: 'product already present in wishlist', status:false})
         }else {
           //if product doesnot exist in wishlist or product present but with different size, execute this.
           let response = await db.get().collection(WISHLIST_COLLECTION)
@@ -573,7 +573,7 @@ addProductToWishlist : (userId, productId, productSize)=>{
                                 })
           if(response){
             console.log(response);
-            resolve(response)
+            resolve({msg: 'product added to wishlist', status:true})
           }
         }
       }else {
@@ -587,7 +587,7 @@ addProductToWishlist : (userId, productId, productSize)=>{
 
         if(response){
           console.log(response);
-          resolve(response)
+          resolve({msg: 'product added to wishlist', status:true})
         }
       }
 
@@ -647,6 +647,60 @@ fetchWishlistProducts : (userId)=>{
       
     } catch (error) {
       reject(error)
+    }
+  })
+},
+
+removeFromWishlist : (wishlistId, productAddedTime)=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+      
+      let response = await db.get().collection(WISHLIST_COLLECTION)
+                      .updateOne({_id:ObjectId(wishlistId)},{
+                        $pull : {
+                          products : {time: parseInt(productAddedTime)}
+                        }
+                      });
+
+      if(response.modifiedCount === 1){
+        resolve(true)
+      }else {
+        reject({msg: 'Error removing the product. modifiedCount !== 1'})
+      }
+
+    } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+fetchWishlistCount : (userId)=>{
+  return new Promise( async(resolve, reject) => {
+    try {
+      let count = 0
+      let wishlist = await db.get().collection(WISHLIST_COLLECTION).findOne({user: ObjectId(userId)})
+      if(wishlist){
+        count = await db.get().collection(WISHLIST_COLLECTION).aggregate([
+          {
+            $match : {user : ObjectId(userId)}
+          },
+          {
+            $project : {
+              _id : 0,
+              'totalQuantity' : {$size: '$products'}
+            }
+          }
+        ]).toArray()
+      }
+
+      if(count[0]){
+        resolve(count[0].totalQuantity)
+      }else {
+        resolve(0)
+      }
+      
+    } catch (error) {
+      
     }
   })
 }

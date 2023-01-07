@@ -1466,7 +1466,7 @@ lottie-player {
 .top-notification-badge {
   border-radius: 10px !important;
   margin-bottom: -5px;
-  margin-right: -18px;
+  margin-right: -20px;
   z-index: 9;
   font-size: .7em !important;
   font-weight: 300 !important;
@@ -1475,4 +1475,13 @@ lottie-player {
 .top-notification-badge-mobile {
   font-size: .5em !important;
   font-weight: 100 !important;
+}
+
+.wishlist-notification-badge {
+  border-radius: 10px !important;
+  margin-bottom: -5px;
+  margin-right: -23px;
+  z-index: 9;
+  font-size: .8em !important;
+  font-weight: 300 !important;
 }

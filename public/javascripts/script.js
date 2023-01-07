@@ -149,8 +149,12 @@ let addToWishlist = (productId)=>{
         url: '/add-to-wishlist/' + productId,
         method: 'get',
         success: (response)=>{
+            
             wishlistPopupAppear();
-            // document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
+            console.log(response);
+            if(response.status){
+                document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('wishlistCountBadge').innerHTML) + 1;
+            }
         }
     })
 }
@@ -166,6 +170,7 @@ let addToWishlistFromProPage = (productId)=>{
             size : size
         },
         success: (response)=>{
+            console.log(response);
             wishlistPopupAppear();
             // document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
         }
@@ -198,13 +203,39 @@ let wishlistPopupAppear = ()=>{
 // Move wishlisted product to cart 
         //and in the process, remove the product from wishlist.
 
-let moveToCartFromWish = ()=>{
+let moveToCartFromWishlist = (wishlistId, size, item, time)=>{
     $.ajax({
-        url: '/move-to-cart',
+        url: '/move-to-cart-from-wishlist',
         data: {
-            wishlistId: 0,
-            item: 0,
-            time: 0,
+            wishlistId: wishlistId,
+            size : size,
+            item: item,
+            time: time,
+        },
+        method:'post',
+        success: (response)=>{
+            if(response.status){
+                alert('Product added to cart!')
+                location.reload()
+            }
+        }
+    })
+}
+
+//to remove a product from wishlist
+let removeProductFromCart = (wishlistId, productAddedTime)=>{
+    $.ajax({
+        url: '/remove-from-wishlist',
+        method: 'post',
+        data: {
+            wishlistId: wishlistId,
+            time: productAddedTime
+        },
+        success: (response)=>{
+            if(response.status){
+                alert('Product removed from wishlist!')
+                location.reload()
+            }
         }
     })
 }

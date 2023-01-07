@@ -7,9 +7,9 @@
           <th>Product</th>
           <th>Brand</th>
           <th>Name</th>
-          <th >Size</th>
-          <th style="width: 90px;">Price</th>
-          <th style="width: 150px;">Options</th>
+          <th class="text-center">Size</th>
+          <th style="width: 90px;" class="text-center">Price</th>
+          <th style="width: 150px;" class="text-center">Options</th>
         </tr>
 
         {{#each products}}
@@ -27,15 +27,15 @@
           <td>
             {{this.product.productName}}
           </td>
-          <td>
+          <td class="text-center">
             {{this.size}}
           </td>
-          <td> 
+          <td class="text-center"> 
             &#8377; {{this.product.productPrice}}
           </td>
-          <td>
-            <button onclick="" class="btn btn-success">Move To Cart</button>
-            <button onclick="" style="padding-left: 30px; padding-right: 30px;" class="btn btn-warning mt-2">Remove</button>
+          <td class="text-center">
+            <button onclick="moveToCartFromWishlist('{{this._id}}','{{this.size}}','{{this.item}}','{{this.time}}')" class="btn btn-success">Move To Cart</button>
+            <button onclick="removeProductFromCart('{{this._id}}', '{{this.time}}')" style="padding-left: 30px; padding-right: 30px;" class="btn btn-warning mt-2">Remove</button>
           </td>
         </tr>
 
