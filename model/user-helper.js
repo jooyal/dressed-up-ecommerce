@@ -548,6 +548,7 @@ addProductToWishlist : (userId, productId, productSize)=>{
   let productObject = {
     item: ObjectId(productId),
     size: productSize,
+    quantity: 1,
     time: new Date().getTime()
   }
 
@@ -613,7 +614,8 @@ fetchWishlistProducts : (userId)=>{
           $project : {
             item : '$products.item',
             size : '$products.size',
-            time : '$products.time'
+            time : '$products.time',
+            quantity : '$products.quantity'
           }
         },
         {
@@ -626,7 +628,7 @@ fetchWishlistProducts : (userId)=>{
         },
         {
           $project : {
-            item : 1, size : 1, time:1, product : {$arrayElemAt : ['$productInfo',0]}
+            item : 1, size : 1, time:1, quantity : 1, product : {$arrayElemAt : ['$productInfo',0]}
           }
         }
       ]).toArray()

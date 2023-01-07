@@ -149,8 +149,7 @@ let addToWishlist = (productId)=>{
         url: '/add-to-wishlist/' + productId,
         method: 'get',
         success: (response)=>{
-            alert('Product added to wishlist!')
-            // wishlistPopupAppear();
+            wishlistPopupAppear();
             // document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
         }
     })
@@ -167,10 +166,45 @@ let addToWishlistFromProPage = (productId)=>{
             size : size
         },
         success: (response)=>{
-            alert('Product added to wishlist!')
-            // wishlistPopupAppear();
+            wishlistPopupAppear();
             // document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
         }
     })
 }
 
+//added to wishlist popup
+
+let wishlistPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieAddToWishlist')
+    document.querySelector('.alert-added-to-wishlist').classList.add('alert-added-to-wishlist-appear');
+    let productCard = document.querySelectorAll('.pro-container')
+    for (let i = 0; i < productCard.length; i++) {
+        productCard[i].style.visibility = 'hidden';
+      }
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-added-to-wishlist').classList.remove('alert-added-to-wishlist-appear');
+            let productCard = document.querySelectorAll('.pro-container')
+            for (let i = 0; i < productCard.length; i++) {
+                productCard[i].style.visibility = 'visible';
+            }
+            lottie.stop()
+        },2500)
+}
+
+
+// Move wishlisted product to cart 
+        //and in the process, remove the product from wishlist.
+
+let moveToCartFromWish = ()=>{
+    $.ajax({
+        url: '/move-to-cart',
+        data: {
+            wishlistId: 0,
+            item: 0,
+            time: 0,
+        }
+    })
+}

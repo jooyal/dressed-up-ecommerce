@@ -1422,6 +1422,39 @@ lottie-player {
   opacity: 100 !important;
 }
 
+.wishlist-alert-card {
+
+  width: 350px;
+  height: 350px;
+  border-radius: 25px;
+  border:solid,#04746c;
+  background-color: rgb(255, 217, 175);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-added-to-wishlist {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  z-index: 99992;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s ease-in-out;
+}
+
+.alert-added-to-wishlist-appear {
+  opacity: 100 !important;
+}
+
 .item-display-none{
   display: none;
 }
