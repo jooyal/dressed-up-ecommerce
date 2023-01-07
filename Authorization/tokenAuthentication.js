@@ -49,7 +49,7 @@ module.exports = {
 
   checkIfValidTokenExist : (req)=>{
     const token = req.cookies.authToken
-
+    
     //if no token is present in cookies or if token expired, render login page.
 
     if(!token || checkTokenExpired(token)===true){

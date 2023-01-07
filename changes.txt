@@ -39,3 +39,11 @@
 
 --------------------------------------------------------------------------------------------------
 
+07/01/2023 (12:35 AM)
+
+>   Changed logout from simple GET request via 'a' tag to AJAX request and asks a confirmation 
+    before logging out user.
+    
+>   Cookie deleted instead of assigning it null value.
+
+--------------------------------------------------------------------------------------------------

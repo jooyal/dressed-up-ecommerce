@@ -144,11 +144,15 @@ body {
 }
 
 #navbar li a:hover,
+#navbar li button:hover,
+#navbar li button.active,
 #navbar li a.active {
   color: #088178;
 }
 
 #navbar li a.active::after,
+#navbar li button:hover::after,
+#navbar li button.active::after,
 #navbar li a:hover::after {
   content: "";
   width: 40%;

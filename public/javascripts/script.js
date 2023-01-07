@@ -239,3 +239,25 @@ let removeProductFromCart = (wishlistId, productAddedTime)=>{
         }
     })
 }
+
+// function for performing logout
+
+let doLogOut = ()=>{
+    let confirmation = confirm("Are you sure you want to Logout ?");
+
+    if(confirmation){
+        $.ajax({
+            url : "/logout",
+            method : 'get',
+            success : (response)=>{
+                if (response.status) {
+                    alert('You have successfully Logged Out!')
+                    location.href="/"
+                } else {
+                    alert('You are already logged out!')
+                }
+                
+            }
+        })
+    }
+}

@@ -6,6 +6,7 @@ const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 module.exports = {
   landingPage : async (req, res, next)=> {
     try {
+        // if no valid token exist (false), render landing page. Else, redirect to home
         if(checkIfValidTokenExist(req)===false){
             let title = 'Explore Latest Styles For You and your Home - Dressed Up'
  
@@ -176,11 +177,8 @@ module.exports = {
     },
 
     doSignOut : (req,res)=> {
-        //setting cookie value as null when signing out.
-        res.cookie("authToken", null,{
-            httpOnly: true
-        }).redirect('/')
-
+        //cookie is deleted when signing out.
+        res.clearCookie('authToken').json({status:true});
     },
 
     redirectToSignout : (req,res)=> {

@@ -27,13 +27,18 @@ module.exports = {
       try {
         // Decode the token
         const decodedToken = await jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+        if(!decodedToken){
+          return true
+        } else {
 
-        // Check the expiration date of the token
-        const expirationDate = new Date(decodedToken.exp * 1000); // the exp value is in seconds, so convert to milliseconds
+          // Check the expiration date of the token
+          const expirationDate = new Date(decodedToken.exp * 1000); // the exp value is in seconds, so convert to milliseconds
 
-        if(expirationDate < new Date()) console.log('token expired');
-        
-        return (expirationDate < new Date().getTime());
+          if(expirationDate < new Date().getTime()) console.log('token expired');
+          
+          return (expirationDate < new Date().getTime());
+
+        }
 
       } catch (error) {
         console.log(error)
