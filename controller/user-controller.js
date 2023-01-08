@@ -608,10 +608,16 @@ module.exports = {
         res.render('userView/place-order',{user:true})
     },
     getOrderHistory : async(req,res)=> {
-        let decodedData = await tokenVerify(req.cookies.authToken)
-        let cartCount = await fetchCartCount(decodedData.value.userId)
-        let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-        res.render('userView/order-history',{user:true, cartCount, wishlistCount})
+        try {
+
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            res.render('userView/order-history',{user:true, cartCount, wishlistCount})
+            
+        } catch (error) {
+            console.log(error);
+        }
     },
     getOrderItems : (req,res)=> {
         res.render('userView/order-history-items',{user:true})
@@ -640,10 +646,28 @@ module.exports = {
     getPrivacyPolicy :(req,res)=> {
         res.render('userView/privacy-policy',{user:true})
     },
-    getUserProfile :(req,res)=> {
-        res.render('userView/user-profile',{user:true})
+    getUserProfile :async(req,res)=> {
+        try {
+
+            let data = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(data.value.userId)
+            let wishlistCount = await fetchWishlistCount(data.value.userId)
+            res.render('userView/user-profile',{user:true, cartCount, wishlistCount, data:data.value})
+            
+        } catch (error) {
+            console.log(error);
+        }
     },
-    getChangeUserInfo :(req,res)=> {
-        res.render('userView/change-user-info',{user:true})
+    getChangeUserInfo :async(req,res)=> {
+        try {
+
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            res.render('userView/change-user-info',{user:true, cartCount, wishlistCount, data: decodedData.value})
+            
+        } catch (error) {
+            console.log(error);
+        }
     }
 }

@@ -76,9 +76,9 @@ let addToCartFromProPage = (productId)=>{
         success : (response)=>{
             popupAppear();
             document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + parseInt(quantity)
-            setTimeout(() => {
-                location.reload()
-            }, 2500);
+            // setTimeout(() => {
+            //     location.reload()
+            // }, 2500);
         }
     })
 }
