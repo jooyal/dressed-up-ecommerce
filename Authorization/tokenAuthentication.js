@@ -21,6 +21,8 @@ module.exports = {
         //if no data is decoded(token might have expired or tampered with)
         if(!data){
           console.log('no data in token');
+          //if no data in token, delete cookie.
+          res.clearCookie('authToken')
           return res.status(403).render('userView/login',{title : 'Log In to your Account | Dressed Up',loginError:'Please Log In to continue.'})
         }
 
@@ -49,10 +51,10 @@ module.exports = {
 
   checkIfValidTokenExist : (req)=>{
     const token = req.cookies.authToken
-    
+
     //if no token is present in cookies or if token expired, render login page.
 
-    if(!token || checkTokenExpired(token)===true){
+    if(checkTokenExpired(token)===true || !token){
       return false
     }else {
       return true

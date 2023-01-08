@@ -1,23 +1,28 @@
 <div class="text-center my-3  align-items-center d-flex flex-column">
     <h1 class="mt-3">Change Account Info</h1>
-    <p class="mt-3">Random Person, Change your account settings here.</p>
-    <div class="rounded bg-white shadow p-3 mb-5 mt-4 d-flex flex-column align-items-center justify-content-center" style="width: 36vw">
-        <form action="">
-        <div id="userName" class="mt-4">Current Name : {{data.userName}}</div>
-        <label for="newUserName">Enter your new name</label>
-        <input type="text" class="form-control" name="userName" id="newUserName">
+    <p class="mt-3">{{data.userName}}, Change your account settings here.</p>
+    <div class="bg-white shadow p-3 mb-5 mt-4 d-flex flex-column align-items-center justify-content-center" style="width: 36vw; border-radius: 20px !important;">
+        
+        <div id="userName" class="mt-4">Current Full Name : {{data.userName}}</div>
+        <label for="newUserName">Enter your new preferred Full Name</label>
+        <input type="text" class="form-control" id="newUserName">
         
         <div id="userEmail" class="mt-4">Current Email : {{data.userEmail}}</div>
         <label for="newuserEmail">Enter your new email</label>
-        <input type="text" class="form-control" name="userEmail" id="userEmail">
+        <input type="email" class="form-control" id="newUserEmail">
 
         <div id="userMobile" class="mt-4">Current Phone No. : {{data.userMobile}}</div>
-        <label for="newuserMobile" >Enter your new phone number</label>
-        <input type="number"  class="form-control" name="userMobile" id="newuserMobile">        
+        <label for="newUserMobile" >Enter your new phone number</label>
+        <input type="number"  class="form-control" id="newUserMobile">        
         
-        <button type="submit" class="btn btn-warning mt-5 mb-5"> Save Account Info</button>
+        <p class="text-center text-danger mt-2">{{changeUserInfoErr}}</p>
 
-        </form>
+        <button class="btn btn-success mt-3 mb-5" onclick="changeAccountInfo('{{data.userId}}')"> Save Account Info</button>
+        <br>
+        <small class="text-muted"> > If you don't want to change a data, leave it blank. <br>
+        > After successfully changing your account info, you will be Logged Out.</small>
+
+        
     </div>
 </div>
 

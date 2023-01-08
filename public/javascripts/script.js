@@ -261,3 +261,47 @@ let doLogOut = ()=>{
         })
     }
 }
+
+//function for changing account info of the user.
+
+let changeAccountInfo = (userId)=>{
+    let newUserName = document.getElementById('newUserName').value
+    let newUserEmail = document.getElementById('newUserEmail').value
+    let newUserMobile = document.getElementById('newUserMobile').value
+
+    let confirmation = confirm("Are you sure you want to change your User Info?");
+
+    if(confirmation){
+        $.ajax({
+            url : '/change-user-info',
+            method : 'post',
+            data : {
+                newUserName:newUserName,
+                newUserEmail:newUserEmail,
+                newUserMobile:newUserMobile
+            },
+            success : (response)=>{
+                if(response.status){
+                    alert('data changed successfully!')
+                    performLogOut()
+                }
+                
+            }
+        })
+    }
+}
+
+let performLogOut = ()=>{
+    $.ajax({
+        url : "/logout",
+        method : 'get',
+        success : (response)=>{
+            if (response.status) {
+                alert('You have successfully Logged Out!')
+                location.href="/"
+            } else {
+                alert('You are already logged out!')
+            }
+        }
+    })
+}

@@ -1,7 +1,11 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
+
+//global variables
+let changeUserInfoErr
+let signupError
 
 module.exports = {
   landingPage : async (req, res, next)=> {
@@ -32,44 +36,39 @@ module.exports = {
         }else {
             let title = 'Create an account | Dressed Up'
 
-            res.render('userView/signup', {title})
+            res.render('userView/signup', {title, signupError})
+            signupError = null
         }
     },
 
     postSignUp : async (req,res)=> {
-        let signupError
         let title = 'Create an account | Dressed Up'
 
         if(!req.body.fullName || !req.body.userEmail || !req.body.userMobile 
             || !req.body.userPassword || !req.body.confirmUserPassword){
 
             signupError = 'Please enter all the required details to continue'
-            res.render('userView/signup', {title, signupError})
-            signupError = null;
+            res.status(422).redirect('/signup')
 
         } else if(req.body.userPassword !== req.body.confirmUserPassword){
 
             signupError = 'Passwords does not match!'
-            res.render('userView/signup', {title, signupError})
-            signupError = null;
+            res.status(422).redirect('/signup')
 
         } else if((req.body.userMobile).length !== 10){
 
             signupError = 'Mobile number is not valid! Enter a valid number. Hint: Only enter the 10 digit number, no need for country code.'
-            res.render('userView/signup', {title, signupError})
-            signupError = null;
+            res.status(422).redirect('/signup')
 
         } else if(req.body.termsCheckBox !== 'on'){
 
             signupError = 'Please agree to the privacy policy to continue'
-            res.render('userView/signup', {title, signupError})
-            signupError = null;
+            res.status(422).redirect('/signup')
 
         } else if((req.body.userPassword).length < 8){
 
             signupError = 'Please enter a password that is atleast 8 characters long.'
-            res.render('userView/signup', {title, signupError})
-            signupError = null;
+            res.status(422).redirect('/signup')
 
         } else{
             try {
@@ -78,8 +77,7 @@ module.exports = {
                     if(response.status === false){
 
                         signupError = response.error
-                        res.render('userView/signup', {title, signupError})
-                        signupError = null;
+                        res.status(422).redirect('/signup')
 
                     }else {
                         const payload = {
@@ -664,7 +662,52 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-            res.render('userView/change-user-info',{user:true, cartCount, wishlistCount, data: decodedData.value})
+            res.render('userView/change-user-info',{user:true, cartCount, wishlistCount, data: decodedData.value, changeUserInfoErr})
+            changeUserInfoErr = null
+
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    postChangeUserInfo : async(req,res)=>{
+        try {
+
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            // console.log(req.body);
+            
+            // if mobile number exist in body, check if its length is 10.
+            if(req.body.newUserMobile){
+                if((req.body.newUserMobile).length !== 10){
+                    changeUserInfoErr = 'Invalid mobile number.'
+                    res.status(422).redirect('/change-user-info')
+                }
+            }
+            //assigning values from body to an object.
+            let newData = {}
+            if(req.body.newUserName){
+                newData.userName = req.body.newUserName
+            }
+            if(req.body.newUserEmail){
+                newData.userEmail = req.body.newUserEmail
+            }
+            if(req.body.newUserMobile){
+                newData.userMobile = req.body.newUserMobile
+            }
+            //check if the values inside the object is undefined, i.e, if the body contained no data.
+            if(newData.userName === undefined && newData.userEmail === undefined && newData.userMobile === undefined){
+                changeUserInfoErr = 'No data to be changed.'
+                res.status(422).redirect('/change-user-info')
+
+            } else {
+                let response = await modifyUserData(decodedData.value.userId, newData)
+                console.log(response);
+                if(response.changeName || response.changeEmail || response.changeMobile){
+                    res.json({status:true})
+                }else {
+                    res.json({status:false})
+                }
+            }
+
             
         } catch (error) {
             console.log(error);

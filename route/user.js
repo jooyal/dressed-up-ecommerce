@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo } = require('../controller/user-controller')
 
 /* GET home page. */
 router.get('/',landingPage);
@@ -37,6 +37,7 @@ router.get('/women', userAuthorization, getWomenProducts)
 router.get('/living', userAuthorization, getLivingProducts)
 router.get('/user-profile', userAuthorization, getUserProfile)
 router.get('/change-user-info', userAuthorization, getChangeUserInfo)
+router.post('/change-user-info', userAuthorization, postChangeUserInfo)
 router.get('/contact-us',getContactUs)
 router.get('/delivery-information',getDeliveryInformation)
 router.get('/about-us',getAboutUs)

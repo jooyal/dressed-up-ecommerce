@@ -700,7 +700,32 @@ fetchWishlistCount : (userId)=>{
       }
       
     } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+modifyUserData : (userId, newData)=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+
+      let response = {}
+
+      if(newData.userName){
+        console.log('new Name Exist');
+        response.changeName = await db.get().collection(USER_COLLECTION).updateOne({_id : ObjectId(userId)}, {$set : {fullName : newData.userName}})
+      }
+      if(newData.userEmail){
+        response.changeEmail = await db.get().collection(USER_COLLECTION).updateOne({_id : ObjectId(userId)}, {$set: {userEmail : newData.userEmail}})
+      }
+      if(newData.userMobile){
+        response.changeMobile = await db.get().collection(USER_COLLECTION).updateOne({_id : ObjectId(userId)}, {$set: {userMobile : newData.userMobile}})
+      }
+
+      resolve(response)
       
+    } catch (error) {
+      reject(error)
     }
   })
 }
