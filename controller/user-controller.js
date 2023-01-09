@@ -1,11 +1,12 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
 //global variables
-let changeUserInfoErr
 let signupError
+let changeUserInfoErr
+let changeUserPasswordErr
 
 module.exports = {
   landingPage : async (req, res, next)=> {
@@ -708,6 +709,54 @@ module.exports = {
                 }
             }
 
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    getChangeUserPassword : async(req,res)=>{
+        try {
+
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            res.render('userView/change-user-password',{user:true, cartCount, wishlistCount, data: decodedData.value, changeUserPasswordErr})
+            changeUserPasswordErr = null
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    postChangeUserPassword : async(req,res)=>{
+        try {
+
+            let checkPasswordExist = await checkIfPasswordTrue(req.body.currentPassword, req.body.userId)
+            if(checkPasswordExist.status === false){
+                // changeUserPasswordErr = 'Current Password is not Valid!'
+                // console.log('wrong password');
+                res.json({status:false, msg:"Current Password is wrong!"})
+        
+            } else if (req.body.newPassword.length < 8){
+                // changeUserPasswordErr = 'New Password should be of minimum 8 characters!'
+                // console.log('wrong new password');
+                res.json({status:false, msg:"New Password should be of minimum 8 characters!"})
+        
+            } else if (req.body.newPassword !== req.body.newPasswordConfirm){
+                // changeUserPasswordErr = "New Password and New Password Confirm doesn't match!"
+                // console.log('passwords dont match');
+                res.json({status:false, msg:"New Password and New Password Confirm doesn't match!"})
+        
+            } else {
+                let response = await changeUserPassword(req.body.userId, req.body.newPassword)
+                
+                if(response){
+                    res.json({status:true})
+                }else {
+                    res.json({status:false, msg:'Some unexpected error occured! Please try again later.'})
+                }
+            }
             
         } catch (error) {
             console.log(error);

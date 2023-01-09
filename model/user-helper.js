@@ -46,7 +46,7 @@ module.exports = {
       }
     })
   },
-  fetchRecCategoryAndType : (id)=>{
+  fetchRecCategoryAndType : (id)=>{ //recommended categories and type
     return new Promise(async (resolve, reject) => {
       try {
         let categoryAndType = await db.get().collection(PRODUCT_COLLECTION).aggregate([
@@ -728,7 +728,54 @@ modifyUserData : (userId, newData)=>{
       reject(error)
     }
   })
+},
+
+changeUserPassword : (userId, newPassword)=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+      newPassword = await bcrypt.hash(newPassword,10);
+      let response = await db.get().collection(USER_COLLECTION).updateOne({_id: ObjectId(userId)}, {$set: {userPassword : newPassword}})
+
+      if(response){
+        resolve({status:true, msg:'Password changed successfully!'})
+      }else {
+        reject({status:false, msg:'Promise to change password in database didnot work as expected.'})
+      }
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+checkIfPasswordTrue : (checkPassword, userId)=>{
+  return new Promise(async (resolve, reject) => {
+
+    try {
+
+      let userData = await db.get().collection(USER_COLLECTION).findOne({_id : ObjectId(userId)})
+
+      if(!userData) {
+        resolve({status:false, error:'User data does not exist in database. Please create an account to continue.'})
+      } else {
+        let status = await bcrypt.compare(checkPassword,userData.userPassword)
+
+        if(status) {
+          console.log('Passwords Match!');
+          resolve({status: true, msg:'Passwords Match!'})
+
+        }else {
+          console.log('Passwords Doesnt Match!');
+          resolve({status:false, msg:'Passwords Doesnot Match!!'})
+        }
+      }
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
+
 
 
 }

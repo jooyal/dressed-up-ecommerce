@@ -291,6 +291,47 @@ let changeAccountInfo = (userId)=>{
     }
 }
 
+// to change user password
+
+let changeUserPassword = (userId)=>{
+    let currentPass = document.getElementById('currentPassword').value
+    let newPass = document.getElementById('newPassword').value
+    let newPassConfirm = document.getElementById('newPasswordConfirm').value
+    let userPasswordErr = document.getElementById('userPasswordErr')
+
+    if(currentPass.length < 8){
+        userPasswordErr.innerHTML = 'Current Password is not Valid!'
+
+    } else if (newPass.length < 8){
+        userPasswordErr.innerHTML = 'New Password should be of minimum 8 characters!'
+
+    } else if (newPass !== newPassConfirm){
+        userPasswordErr.innerHTML = "New Password and New Password Confirm doesn't match!"
+
+    } else {
+        $.ajax({
+            url : '/change-user-password',
+            method : 'post',
+            data : {
+                userId : userId,
+                currentPassword : currentPass,
+                newPassword : newPass,
+                newPasswordConfirm : newPassConfirm
+            },
+            success : (response)=>{
+                if(response.status === false){
+                    userPasswordErr.innerHTML = response.msg
+
+                } else {
+                    alert('Password Changed Successfully!')
+                    performLogOut();
+                }
+            }
+        })
+    }
+}
+
+//to logout user
 let performLogOut = ()=>{
     $.ajax({
         url : "/logout",
