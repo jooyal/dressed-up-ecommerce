@@ -6,56 +6,81 @@
 
     <div class="col-md-8 order-md-1">
       <h4 class="mb-3">Billing address</h4>
-      <form method="post" id="checkout-form" action="">
+      {{!-- <form method="post" id="checkout-form" action=""> --}}
 
         <div class="mb-3">
-          <input type="text" name="userId" value="{{user._id}}" hidden />
+          {{!-- <input type="text" name="userId" value="{{user._id}}" hidden /> --}}
           <label for="name">Name</label>
-          <input type="text" class="form-control" name="name" id="name" placeholder="Your name" />
+          <input type="text" class="form-control" name="name" id="name" placeholder="Your Full Name" />
           <label class="pt-2" for="address">Address</label>
-          <input type="text" class="form-control" name="address" id="address" placeholder="Apartment or suite" />
+          <input type="text" class="form-control" name="address" id="address" placeholder="Apartment or Suite" />
           <label class="pt-2" for="pincode">Pincode</label>
-          <input type="text" class="form-control" name="pincode" id="pincode" placeholder="400011" required />
+          <input type="text" class="form-control" name="pincode" id="pincode" placeholder="40XXXX" required />
           <label class="pt-2" style=" display: block;" for="mobileNo">Mobile No.</label>
           <input style="width: 7%; display: inline-block;" type="num" class="form-control" disabled placeholder="+91" />
           <input style="width: 92%; display: inline-block;" type="tel" class="form-control ms-1" maxlength="10" name="mobile" id="mobileNo" placeholder="XXXXXXXXXX" />
-          <div class="invalid-feedback">
-            Please enter your shipping address.
-          </div>
+          <p class="text-danger mt-4" id="placeOrderError"></p>
         </div>
         </div>
 <br>
         <div>
-            
 
-          <div class="custom-control custom-radio mt-5">
+          <div class="custom-control custom-radio mt-2">
             <h4 class="mb-3">PAYMENT METHOD</h4>
             <input id="cod" value="COD" name="paymentMethod" type="radio" class="custom-control-input" >
             <label class="custom-control-label" for="cod">Cash On Delivery</label>
           </div>
-          <div class="custom-control custom-radio">
+          <div class="custom-control custom-radio mb-2">
             <input id="online-payment" value="ONLINE" name="paymentMethod" type="radio" class="custom-control-input">
             <label class="custom-control-label" for="online-payment">Online Payment</label>
           </div>
+          <p class="text-danger my-1" id="paymentSelectError"></p>
           <br/>
 
         </div>
 
-        <button style="width: 66%;" class="btn btn-success mt-2 mb-5" id="order-button" type="submit">Checkout</button>
+        <p style="display: inline-block;">Apply Coupon: </p>
+        <input type="text" oninput="this.value = this.value.toUpperCase('{{userId}}')" class="px-2" id="discountCoupon" name="coupon" >
+        <button style="border: none; color: black !important;" class="bg-warning text-white ms-2 rounded px-2 py-1" onclick="applyCouponDiscount()">Submit</button>
+        
+        <br>
+        
+      <div class="total-price total-price-start mt-4">
+        <table>
+          <tr>
+            <td>Total Price</td>
+            <td>&#8377 <span id="sumTotalId">{{orderTotal.sumTotalBeforeDisc}}</span></td>
+          </tr>
+          <tr>
+            <td>Discount Amount</td>
+            <td>&#8377 <span id="sumTotalId">{{orderTotal.discountAmt}}</span></td>
+          </tr>
+          <tr>
+            <td>Price After Discount</td>
+            <td>&#8377 <span id="sumTotalId">{{orderTotal.sumTotalAfterDiscount}}</span></td>
+          </tr>
+          <tr>
+            <td>Tax (GST @ 12%)</td>
+            <td>&#8377 <span id="taxAmountId">{{orderTotal.taxAmt}}</span></td>
+          </tr>
+          <tr>
+            <td>Grand Total</td>
+            <td>&#8377 <span id="grandTotalId">{{orderTotal.grandTotal}}</span></td>
+          </tr>
+        </table>
+      </div>
 
-        </form>
+        <button style="width: 66%;" class="btn btn-success mt-4 mb-5" id="order-button" onclick="placeOrder()">Place Order</button>
 
-        <div>
-          <h3>Total : Rs. {{cartTotal}}</h3></br>
-
-          <div>
-            
-              <p style="display: inline-block;">Coupon Code: </p> <input type="text" id="discountCoupon" name="coupon" ><a style="text-decoration: none;" href="" class="bg-warning text-white ms-2 rounded px-2 py-1">Submit</a>
+        {{!-- </form> --}}
             
           </div>
         </div>
         </div>
 <hr>
+
+
+
 {{!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>

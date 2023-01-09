@@ -774,6 +774,85 @@ checkIfPasswordTrue : (checkPassword, userId)=>{
       reject(error)
     }
   })
+},
+
+fetchOrderTotal : (userId, couponDiscount)=>{
+  let discount = (parseInt(couponDiscount)|| 0)
+  return new Promise(async(resolve, reject) => {
+    try {
+
+      let data = await db.get().collection(CART_COLLECTION).aggregate([
+        {
+          $match:{user: ObjectId(userId)}
+        },
+        {
+          $unwind:'$products'
+        },
+        {
+          $project:{
+            item:'$products.item',
+            quantity:'$products.quantity',
+            size:'$products.size',
+            time:'$products.time'
+          }
+        },
+        {
+          $lookup:{
+            from:PRODUCT_COLLECTION,
+            localField:'item',
+            foreignField:'_id',
+            as: 'productInfo'
+          }
+        },
+        {
+          $project:{
+            item:1, quantity:1, size:1, time:1, product:{$arrayElemAt:['$productInfo',0]}
+          }
+        },
+        {
+          $project:{
+            item:1, quantity:1, size:1, time:1, productPrice: {$toInt: '$product.productPrice'}
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            sumTotalBeforeDisc : {$sum : {$multiply : ['$quantity', '$productPrice']}},
+          }
+        },
+        {
+          $project:{
+            sumTotalBeforeDisc:1, sumTotalMultDiscount : {$multiply:['$sumTotalBeforeDisc', {$toInt : discount}]}
+          }
+        },
+        {
+          $project: {
+            sumTotalBeforeDisc: 1, discountAmt : {$divide: ['$sumTotalMultDiscount', 100]}
+          }
+        },
+        {
+          $project:{
+            sumTotalBeforeDisc:1, discountAmt:1, sumTotalAfterDiscount: {$subtract: ["$sumTotalBeforeDisc", "$discountAmt"]}
+          }
+        },
+        {
+          $project:{ // $ceil is used to round-up the value.
+            sumTotalBeforeDisc:1, discountAmt:1, sumTotalAfterDiscount:1, taxAmt: {$ceil :{$multiply : [{$divide : ['$sumTotalAfterDiscount',100]}, 12]}}, //12 is here because GST for clothes are 12%
+          }
+        },
+        {
+          $project:{
+            _id:0, sumTotalBeforeDisc:1, discountAmt:1, sumTotalAfterDiscount:1, taxAmt:1, grandTotal: {$sum:['$sumTotalAfterDiscount', '$taxAmt']}
+          }
+        }
+      ]).toArray()
+
+      resolve(data[0]);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  })
 }
 
 

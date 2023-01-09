@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -603,9 +603,36 @@ module.exports = {
 
 
     
-    placeOrder : (req,res)=> {
-        res.render('userView/place-order',{user:true})
+    getPlaceOrder : async(req,res)=> {
+        let couponDiscount = null;
+
+        try {
+
+        // const url = require('url');
+        // console.log(url.parse(req.headers.referer).pathname);
+        let decodedData = await tokenVerify(req.cookies.authToken)
+        let cartCount = await fetchCartCount(decodedData.value.userId)
+        let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+        let orderTotal = await fetchOrderTotal(decodedData.value.userId, couponDiscount)
+
+        res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, userId: decodedData.value.userId})
+            
+        } catch (error) {
+            console.log(error);
+        }
     },
+
+    postPlaceOrder : (req, res)=>{
+        try {
+
+
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    
     getOrderHistory : async(req,res)=> {
         try {
 

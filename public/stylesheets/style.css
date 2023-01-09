@@ -959,8 +959,8 @@ td a {
   text-decoration: none;
 }
 td img {
-  width: 120px;
-  height: 120px;
+  /* width: 120px;
+  height: 120px; */
   /* width: 100%; */
   display: inline-block;
   margin-right: 10px;
@@ -993,6 +993,20 @@ th:last-child {
   color: #fff;
   /* margin-top: 0px; */
 }
+
+.total-price-start {
+  display: flex;
+  justify-content: flex-start !important;
+  /* border: 2px solid blue; */
+}
+
+.total-price-start table {
+  border-top: 3px solid rgb(6, 85, 103);
+  width: 100%;
+  max-width: 735px;
+  /* border: 2px solid red; */
+}
+
 
 /* Start Media Query*/
 
