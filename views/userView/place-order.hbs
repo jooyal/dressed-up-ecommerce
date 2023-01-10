@@ -19,7 +19,7 @@
           <label class="pt-2" style=" display: block;" for="mobileNo">Mobile No.</label>
           <input style="width: 7%; display: inline-block;" type="num" class="form-control" disabled placeholder="+91" />
           <input style="width: 92%; display: inline-block;" type="tel" class="form-control ms-1" maxlength="10" name="mobile" id="mobileNo" placeholder="XXXXXXXXXX" />
-          <p class="text-danger mt-4" id="placeOrderError"></p>
+          <p class="text-danger mt-4" id="placeOrderError">{{placeOrderError}}</p>
         </div>
         </div>
 <br>
@@ -40,9 +40,9 @@
         </div>
 
         <p style="display: inline-block;">Apply Coupon: </p>
-        <input type="text" oninput="this.value = this.value.toUpperCase('{{userId}}')" class="px-2" id="discountCoupon" name="coupon" >
-        <button style="border: none; color: black !important;" class="bg-warning text-white ms-2 rounded px-2 py-1" onclick="applyCouponDiscount()">Submit</button>
-        
+        <input type="text" oninput="this.value = this.value.toUpperCase()" class="px-2" id="discountCoupon" name="coupon" value="">
+        <button style="border: none; color: black !important;" class="bg-warning text-white ms-2 rounded px-2 py-1" onclick="applyCouponDiscount('{{userId}}')">Submit</button>
+        <p class="text-danger my-1" id="couponApplyErr"></p>
         <br>
         
       <div class="total-price total-price-start mt-4">
@@ -70,7 +70,7 @@
         </table>
       </div>
 
-        <button style="width: 66%;" class="btn btn-success mt-4 mb-5" id="order-button" onclick="placeOrder()">Place Order</button>
+        <button style="width: 66%;" class="btn btn-success mt-5 mb-5" id="order-button" onclick="placeOrder('{{userId}}')">Place Order</button>
 
         {{!-- </form> --}}
             

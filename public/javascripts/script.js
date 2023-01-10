@@ -172,7 +172,7 @@ let addToWishlistFromProPage = (productId)=>{
         success: (response)=>{
             console.log(response);
             wishlistPopupAppear();
-            // document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
+            document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('wishlistCountBadge').innerHTML) + 1;
         }
     })
 }
@@ -345,4 +345,31 @@ let performLogOut = ()=>{
             }
         }
     })
+}
+
+
+// Apply coupon to order in place-order page
+
+let applyCouponDiscount = (userId)=>{
+    let couponCode = document.getElementById('discountCoupon').value
+    let couponApplyErr = document.getElementById('couponApplyErr')
+
+    // check if the coupon is valid. If yes, continue with applying updated values.
+    //else, send an error message.
+    if(couponCode == ''){
+        couponApplyErr.innerHTML = 'Enter a valid coupon code.'
+    }else {
+        $.ajax({
+            url: '/check-if-coupon-valid',
+            method: 'post',
+            data: {
+                code: couponCode,
+                userId: userId
+            },
+            success: (response)=>{
+
+            }
+        })
+    }
+
 }

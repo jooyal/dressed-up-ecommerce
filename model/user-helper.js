@@ -1,5 +1,5 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION, USER_COLLECTION, CART_COLLECTION, WISHLIST_COLLECTION } = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION, USER_COLLECTION, CART_COLLECTION, WISHLIST_COLLECTION, OFFER_COLLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
 const bcrypt = require('bcrypt');
 
@@ -132,25 +132,26 @@ module.exports = {
         //console.log(checkIfEmailExist);
 
         if(checkIfEmailExist !== null) {
-          resolve({status:false, error: 'Account already exist with this email, do sign-in instead.'})
+          resolve({status:false, error: 'Account already exist with this email, do sign-in instead.'});
         }else if(checkIfMobileExist !== null) {
-          resolve({status:false, error: 'Account already exist with this Mobile Number, do sign-in instead.'})
+          resolve({status:false, error: 'Account already exist with this Mobile Number, do sign-in instead.'});
         }else {
-          data.userMobile = '+91' + data.userMobile
-          data.isBlocked = false
+          data.userMobile = '+91' + data.userMobile;
+          data.isBlocked = false;
           data.userAddress = null;
-          delete data.confirmUserPassword
-          delete data.termsCheckBox
+          data.offers = [];
+          delete data.confirmUserPassword;
+          delete data.termsCheckBox;
           //hashing password
           data.userPassword = await bcrypt.hash(data.userPassword,10);
 
-          let response = await db.get().collection(USER_COLLECTION).insertOne(data)
+          let response = await db.get().collection(USER_COLLECTION).insertOne(data);
 
           if(response) {
             //console.log(response.insertedId);
-            resolve({status:true, userId:response.insertedId})
+            resolve({status:true, userId:response.insertedId});
           }else {
-            reject({error: "Couldn't insert data to Database"})
+            reject({error: "Couldn't insert data to Database"});
           }
         }
         
@@ -851,6 +852,28 @@ fetchOrderTotal : (userId, couponDiscount)=>{
       
     } catch (error) {
       console.log(error);
+    }
+  })
+},
+
+checkIfCouponValid : (userId, couponCode)=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+
+      let response = await db.get().collection(OFFER_COLLLECTION).findOne({code:couponCode})
+
+      if(!response){
+        resolve({status:false, message:'Not a valid Coupon Code'})
+      } else {
+        
+        let userExist = db.get().collection(USER_COLLECTION).findone({_id: ObjectId(userId)})
+        if(userExist){
+
+        }
+      }
+      
+    } catch (error) {
+      reject(error)
     }
   })
 }

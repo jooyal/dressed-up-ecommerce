@@ -788,5 +788,18 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    postCheckIfCouponValid : async(req,res)=>{
+        try {
+
+            let userId = req.body.userId
+            let code = req.body.code
+
+            let response = await checkIfCouponValid(userId, code)
+            
+        } catch (error) {
+            console.log(error);
+        }
     }
 }

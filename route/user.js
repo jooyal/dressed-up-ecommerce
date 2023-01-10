@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo, getChangeUserPassword, postChangeUserPassword, getPlaceOrder, postPlaceOrder } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo, getChangeUserPassword, postChangeUserPassword, getPlaceOrder, postPlaceOrder, postCheckIfCouponValid } = require('../controller/user-controller')
 
 /* GET home page. */
 router.get('/',landingPage);
@@ -25,6 +25,7 @@ router.post('/change-product-quantity', userAuthorization, postChangeProQuantity
 router.post('/remove-cart-product', userAuthorization, postRemoveProduct)
 router.get('/place-order', userAuthorization, getPlaceOrder)
 router.post('/place-order', userAuthorization, postPlaceOrder)
+router.post('/check-if-coupon-valid', userAuthorization, postCheckIfCouponValid)
 router.get('/order-history', userAuthorization, getOrderHistory)
 router.get('/view-order-items', userAuthorization, getOrderItems)
 router.get('/order-confirmed', userAuthorization, getOrderConfirmed)
