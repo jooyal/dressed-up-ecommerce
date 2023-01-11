@@ -1,29 +1,64 @@
 <div class="container pb-5">
   <div class="py-5 text-center">
     
-    <h2>Enter Delivery Address</h2>
+    <h2>Enter Delivery Details</h2>
     </div>
+    <div class="d-flex">
+      <div class="col-md-8">
+        <h4 class="mb-3">BILLING ADDRESS</h4>
+        {{!-- <form method="post" id="checkout-form" action=""> --}}
 
-    <div class="col-md-8 order-md-1">
-      <h4 class="mb-3">Billing address</h4>
-      {{!-- <form method="post" id="checkout-form" action=""> --}}
+          <div class="mb-3">
+            {{!-- <input type="text" name="userId" value="{{user._id}}" hidden /> --}}
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Your Full Name" />
+            <label class="pt-2" for="address">Address</label>
+            <input type="text" class="form-control" name="address" id="address" placeholder="Apartment or Suite" />
+            <label class="pt-2" for="pincode">Pincode</label>
+            <input type="text" class="form-control" name="pincode" id="pincode" placeholder="40XXXX" required />
+            <label class="pt-2" style=" display: block;" for="mobileNo">Mobile No.</label>
+            <input style="width: 7%; display: inline-block;" type="num" class="form-control" disabled placeholder="+91" />
+            <input style="width: 92%; display: inline-block;" type="tel" class="form-control ms-1" maxlength="10" name="mobile" id="mobileNo" placeholder="XXXXXXXXXX" />
+          </div>
+      </div>
+      <div class="col-md-4 ms-5">
+        <div class="custom-control custom-radio mt-2">
+            <h4 class="mb-3">PAYMENT METHOD</h4>
+            <input id="codPayment" value="COD" name="paymentMethod" type="radio" class="custom-control-input" >
+            <label class="custom-control-label" for="cod">Cash On Delivery</label>
+          </div>
+          <div class="custom-control custom-radio mb-2">
+            <input id="onlinePayment" value="ONLINE" name="paymentMethod" type="radio" class="custom-control-input">
+            <label class="custom-control-label" for="online-payment">Online Payment</label>
+          </div>
+          <br/>
+          <div>
+            <h4>SAVED ADDRESS</h4>
 
-        <div class="mb-3">
-          {{!-- <input type="text" name="userId" value="{{user._id}}" hidden /> --}}
-          <label for="name">Name</label>
-          <input type="text" class="form-control" name="name" id="name" placeholder="Your Full Name" />
-          <label class="pt-2" for="address">Address</label>
-          <input type="text" class="form-control" name="address" id="address" placeholder="Apartment or Suite" />
-          <label class="pt-2" for="pincode">Pincode</label>
-          <input type="text" class="form-control" name="pincode" id="pincode" placeholder="40XXXX" required />
-          <label class="pt-2" style=" display: block;" for="mobileNo">Mobile No.</label>
-          <input style="width: 7%; display: inline-block;" type="num" class="form-control" disabled placeholder="+91" />
-          <input style="width: 92%; display: inline-block;" type="tel" class="form-control ms-1" maxlength="10" name="mobile" id="mobileNo" placeholder="XXXXXXXXXX" />
-          <p class="text-danger mt-4" id="placeOrderError">{{placeOrderError}}</p>
-        </div>
-        </div>
+          {{#if userSavedAddress.status}}
+
+            <input type="checkbox" name="" id="selectSavedAddress" class="mt-3">
+            <label class="text-muted" for="selectSavedAddress">
+              Select Saved Address Details For Delivery.
+            </label>
+                <p style="width: 300px; margin-top: 20px; border: solid 3px;" class="p-2">
+                  {{userSavedAddress.value}}
+                </p>
+
+          {{else}}
+
+              <p style="width: 300px; margin-top: 20px; border: solid 3px;" class="p-2">
+                No user address found.
+              </p>
+
+          {{/if}}
+
+          </div>
+      </div>
+    </div>
+    
 <br>
-        <div>
+        {{!-- <div>
 
           <div class="custom-control custom-radio mt-2">
             <h4 class="mb-3">PAYMENT METHOD</h4>
@@ -34,15 +69,16 @@
             <input id="online-payment" value="ONLINE" name="paymentMethod" type="radio" class="custom-control-input">
             <label class="custom-control-label" for="online-payment">Online Payment</label>
           </div>
-          <p class="text-danger my-1" id="paymentSelectError"></p>
           <br/>
 
-        </div>
+        </div> --}}
 
         <p style="display: inline-block;">Apply Coupon: </p>
         <input type="text" oninput="this.value = this.value.toUpperCase()" class="px-2" id="discountCoupon" name="coupon" value="">
         <button style="border: none; color: black !important;" class="bg-warning text-white ms-2 rounded px-2 py-1" onclick="applyCouponDiscount('{{userId}}')">Submit</button>
+        
         <p class="text-danger my-1" id="couponApplyErr"></p>
+        <p style="color: rgb(0, 209, 0);" class="my-1" id="couponApplySuccess"></p>
         <br>
         
       <div class="total-price total-price-start mt-4">
@@ -53,11 +89,11 @@
           </tr>
           <tr>
             <td>Discount Amount</td>
-            <td>&#8377 <span id="sumTotalId">{{orderTotal.discountAmt}}</span></td>
+            <td>&#8377 <span id="discAmountId">{{orderTotal.discountAmt}}</span></td>
           </tr>
           <tr>
             <td>Price After Discount</td>
-            <td>&#8377 <span id="sumTotalId">{{orderTotal.sumTotalAfterDiscount}}</span></td>
+            <td>&#8377 <span id="amtAfterDiscount">{{orderTotal.sumTotalAfterDiscount}}</span></td>
           </tr>
           <tr>
             <td>Tax (GST @ 12%)</td>
@@ -71,13 +107,41 @@
       </div>
 
         <button style="width: 66%;" class="btn btn-success mt-5 mb-5" id="order-button" onclick="placeOrder('{{userId}}')">Place Order</button>
-
+        <p class="text-danger" id="placeOrderError"></p>
         {{!-- </form> --}}
             
           </div>
         </div>
         </div>
 <hr>
+
+<script>
+  let addressValue = document.getElementById('userSavedAddress')
+  let checkbox = document.getElementById('selectSavedAddress');
+  let addressLine1 = document.getElementById('name')
+  let addressLine2 = document.getElementById('address')
+  let addressLine3 = document.getElementById('pincode')
+  let addressLine4 = document.getElementById('mobileNo')
+
+  checkbox.addEventListener('click',()=>{
+    if(checkbox.checked){
+      addressLine1.disabled = true;
+      addressLine2.disabled = true;
+      addressLine3.disabled = true;
+      addressLine4.disabled = true;
+      addressLine1.value = null;
+      addressLine2.value = null;
+      addressLine3.value = null;
+      addressLine4.value = null;
+      
+    }else {
+      addressLine1.disabled = false
+      addressLine2.disabled = false
+      addressLine3.disabled = false
+      addressLine4.disabled = false
+    }
+  })
+</script>
 
 
 

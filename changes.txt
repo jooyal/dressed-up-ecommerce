@@ -47,3 +47,13 @@
 >   Cookie deleted instead of assigning it null value.
 
 --------------------------------------------------------------------------------------------------
+
+11/01/2022 (03:55PM)
+
+>   Discount Coupon can be applied successdully and total in the place order page gets changed via
+    DOM manipulation.
+
+>   User can view, change saved address and they have an option to select saved address or enter
+    a new address. if they choose to select saved address, input field of entering new address
+    is disabled via DOM manipulation. If user address doesn't exist, then the checkbox to select
+    saved address is hidden.

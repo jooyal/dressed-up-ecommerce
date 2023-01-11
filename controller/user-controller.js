@@ -1,12 +1,12 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
 //global variables
-let signupError
-let changeUserInfoErr
-let changeUserPasswordErr
+let signupError = null;
+let changeUserInfoErr = null;
+let changeUserPasswordErr = null;
 
 module.exports = {
   landingPage : async (req, res, next)=> {
@@ -604,7 +604,7 @@ module.exports = {
 
     
     getPlaceOrder : async(req,res)=> {
-        let couponDiscount = null;
+        let couponDiscount = null
 
         try {
 
@@ -614,18 +614,21 @@ module.exports = {
         let cartCount = await fetchCartCount(decodedData.value.userId)
         let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
         let orderTotal = await fetchOrderTotal(decodedData.value.userId, couponDiscount)
+        let savedAddressData = await fetchUserSavedAddress(decodedData.value.userId)
+        let savedAddressStatus
 
-        res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, userId: decodedData.value.userId})
-            
-        } catch (error) {
-            console.log(error);
+        if(savedAddressData.status){
+            savedAddressStatus = true
+        }else {
+            savedAddressStatus = false
         }
-    },
 
-    postPlaceOrder : (req, res)=>{
-        try {
+        let userSavedAddress = {
+            status : savedAddressStatus,
+            value: decodedData.value.userName + ' , '+ savedAddressData.address + ' , Ph:'+ decodedData.value.userMobile
+        }
 
-
+        res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, userId: decodedData.value.userId, userSavedAddress})
             
         } catch (error) {
             console.log(error);
@@ -675,10 +678,11 @@ module.exports = {
     getUserProfile :async(req,res)=> {
         try {
 
-            let data = await tokenVerify(req.cookies.authToken)
-            let cartCount = await fetchCartCount(data.value.userId)
-            let wishlistCount = await fetchWishlistCount(data.value.userId)
-            res.render('userView/user-profile',{user:true, cartCount, wishlistCount, data:data.value})
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let userSavedAddress = await fetchUserSavedAddress(decodedData.value.userId)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            res.render('userView/user-profile',{user:true, cartCount, wishlistCount, userSavedAddress:userSavedAddress.address, data:decodedData.value})
             
         } catch (error) {
             console.log(error);
@@ -688,9 +692,10 @@ module.exports = {
         try {
 
             let decodedData = await tokenVerify(req.cookies.authToken)
+            let userSavedAddress = await fetchUserSavedAddress(decodedData.value.userId)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-            res.render('userView/change-user-info',{user:true, cartCount, wishlistCount, data: decodedData.value, changeUserInfoErr})
+            res.render('userView/change-user-info',{user:true, cartCount, wishlistCount, data: decodedData.value, userSavedAddress:userSavedAddress.address, changeUserInfoErr})
             changeUserInfoErr = null
 
         } catch (error) {
@@ -721,15 +726,18 @@ module.exports = {
             if(req.body.newUserMobile){
                 newData.userMobile = req.body.newUserMobile
             }
+            if(req.body.newUserAddress){
+                newData.userAddress = req.body.newUserAddress
+            }
             //check if the values inside the object is undefined, i.e, if the body contained no data.
-            if(newData.userName === undefined && newData.userEmail === undefined && newData.userMobile === undefined){
+            if(newData.userName === undefined && newData.userEmail === undefined && newData.userMobile === undefined && newData.userAddress === undefined){
                 changeUserInfoErr = 'No data to be changed.'
                 res.status(422).redirect('/change-user-info')
 
             } else {
                 let response = await modifyUserData(decodedData.value.userId, newData)
                 console.log(response);
-                if(response.changeName || response.changeEmail || response.changeMobile){
+                if(response.changeName || response.changeEmail || response.changeMobile || response.changeAddress){
                     res.json({status:true})
                 }else {
                     res.json({status:false})
@@ -794,9 +802,38 @@ module.exports = {
         try {
 
             let userId = req.body.userId
-            let code = req.body.code
+            let discountCode = req.body.code
 
-            let response = await checkIfCouponValid(userId, code)
+            let response = await checkIfCouponValid(userId, discountCode)
+            if(response.status===false){
+                // res.json({status:false, error:response.message})
+                let decodedData = await tokenVerify(req.cookies.authToken)
+                let orderTotal = await fetchOrderTotal(decodedData.value.userId)
+                console.log(orderTotal);
+                res.json({
+                    status:false, 
+                    error:response.message, 
+                    totalBeforeDisc : orderTotal.sumTotalBeforeDisc, 
+                    discAmt : orderTotal.discountAmt, 
+                    totalAfterDisc : orderTotal.sumTotalAfterDiscount, 
+                    taxAmt : orderTotal.taxAmt, 
+                    grandTotal : orderTotal.grandTotal
+                })
+            }else {
+                let couponDiscount = response.discount;
+                let decodedData = await tokenVerify(req.cookies.authToken)
+                let orderTotal = await fetchOrderTotal(decodedData.value.userId, couponDiscount)
+                console.log(orderTotal);
+                res.json({
+                    status:true, 
+                    message:response.message, 
+                    totalBeforeDisc : orderTotal.sumTotalBeforeDisc, 
+                    discAmt : orderTotal.discountAmt, 
+                    totalAfterDisc : orderTotal.sumTotalAfterDiscount, 
+                    taxAmt : orderTotal.taxAmt, 
+                    grandTotal : orderTotal.grandTotal
+                })
+            }
             
         } catch (error) {
             console.log(error);

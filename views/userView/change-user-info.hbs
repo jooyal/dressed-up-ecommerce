@@ -14,6 +14,10 @@
         <div id="userMobile" class="mt-4">Current Phone No. : {{data.userMobile}}</div>
         <label for="newUserMobile" >Enter your new phone number</label>
         <input type="number"  class="form-control" id="newUserMobile">        
+
+        <div id="userAddress" class="mt-4">Current Saved Address : {{userSavedAddress}}</div>
+        <label for="newUserAddress" >Enter your new Address (IN CAPITAL LETTERS)</label>
+        <input type="text" oninput="this.value = this.value.toUpperCase()" class="form-control" id="newUserAddress"> 
         
         <p class="text-center text-danger mt-2">{{changeUserInfoErr}}</p>
 

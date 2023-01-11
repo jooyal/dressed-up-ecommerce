@@ -139,7 +139,6 @@ module.exports = {
           data.userMobile = '+91' + data.userMobile;
           data.isBlocked = false;
           data.userAddress = null;
-          data.offers = [];
           delete data.confirmUserPassword;
           delete data.termsCheckBox;
           //hashing password
@@ -722,6 +721,9 @@ modifyUserData : (userId, newData)=>{
       if(newData.userMobile){
         response.changeMobile = await db.get().collection(USER_COLLECTION).updateOne({_id : ObjectId(userId)}, {$set: {userMobile : newData.userMobile}})
       }
+      if(newData.userAddress){
+        response.changeAddress = await db.get().collection(USER_COLLECTION).updateOne({_id : ObjectId(userId)}, {$set: {userAddress : newData.userAddress}})
+      }
 
       resolve(response)
       
@@ -859,25 +861,36 @@ fetchOrderTotal : (userId, couponDiscount)=>{
 checkIfCouponValid : (userId, couponCode)=>{
   return new Promise(async(resolve, reject) => {
     try {
-
-      let response = await db.get().collection(OFFER_COLLLECTION).findOne({code:couponCode})
-
+      console.log(couponCode);
+      let response = await db.get().collection(OFFER_COLLLECTION).findOne({offer: couponCode})
+      console.log(response);
       if(!response){
         resolve({status:false, message:'Not a valid Coupon Code'})
       } else {
-        
-        let userExist = db.get().collection(USER_COLLECTION).findone({_id: ObjectId(userId)})
-        if(userExist){
-
-        }
+        resolve({status:true, message:'Entered Coupon is Valid!.', discount: response.percentage})
       }
       
     } catch (error) {
       reject(error)
     }
   })
-}
+},
 
+fetchUserSavedAddress : (userId)=>{
+  return new Promise(async(resolve, reject)=>{
+    try {
+      let response = await db.get().collection(USER_COLLECTION).findOne({_id: ObjectId(userId)})
+      if(response.userAddress === null){
+        resolve({status:false, address: 'User has no saved address'})
+
+      }else {
+        resolve({status:true, address:response.userAddress})
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
 
 
 }

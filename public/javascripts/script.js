@@ -268,6 +268,7 @@ let changeAccountInfo = (userId)=>{
     let newUserName = document.getElementById('newUserName').value
     let newUserEmail = document.getElementById('newUserEmail').value
     let newUserMobile = document.getElementById('newUserMobile').value
+    let newUserAddress = document.getElementById('newUserAddress').value
 
     let confirmation = confirm("Are you sure you want to change your User Info?");
 
@@ -278,7 +279,8 @@ let changeAccountInfo = (userId)=>{
             data : {
                 newUserName:newUserName,
                 newUserEmail:newUserEmail,
-                newUserMobile:newUserMobile
+                newUserMobile:newUserMobile,
+                newUserAddress:newUserAddress
             },
             success : (response)=>{
                 if(response.status){
@@ -353,6 +355,7 @@ let performLogOut = ()=>{
 let applyCouponDiscount = (userId)=>{
     let couponCode = document.getElementById('discountCoupon').value
     let couponApplyErr = document.getElementById('couponApplyErr')
+    let couponApplySuccess = document.getElementById('couponApplySuccess')
 
     // check if the coupon is valid. If yes, continue with applying updated values.
     //else, send an error message.
@@ -366,10 +369,46 @@ let applyCouponDiscount = (userId)=>{
                 code: couponCode,
                 userId: userId
             },
+            // reason for DOM manipulation in both the cases is that if after entering a
+            // valid coupon code and then user enters an invalid code, the previousely applied
+            // discount amount should be reverted back to normal.
             success: (response)=>{
-
+                if(response.status===false){
+                    couponApplySuccess.innerHTML = null
+                    couponApplyErr.innerHTML = response.error
+                    document.getElementById('sumTotalId').innerHTML = response.totalBeforeDisc;
+                    document.getElementById('discAmountId').innerHTML = response.discAmt;
+                    document.getElementById('amtAfterDiscount').innerHTML = response.totalAfterDisc;
+                    document.getElementById('taxAmountId').innerHTML = response.taxAmt;
+                    document.getElementById('grandTotalId').innerHTML = response.grandTotal;
+                }else{
+                    couponApplyErr.innerHTML = null;
+                    couponApplySuccess.innerHTML = response.message;
+                    document.getElementById('sumTotalId').innerHTML = response.totalBeforeDisc;
+                    document.getElementById('discAmountId').innerHTML = response.discAmt;
+                    document.getElementById('amtAfterDiscount').innerHTML = response.totalAfterDisc;
+                    document.getElementById('taxAmountId').innerHTML = response.taxAmt;
+                    document.getElementById('grandTotalId').innerHTML = response.grandTotal;
+                    alert('Coupon Applied Successfully!')
+                }
             }
         })
     }
 
+}
+
+let placeOrder = (userId)=>{
+    let cod = document.getElementById('codPayment')
+    let online = document.getElementById('onlinePayment')
+    let couponCode = document.getElementById('discountCoupon').value
+
+    // console.log(cod.checked);
+    // console.log(online.checked)
+
+    if(cod.checked===false && online.checked===false){
+        document.getElementById('placeOrderError').innerHTML = 'Select a payment method to continue.';
+    }else {
+        document.getElementById('placeOrderError').innerHTML = null;
+        
+    }
 }

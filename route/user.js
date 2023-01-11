@@ -24,7 +24,6 @@ router.post('/remove-from-wishlist', userAuthorization, postRemoveProductFromWis
 router.post('/change-product-quantity', userAuthorization, postChangeProQuantity)
 router.post('/remove-cart-product', userAuthorization, postRemoveProduct)
 router.get('/place-order', userAuthorization, getPlaceOrder)
-router.post('/place-order', userAuthorization, postPlaceOrder)
 router.post('/check-if-coupon-valid', userAuthorization, postCheckIfCouponValid)
 router.get('/order-history', userAuthorization, getOrderHistory)
 router.get('/view-order-items', userAuthorization, getOrderItems)

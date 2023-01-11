@@ -1,10 +1,11 @@
 <div class="text-center  align-items-center d-flex flex-column">
     <h1 class="mt-5">User Profile</h1>
     <p class="mt-3">Hello {{data.userName}}! You can find your account information & settings here.</p>
-    <div class="rounded bg-white shadow p-5 mt-5 mb-5 d-flex flex-column align-items-center justify-content-center" style="width: fit-content; height: 65vh; border-radius: 20px !important;">
+    <div class="rounded bg-white shadow px-5 mt-3 mb-3 d-flex flex-column align-items-center justify-content-center" style="width: fit-content; height: fit-content; border-radius: 20px !important;">
         <div id="userName" class="m-3 mt-5 d-flex flex-row"><i class="fa-solid fa-user p-1 me-2"></i><h5>{{data.userName}}</h5></div>
         <div id="userEmail" class="m-3 d-flex flex-row"><i class="fa-solid fa-envelope p-1 me-2"></i><h5>{{data.userEmail}}</h5></div>
-        <div id="userPhoneNumber" class="m-3 mb-4 d-flex flex-row"><i class="fa-solid fa-phone-volume p-1 me-2"></i>{{data.userMobile}}</h5></div>
+        <div id="userPhoneNumber" class="m-3 d-flex flex-row"><i class="fa-solid fa-phone-volume p-1 me-2"></i>{{data.userMobile}}</h5></div>
+        <div id="userAddress" style="max-width: 400px;" class="m-3 mb-5 d-flex flex-row"><i class="fa-solid fa-house p-1 me-2"></i>{{userSavedAddress}}</h5></div>
         <a href="/change-user-info" class="btn btn-warning mb-4">Change Account Info</a>
         <a href="/change-user-password" class="btn btn-danger mb-5">Change Password</a>
     </div>
