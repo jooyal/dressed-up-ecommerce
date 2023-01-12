@@ -1007,6 +1007,9 @@ th:last-child {
   /* border: 2px solid red; */
 }
 
+.payment-details-flex {
+  display: block;
+}
 
 /* Start Media Query*/
 
@@ -1015,6 +1018,9 @@ th:last-child {
     font-family: 'great-vibes';
     font-size: 2rem !important;
     color: #088178;
+  }
+  .payment-details-flex {
+    display: flex !important;
   }
 }
 
@@ -1126,6 +1132,9 @@ th:last-child {
     font-family: 'great-vibes';
     font-size: 2rem !important;
     color: #088178;
+  }
+  .payment-details-flex {
+    display: block !important;
   }
 }
 

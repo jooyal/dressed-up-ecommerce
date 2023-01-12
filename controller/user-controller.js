@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -625,11 +625,83 @@ module.exports = {
 
         let userSavedAddress = {
             status : savedAddressStatus,
-            value: decodedData.value.userName + ' , '+ savedAddressData.address + ' , Ph:'+ decodedData.value.userMobile
+            value: (decodedData.value.userName).toUpperCase() + ' , '+ savedAddressData.address + ' , Ph:'+ decodedData.value.userMobile
         }
 
         res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, userId: decodedData.value.userId, userSavedAddress})
             
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    postPlaceOrder : async (req,res)=>{
+
+        let orderDetails = {}
+        let paymentMethod = req.body.paymentMethod
+        let decodedData = await tokenVerify(req.cookies.authToken)
+        let couponCode = req.body.coupon
+        let couponDiscount
+        let orderTotal
+        let products
+
+        try {
+            if(couponCode === null){
+                couponDiscount = 0
+            } else {
+                let checkCouponValidity = await checkIfCouponValid(couponCode)
+
+                if(checkCouponValidity.status){
+                    couponDiscount = checkCouponValidity.discount;
+                } else {
+                    couponDiscount = 0
+                }
+            }
+            
+            orderTotal = await fetchOrderTotal(decodedData.value.userId, couponDiscount)
+
+            products = await getCartProductList(decodedData.value.userId)
+
+            // console.log('status = '+req.body.deliveryAddress);
+            if(req.body.deliveryAddress === '' || req.body.deliveryAddress === ', '){
+                let  savedAddressData = await fetchUserSavedAddress(decodedData.value.userId)
+                orderDetails.userId = decodedData.value.userId
+                orderDetails.name = (decodedData.value.userName).toUpperCase()
+                orderDetails.mobile = decodedData.value.userMobile
+                orderDetails.deliveryAddress = savedAddressData.address
+                orderDetails.paymentMethod = paymentMethod
+                orderDetails.orderDiscountCode = couponCode
+                orderDetails.orderDiscountPercent = couponDiscount + ' %'
+
+            } else {
+                orderDetails.userId = decodedData.value.userId
+                orderDetails.name = req.body.orderName;
+                orderDetails.mobile = req.body.orderMobile;
+                orderDetails.deliveryAddress = req.body.deliveryAddress;
+                orderDetails.paymentMethod = paymentMethod
+                orderDetails.orderDiscountCode = couponCode
+                orderDetails.orderDiscountPercent = couponDiscount + ' %'
+            }
+
+            if(paymentMethod === null){
+                res.json({status:false, error:'Select a payment method to continue.'})
+            } else {
+                // console.log('success');
+                // console.log(orderDetails);
+                // console.log(orderTotal.grandTotal);
+                // console.log(products);
+
+                let response = await placeNewOrder(orderDetails, orderTotal.grandTotal, products)
+
+                if(response.paymentMethod==='COD'){
+                    res.json({orderId : response.orderId, codPayment: true, status:true})
+
+                } else if (response.paymentMethod==='ONLINE'){
+
+
+                }
+            }
+
         } catch (error) {
             console.log(error);
         }
@@ -652,7 +724,14 @@ module.exports = {
         res.render('userView/order-history-items',{user:true})
     },
     getOrderConfirmed : (req,res)=> {
-        res.render('userView/order-confirmed',{user:true})
+        try {
+
+        let orderId = req.params.id
+        res.render('userView/order-confirmed',{user:true, orderId})
+            
+        } catch (error) {
+            console.log(error);
+        }
     },
     get404error : (req,res)=> {
         res.render('404-error',{user:true})
@@ -804,7 +883,7 @@ module.exports = {
             let userId = req.body.userId
             let discountCode = req.body.code
 
-            let response = await checkIfCouponValid(userId, discountCode)
+            let response = await checkIfCouponValid(discountCode)
             if(response.status===false){
                 // res.json({status:false, error:response.message})
                 let decodedData = await tokenVerify(req.cookies.authToken)
@@ -815,6 +894,7 @@ module.exports = {
                     error:response.message, 
                     totalBeforeDisc : orderTotal.sumTotalBeforeDisc, 
                     discAmt : orderTotal.discountAmt, 
+                    discPercentage : 0,
                     totalAfterDisc : orderTotal.sumTotalAfterDiscount, 
                     taxAmt : orderTotal.taxAmt, 
                     grandTotal : orderTotal.grandTotal
@@ -829,6 +909,7 @@ module.exports = {
                     message:response.message, 
                     totalBeforeDisc : orderTotal.sumTotalBeforeDisc, 
                     discAmt : orderTotal.discountAmt, 
+                    discPercentage : response.discount,
                     totalAfterDisc : orderTotal.sumTotalAfterDiscount, 
                     taxAmt : orderTotal.taxAmt, 
                     grandTotal : orderTotal.grandTotal

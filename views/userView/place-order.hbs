@@ -3,33 +3,38 @@
     
     <h2>Enter Delivery Details</h2>
     </div>
-    <div class="d-flex">
-      <div class="col-md-8">
+    <div class="payment-details-flex">
+      <div class="col-12 col-sm-12 col-md-8">
         <h4 class="mb-3">BILLING ADDRESS</h4>
         {{!-- <form method="post" id="checkout-form" action=""> --}}
 
           <div class="mb-3">
             {{!-- <input type="text" name="userId" value="{{user._id}}" hidden /> --}}
-            <label for="name">Name</label>
-            <input type="text" class="form-control" name="name" id="name" placeholder="Your Full Name" />
+            <label for="orderNname">Name</label>
+            <input type="text" class="form-control" name="orderNname" onblur="validateName()" id="orderNname" placeholder="Your Full Name" />
+              <div class="mb-1" style="color: red;" id="orderNameErr"></div>
             <label class="pt-2" for="address">Address</label>
-            <input type="text" class="form-control" name="address" id="address" placeholder="Apartment or Suite" />
+            <input type="text" class="form-control" name="address" onkeyup="validateAddress()" id="address" placeholder="Complete Address Including Landmark"/>
+              <div class="mb-1" style="color: red;" id="orderAddressErr"></div>
             <label class="pt-2" for="pincode">Pincode</label>
-            <input type="text" class="form-control" name="pincode" id="pincode" placeholder="40XXXX" required />
+            <input type="text" class="form-control" name="pincode" onblur="validatePincode()" id="pincode" placeholder="40XXXX" maxlength="6"/>
+              <div class="mb-1" style="color: red;" id="orderPincodeErr"></div>
             <label class="pt-2" style=" display: block;" for="mobileNo">Mobile No.</label>
-            <input style="width: 7%; display: inline-block;" type="num" class="form-control" disabled placeholder="+91" />
-            <input style="width: 92%; display: inline-block;" type="tel" class="form-control ms-1" maxlength="10" name="mobile" id="mobileNo" placeholder="XXXXXXXXXX" />
+            <input style="min-width: 50px; max-width: 15%; display: inline-block;" type="num" class="form-control" disabled placeholder="+91" />
+            <input style="max-width: 82%; display: inline-block;" type="tel" class="form-control ms-1" name="mobile" onblur="validateMobile()" id="mobileNo" placeholder="XXXXXXXXXX" maxlength="10"/>
+              <div class="mb-1" style="color: red;" id="orderMobileErr"></div>
+
           </div>
       </div>
-      <div class="col-md-4 ms-5">
+      <div class="col-md-4 ms-5 mt-4">
         <div class="custom-control custom-radio mt-2">
             <h4 class="mb-3">PAYMENT METHOD</h4>
             <input id="codPayment" value="COD" name="paymentMethod" type="radio" class="custom-control-input" >
-            <label class="custom-control-label" for="cod">Cash On Delivery</label>
+            <label class="custom-control-label" for="codPayment">Cash On Delivery</label>
           </div>
           <div class="custom-control custom-radio mb-2">
             <input id="onlinePayment" value="ONLINE" name="paymentMethod" type="radio" class="custom-control-input">
-            <label class="custom-control-label" for="online-payment">Online Payment</label>
+            <label class="custom-control-label" for="onlinePayment">Online Payment</label>
           </div>
           <br/>
           <div>
@@ -74,9 +79,11 @@
         </div> --}}
 
         <p style="display: inline-block;">Apply Coupon: </p>
-        <input type="text" oninput="this.value = this.value.toUpperCase()" class="px-2" id="discountCoupon" name="coupon" value="">
+        <input type="text" oninput="this.value = this.value.toUpperCase()" class="px-2" id="discountCoupon" name="coupon" value="" maxlength="8">
         <button style="border: none; color: black !important;" class="bg-warning text-white ms-2 rounded px-2 py-1" onclick="applyCouponDiscount('{{userId}}')">Submit</button>
-        
+          <br>
+        <a style="text-decoration: none; color: blueviolet;" href="/available-offers">Explore available coupons</a>
+
         <p class="text-danger my-1" id="couponApplyErr"></p>
         <p style="color: rgb(0, 209, 0);" class="my-1" id="couponApplySuccess"></p>
         <br>
@@ -88,7 +95,7 @@
             <td>&#8377 <span id="sumTotalId">{{orderTotal.sumTotalBeforeDisc}}</span></td>
           </tr>
           <tr>
-            <td>Discount Amount</td>
+            <td>Discount Amount (<span id="discPercentage">0</span> %)</td>
             <td>&#8377 <span id="discAmountId">{{orderTotal.discountAmt}}</span></td>
           </tr>
           <tr>
@@ -106,19 +113,18 @@
         </table>
       </div>
 
-        <button style="width: 66%;" class="btn btn-success mt-5 mb-5" id="order-button" onclick="placeOrder('{{userId}}')">Place Order</button>
+        <button style="width: 66%;" class="btn btn-success mt-5 mb-5" id="order-button" onclick="checkForErrorsAndPlaceOrder('{{userId}}')">Place Order</button>
         <p class="text-danger" id="placeOrderError"></p>
         {{!-- </form> --}}
             
           </div>
         </div>
         </div>
-<hr>
 
 <script>
   let addressValue = document.getElementById('userSavedAddress')
   let checkbox = document.getElementById('selectSavedAddress');
-  let addressLine1 = document.getElementById('name')
+  let addressLine1 = document.getElementById('orderNname')
   let addressLine2 = document.getElementById('address')
   let addressLine3 = document.getElementById('pincode')
   let addressLine4 = document.getElementById('mobileNo')
@@ -143,7 +149,7 @@
   })
 </script>
 
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 {{!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 

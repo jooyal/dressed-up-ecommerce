@@ -1,5 +1,5 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION, USER_COLLECTION, CART_COLLECTION, WISHLIST_COLLECTION, OFFER_COLLLECTION } = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION, USER_COLLECTION, CART_COLLECTION, WISHLIST_COLLECTION, OFFER_COLLLECTION, ORDER_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
 const bcrypt = require('bcrypt');
 
@@ -858,13 +858,13 @@ fetchOrderTotal : (userId, couponDiscount)=>{
   })
 },
 
-checkIfCouponValid : (userId, couponCode)=>{
+checkIfCouponValid : (couponCode)=>{
   return new Promise(async(resolve, reject) => {
     try {
       console.log(couponCode);
       let response = await db.get().collection(OFFER_COLLLECTION).findOne({offer: couponCode})
       console.log(response);
-      if(!response){
+      if(!response || response.percentage === undefined){
         resolve({status:false, message:'Not a valid Coupon Code'})
       } else {
         resolve({status:true, message:'Entered Coupon is Valid!.', discount: response.percentage})
@@ -890,7 +890,59 @@ fetchUserSavedAddress : (userId)=>{
       reject(error)
     }
   })
-}
+},
+
+placeNewOrder : (orderDetails, total, products)=>{
+  return new Promise(async(resolve, reject)=>{
+    try {
+
+      let status = orderDetails.paymentMethod === 'COD'?'placed':'pending' //if orderDetails.paymentMethod equalto COD, then status is assigned string value 'placed'. else case(if onlinePayment), status is assigned 'pending'.
+      
+      let orderObject = {
+        deliveryDetails:{
+            mobileNumber : orderDetails.mobile,
+            address : orderDetails.address
+        },
+        userId : ObjectId(orderDetails.userId),
+        paymentMethod : orderDetails.paymentMethod,
+        products : products,
+        totalAmount : total,
+        discountCode : orderDetails.orderDiscountCode,
+        discountPercent : orderDetails.orderDiscountPercent,
+        orderStatus : status,
+        shipmentStatus : false,
+        date: new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})
+      }
+
+      //inserting orderObject containing order details inside the 'order' collection.
+
+      db.get().collection(ORDER_COLLECTION).insertOne(orderObject).then((response)=>{
+        db.get().collection(CART_COLLECTION).deleteOne({user: ObjectId(orderDetails.userId)}).then(()=>{
+          resolve({paymentMethod:orderDetails.paymentMethod,orderId:response.insertedId})
+        })
+      })
+      .catch((error)=>{
+        reject(error)
+      })
+
+    } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+getCartProductList : (userId)=>{
+  return new Promise(async(resolve, reject) => {
+     try {
+
+      let cart = await db.get().collection(CART_COLLECTION).findOne({user:ObjectId(userId)});
+      resolve(cart.products)
+      
+     } catch (error) {
+      reject(error)
+     }
+  })
+},
 
 
 }

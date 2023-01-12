@@ -359,9 +359,10 @@ let applyCouponDiscount = (userId)=>{
 
     // check if the coupon is valid. If yes, continue with applying updated values.
     //else, send an error message.
-    if(couponCode == ''){
-        couponApplyErr.innerHTML = 'Enter a valid coupon code.'
-    }else {
+    // if(couponCode == ''){
+    //     couponApplySuccess.innerHTML = null
+    //     couponApplyErr.innerHTML = 'Enter a valid coupon code.'
+    // }else {
         $.ajax({
             url: '/check-if-coupon-valid',
             method: 'post',
@@ -378,6 +379,7 @@ let applyCouponDiscount = (userId)=>{
                     couponApplyErr.innerHTML = response.error
                     document.getElementById('sumTotalId').innerHTML = response.totalBeforeDisc;
                     document.getElementById('discAmountId').innerHTML = response.discAmt;
+                    document.getElementById('discPercentage').innerHTML = response.discPercentage;
                     document.getElementById('amtAfterDiscount').innerHTML = response.totalAfterDisc;
                     document.getElementById('taxAmountId').innerHTML = response.taxAmt;
                     document.getElementById('grandTotalId').innerHTML = response.grandTotal;
@@ -386,6 +388,7 @@ let applyCouponDiscount = (userId)=>{
                     couponApplySuccess.innerHTML = response.message;
                     document.getElementById('sumTotalId').innerHTML = response.totalBeforeDisc;
                     document.getElementById('discAmountId').innerHTML = response.discAmt;
+                    document.getElementById('discPercentage').innerHTML = response.discPercentage;
                     document.getElementById('amtAfterDiscount').innerHTML = response.totalAfterDisc;
                     document.getElementById('taxAmountId').innerHTML = response.taxAmt;
                     document.getElementById('grandTotalId').innerHTML = response.grandTotal;
@@ -393,14 +396,127 @@ let applyCouponDiscount = (userId)=>{
                 }
             }
         })
+    // }
+
+}
+
+
+
+let validateName = ()=> {
+    let name = document.getElementById('orderNname').value;
+    let nameError = document.getElementById('orderNameErr')
+
+    if(name.length == 0){
+        nameError.innerHTML = 'Name is required';
+        return false;
+    }
+    if(!name.match(/^[A-Za-z]+ [A-Za-z]+$/)) {
+        nameError.innerHTML = 'Enter Your Full Name';
+        return false;
+    }
+    nameError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+        return true;
+}
+
+let validatePincode = ()=>{
+    let pincode = document.getElementById('pincode').value
+    let pincodeError = document.getElementById('orderPincodeErr')
+
+    if(pincode.length == 0){
+        pincodeError.innerHTML = 'Enter Your Pincode'
+        return false;
+    }
+    if(!pincode.match(/^\d{6}$/)){
+        pincodeError.innerHTML = 'Enter Valid 6 digit Pincode'
+        return false;
+    }
+    pincodeError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+}
+
+let validateMobile = ()=>{
+    let mobile = document.getElementById('mobileNo').value
+    let mobileErr = document.getElementById('orderMobileErr')
+
+    if(mobile.length == 0){
+        mobileErr.innerHTML = 'Enter Your Mobile Number.'
+        return false;
+    }
+    if(!mobile.match(/^\d{10}$/)){
+        mobileErr.innerHTML = 'Enter A Valid 10 Digit Mobile Number.'
+        return false;
+    }
+    mobileErr.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+}
+
+let validateAddress = ()=>{
+    let address = document.getElementById('address').value
+    let addressErr = document.getElementById('orderAddressErr')
+
+    if(address.length == 0){
+        addressErr.innerHTML = 'Enter Your Address'
+        return false
+    }
+    if(address.length < 50){
+        addressErr.innerHTML = 'Length Of Address Should Be Atleast 50 Letters'
+        return false
+    }
+    addressErr.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+    return true
+}
+
+// function validateEmail() {
+//     var email = document.getElementById('cemail').value;
+
+//     if(email.length == 0) {
+//         emailError.innerHTML = 'Email is required';
+//         return false;
+//     }
+//     if(!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+//         emailError.innerHTML = 'Email invalid';
+//         return false;
+//     }
+//     emailError.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+//     return true;
+// }
+
+
+
+// check if user has entered the minimum required characters.
+// if the user has selected manual address check for it. else, directly call place-order function.
+
+let checkForErrorsAndPlaceOrder = (userId)=>{
+
+    let checkbox = document.getElementById('selectSavedAddress');
+
+    if(checkbox.checked === false){
+
+        if(!validateName() && !validateAddress() && !validateMobile() && !validatePincode()){
+            document.getElementById('placeOrderError').innerHTML = 'Enter All Required Fields To Continue.'
+
+        } else {
+            placeOrder(userId)
+
+        }
+
+    } else if (checkbox.checked === true){
+        placeOrder(userId)
+
     }
 
+    
 }
 
 let placeOrder = (userId)=>{
     let cod = document.getElementById('codPayment')
     let online = document.getElementById('onlinePayment')
     let couponCode = document.getElementById('discountCoupon').value
+    let savedAddressSelection = document.getElementById('selectSavedAddress')
+    let userName = (document.getElementById('orderNname').value).toUpperCase()
+    let addressLine2 = (document.getElementById('address').value).toUpperCase()
+    let addressLine3 = (document.getElementById('pincode').value).toUpperCase()
+    let userMobile = (document.getElementById('mobileNo').value)
+    let paymentMethod
+    let deliveryAddress
 
     // console.log(cod.checked);
     // console.log(online.checked)
@@ -409,6 +525,49 @@ let placeOrder = (userId)=>{
         document.getElementById('placeOrderError').innerHTML = 'Select a payment method to continue.';
     }else {
         document.getElementById('placeOrderError').innerHTML = null;
-        
+
+        if(!savedAddressSelection.checked){
+            deliveryAddress = addressLine2 + ', ' + addressLine3
+        } else {
+            deliveryAddress = null
+        }
+
+        if(cod.checked===true){
+            paymentMethod = 'COD'
+
+        } else if (online.checked===true){
+            paymentMethod = 'ONLINE'
+        }
+// function to place order.
+
+        $.ajax({
+            url:'/place-order',
+            method:'post',
+            data:{
+                orderName : userName,
+                orderMobile : '+91'+userMobile,
+                paymentMethod : paymentMethod,
+                deliveryAddress : deliveryAddress,
+                user: userId,
+                coupon : couponCode,
+            },
+            success : (response)=>{
+                if(response.status === false){
+                    document.getElementById('placeOrderError').innerHTML = response.error
+                } else {
+                    document.getElementById('placeOrderError').innerHTML = null;
+
+                    if(response.codPayment === true){
+                        alert('Order Placed Successfully!')
+                        location.href = "/order-confirmed"+response.orderId
+
+                    }
+
+
+                }
+            }
+        })
+
     }
 }
+

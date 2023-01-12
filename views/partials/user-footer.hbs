@@ -44,8 +44,11 @@
     </div>
 
     <div class="copyright">
-        <p>&#169 Dressed Up, 2023. Made By <a href="https://github.com/jooyal" target="_blank">Joseph Joyal</a></p>
+        <p>&#169 Dressed Up, <span id="currentYearDisplay"></span>. Made By <a href="https://github.com/jooyal" target="_blank">Joseph Joyal</a></p>
     </div>
 
    </footer>
+   <script>
+      document.getElementById('currentYearDisplay').innerHTML = new Date().getUTCFullYear()
+    </script>
    <!-- end of footer -->
