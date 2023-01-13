@@ -2,6 +2,14 @@ const db = require('./dbConnection/connection.js');
 const { PRODUCT_COLLECTION, USER_COLLECTION, CART_COLLECTION, WISHLIST_COLLECTION, OFFER_COLLLECTION, ORDER_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
 const bcrypt = require('bcrypt');
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
+require('dotenv').config();
+
+const instance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+})
 
 module.exports = {
   fetchHomeProducts : (category)=>{
@@ -917,7 +925,7 @@ placeNewOrder : (orderDetails, total, products)=>{
       //inserting orderObject containing order details inside the 'order' collection.
 
       db.get().collection(ORDER_COLLECTION).insertOne(orderObject).then((response)=>{
-        db.get().collection(CART_COLLECTION).deleteOne({user: ObjectId(orderDetails.userId)}).then(()=>{
+        db.get().collection(CART_COLLECTION).deleteOne({user: ObjectId(orderDetails.userId)}).then(()=>{ //change findOne to deleteOne
           resolve({paymentMethod:orderDetails.paymentMethod,orderId:response.insertedId})
         })
       })
@@ -943,6 +951,50 @@ getCartProductList : (userId)=>{
      }
   })
 },
+
+getRazorPay : (orderId, totalAmount)=>{
+  totalAmount = totalAmount * 100;
+  return new Promise((resolve, reject) => {
+    try {
+      let response = instance.orders.create({
+                      amount: totalAmount,
+                      currency: 'INR',
+                      receipt: ''+orderId
+                    })
+      
+      if(response){
+        resolve(response)
+      } else {
+        reject({msg:'Order creation failed!'})
+      }
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+verifyRazorpayPayment : (rzpOrderObjId, rzpPaymentId, rzpPaymentSignature)=>{
+  return new Promise((resolve, reject) => {
+    try {
+
+      let hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET); // adding the name of algorithm and the secret key for hashing
+      hmac.update(rzpOrderObjId + '|' + rzpPaymentId) // data that needs to be hashed
+      hmac = hmac.digest('hex'); //converting the hashed product to hexacode string
+      // console.log(hmac);
+      //check if the hmac generated here matches with the hexacode signature that razorpay sent back after successful payment.
+      if(hmac === rzpPaymentSignature) {
+        resolve({message: 'Order verified successfully.', status:true});
+
+      }else {
+        reject({message: 'Payment not verified', status:false});
+      }
+
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
 
 
 }

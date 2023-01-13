@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -623,12 +623,19 @@ module.exports = {
             savedAddressStatus = false
         }
 
+        // if useraddress status is false, on rendering, it will show 'no saved address found.'
+        // else, it will show the value.
         let userSavedAddress = {
             status : savedAddressStatus,
             value: (decodedData.value.userName).toUpperCase() + ' , '+ savedAddressData.address + ' , Ph:'+ decodedData.value.userMobile
         }
 
-        res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, userId: decodedData.value.userId, userSavedAddress})
+        res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, 
+            userId: decodedData.value.userId, 
+            userEmail: decodedData.value.userEmail, 
+            userMobile: decodedData.value.userMobile, 
+            userFullName: decodedData.value.userName, 
+            userSavedAddress})
             
         } catch (error) {
             console.log(error);
@@ -697,8 +704,14 @@ module.exports = {
                     res.json({orderId : response.orderId, codPayment: true, status:true})
 
                 } else if (response.paymentMethod==='ONLINE'){
+                    let razorpayOrderObj = await getRazorPay(response.orderId, orderTotal.grandTotal)
 
+                    if(razorpayOrderObj){
+                        res.json({rzpObj : razorpayOrderObj, orderId : response.orderId})
+                    }
 
+                } else {
+                    console.log('Some error occured while checking for payment method!');
                 }
             }
 
@@ -707,6 +720,30 @@ module.exports = {
         }
     },
 
+
+    postVerifyPayment : async (req,res)=>{
+        try {
+
+            //  console.log(req.body);
+            let body = req.body
+            let rzpOrderObjId = body['order[id]']
+            let paymentId = body['payment[razorpay_payment_id]'];
+            let paymentSignature = body['payment[razorpay_signature]'];
+
+            // console.log(paymentId + '  /  ' + rzpOrderObjId + '  /  ' + paymentSignature);
+            let response = await verifyRazorpayPayment(rzpOrderObjId, paymentId, paymentSignature)
+
+            if(response){
+                console.log('Payment Successful!');
+                res.json({message:'Payment verified successfully.', status: true})
+            } else {
+                res.json({message:'Verification of payment failed.', status: false})
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
     
     getOrderHistory : async(req,res)=> {
         try {

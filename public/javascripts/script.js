@@ -403,7 +403,7 @@ let applyCouponDiscount = (userId)=>{
 
 
 let validateName = ()=> {
-    let name = document.getElementById('orderNname').value;
+    let name = document.getElementById('orderName').value;
     let nameError = document.getElementById('orderNameErr')
 
     if(name.length == 0){
@@ -511,7 +511,7 @@ let placeOrder = (userId)=>{
     let online = document.getElementById('onlinePayment')
     let couponCode = document.getElementById('discountCoupon').value
     let savedAddressSelection = document.getElementById('selectSavedAddress')
-    let userName = (document.getElementById('orderNname').value).toUpperCase()
+    let userName = (document.getElementById('orderName').value).toUpperCase()
     let addressLine2 = (document.getElementById('address').value).toUpperCase()
     let addressLine3 = (document.getElementById('pincode').value).toUpperCase()
     let userMobile = (document.getElementById('mobileNo').value)
@@ -559,8 +559,25 @@ let placeOrder = (userId)=>{
 
                     if(response.codPayment === true){
                         alert('Order Placed Successfully!')
-                        location.href = "/order-confirmed"+response.orderId
+                        location.href = "/order-confirmed/"+response.orderId
 
+                    }else {
+                        if(!savedAddressSelection.checked){
+                            let userInfo = {
+                                userName : userName,
+                                userMobile : userMobile,
+                            }
+                            razorPayment(response.rzpObj, userInfo, response.orderId)
+
+                        } else {
+                            let userInfo = {
+                                userName : document.getElementById('userFullNameForPayment').value,
+                                userEmail : document.getElementById('userEmailIdForPayment').value,
+                                userMobile : parseInt(document.getElementById('userMobileNoForPayment').value)
+                            }
+                            razorPayment(response.rzpObj, userInfo, response.orderId)
+                        }
+                        
                     }
 
 
@@ -571,3 +588,75 @@ let placeOrder = (userId)=>{
     }
 }
 
+
+// function to invoke razor payment page
+
+let razorPayment = (order, userDetail, orderId)=>{
+    let options = {
+        "key": "rzp_test_hoA57QfXOzGC2S", // Enter the Key ID generated from the Dashboard
+        "amount": parseInt(order.amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Dressed Up",
+        "description": "Transaction Amount Due To Be Paid For Dressed Up",
+        "image": "https://i.postimg.cc/sgF1LdWx/download.png",
+        "order_id": order.id, 
+        "handler": function (response){
+            // alert(response.razorpay_payment_id);
+            // alert(response.razorpay_order_id);
+            // alert(response.razorpay_signature);
+            verifyPayment(response,order,orderId)
+        },
+        "prefill": {
+            "name": userDetail.userName,
+            "email": userDetail.userEmail,
+            "contact": userDetail.userMobile
+        },
+        "notes": {
+            "Corporate Address": " Imaginary Building, Ernakulam, P.O Kochi, Kerala",
+            "Phone" : "+91 9876504321"
+        },
+        "theme": {
+            "color": "#c7b8ff"
+        }
+      };
+  
+      var rzp1 = new Razorpay(options);
+
+    //   handler for failed payment
+    rzp1.on('payment.failed', function (response){
+        // alert(response.error.code);
+        // alert(response.error.description);
+        // alert(response.error.source);
+        // alert(response.error.step);
+        // alert(response.error.reason);
+        // alert(response.error.metadata.order_id);
+        // alert(response.error.metadata.payment_id);
+        alert('Payment Failed!');
+});
+  
+// calling the function for new razorpay window to open to accept payment.
+      rzp1.open();
+  
+  }
+
+
+// function to verify if the payment is confirmed for the user's order
+
+let verifyPayment = (payment, order, orderId)=>{
+    $.ajax({
+      url: '/verify-payment',
+      method: 'post',
+      data: {
+        payment,
+        order
+      },
+      success: (response)=>{
+        if(response.status){
+            alert('Payment Successful!')
+            location.href = "/order-confirmed/" + orderId;
+        }else {
+          alert('Payment Failed!');
+        }
+      }
+    })
+  }
