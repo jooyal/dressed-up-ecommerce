@@ -994,6 +994,29 @@ verifyRazorpayPayment : (rzpOrderObjId, rzpPaymentId, rzpPaymentSignature)=>{
       reject(error)
     }
   })
+},
+
+changePaymentStatus : (orderId)=>{
+  return new Promise((resolve, reject) => {
+    try {
+
+      let response = db.get().collection(ORDER_COLLECTION).updateOne({_id : ObjectId(orderId)},
+                      {
+                        $set : {
+                          orderStatus : 'placed'
+                        }
+                      })
+
+      if(response){
+        resolve({message: 'Status updated successfully.', status:true})
+      } else {
+        reject({message: 'Failed to update status.', status:false})
+      }
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 

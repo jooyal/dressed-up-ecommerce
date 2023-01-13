@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -608,37 +608,51 @@ module.exports = {
 
         try {
 
-        // const url = require('url');
-        // console.log(url.parse(req.headers.referer).pathname);
-        let decodedData = await tokenVerify(req.cookies.authToken)
-        let cartCount = await fetchCartCount(decodedData.value.userId)
-        let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-        let orderTotal = await fetchOrderTotal(decodedData.value.userId, couponDiscount)
-        let savedAddressData = await fetchUserSavedAddress(decodedData.value.userId)
-        let savedAddressStatus
+        const url = require('url');
+         console.log('URL : '+url.parse(req.headers.referer).pathname);
+        
+            if(url.parse(req.headers.referer).pathname === undefined || url.parse(req.headers.referer).pathname !== '/cart'){
 
-        if(savedAddressData.status){
-            savedAddressStatus = true
-        }else {
-            savedAddressStatus = false
-        }
+                res.render('access-denied', {user:true, cartCount, wishlistCount})
+                    
+            } else {
 
-        // if useraddress status is false, on rendering, it will show 'no saved address found.'
-        // else, it will show the value.
-        let userSavedAddress = {
-            status : savedAddressStatus,
-            value: (decodedData.value.userName).toUpperCase() + ' , '+ savedAddressData.address + ' , Ph:'+ decodedData.value.userMobile
-        }
+                let decodedData = await tokenVerify(req.cookies.authToken)
+                let cartCount = await fetchCartCount(decodedData.value.userId)
+                let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+                let orderTotal = await fetchOrderTotal(decodedData.value.userId, couponDiscount)
+                let savedAddressData = await fetchUserSavedAddress(decodedData.value.userId)
+                let savedAddressStatus
+        
+                if(savedAddressData.status){
+                    savedAddressStatus = true
+                }else {
+                    savedAddressStatus = false
+                }
+        
+                // if useraddress status is false, on rendering, it will show 'no saved address found.'
+                // else, it will show the value.
+                let userSavedAddress = {
+                    status : savedAddressStatus,
+                    value: (decodedData.value.userName).toUpperCase() + ' , '+ savedAddressData.address + ' , Ph:'+ decodedData.value.userMobile
+                }
+        
+                res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, 
+                    userId: decodedData.value.userId, 
+                    userEmail: decodedData.value.userEmail, 
+                    userMobile: decodedData.value.userMobile, 
+                    userFullName: decodedData.value.userName, 
+                    userSavedAddress})
 
-        res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, 
-            userId: decodedData.value.userId, 
-            userEmail: decodedData.value.userEmail, 
-            userMobile: decodedData.value.userMobile, 
-            userFullName: decodedData.value.userName, 
-            userSavedAddress})
-            
+            }
+        
         } catch (error) {
             console.log(error);
+
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            res.render('access-denied', {user:true, cartCount, wishlistCount})
         }
     },
 
@@ -727,6 +741,7 @@ module.exports = {
             //  console.log(req.body);
             let body = req.body
             let rzpOrderObjId = body['order[id]']
+            let DBOrderId = body['order[receipt]']
             let paymentId = body['payment[razorpay_payment_id]'];
             let paymentSignature = body['payment[razorpay_signature]'];
 
@@ -735,7 +750,15 @@ module.exports = {
 
             if(response){
                 console.log('Payment Successful!');
-                res.json({message:'Payment verified successfully.', status: true})
+                let statusChange = await changePaymentStatus(DBOrderId)
+                if(statusChange.status){
+                    console.log('Payment status changed succcessfully');
+                    res.json({message:'Payment verified successfully.', status: true})
+                } else {
+                    console.log(statusChange.message);
+                    res.json({message:'Payment verified successfully, but could not change payment status.', status: false})
+                }
+               
             } else {
                 res.json({message:'Verification of payment failed.', status: false})
             }
