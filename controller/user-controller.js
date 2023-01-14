@@ -191,12 +191,13 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
 
             let menProducts = await fetchHomeProducts('men')
             let womenProducts = await fetchHomeProducts('women')
             let livingProducts = await fetchHomeProducts('living')
 
-            res.render('userView/home', { title, user:true, menProducts, womenProducts, livingProducts, cartCount, wishlistCount });
+            res.render('userView/home', { title, userFullName, user:true, menProducts, womenProducts, livingProducts, cartCount, wishlistCount });
         } catch (error) {
             console.log(error);
         }
@@ -209,8 +210,10 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
             let allProducts = await fetchCategoryProducts('men')
-            res.render('userView/view-products',{user:true, allProducts, title, cartCount, wishlistCount})
+            res.render('userView/view-products',{user:true, userFullName, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }
@@ -222,8 +225,10 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
             let allProducts = await fetchCategoryProducts('women')
-            res.render('userView/view-products',{user:true, allProducts, title, cartCount, wishlistCount})
+            res.render('userView/view-products',{user:true, userFullName, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }
@@ -235,8 +240,10 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
             let allProducts = await fetchCategoryProducts('living')
-            res.render('userView/view-products',{user:true, allProducts, title, cartCount, wishlistCount})
+            res.render('userView/view-products',{user:true, userFullName, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }
@@ -258,6 +265,7 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
 
             let recommendType //to assign new recommended type based on current product being shown
 
@@ -295,7 +303,7 @@ module.exports = {
             let title = 'View Product Details | '+ proDetails.productName + ' | Dressed Up'
                 //to get items to be shown in recommend products below the page
             let bottomProducts = await fetchProDetailPageRecommend(recItem.category,recommendType)
-            res.render('userView/product-details',{user:true, proDetails, bottomProducts, title, cartCount, wishlistCount})
+            res.render('userView/product-details',{user:true, userFullName, proDetails, bottomProducts, title, cartCount, wishlistCount})
 
         } catch (error) {
             console.log(error);
@@ -365,6 +373,7 @@ module.exports = {
                 let total = await fetchCartTotal(decodedData.value.userId)
                 let cartCount = await fetchCartCount(decodedData.value.userId)
                 let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+                let userFullName = (decodedData.value.userName).toUpperCase()
 
                 for (let i = 0; i < products.length; i++) {
                     if (products[i].size === 'productSizeSmall') {
@@ -392,7 +401,7 @@ module.exports = {
                     }
                 }
         // console.log(products);
-                res.render('userView/cart',{user:true, products, total, userId:decodedData.value.userId, title, cartCount, wishlistCount})
+                res.render('userView/cart',{user:true, products, userFullName, total, userId:decodedData.value.userId, title, cartCount, wishlistCount})
             }
 
         } catch (error) {
@@ -488,6 +497,7 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
 
             let products = await fetchWishlistProducts(decodedData.value.userId)
             
@@ -524,7 +534,7 @@ module.exports = {
                     }
                 }
                 // console.log(products);
-                res.render('userView/wishlist',{user:true, cartCount, products, wishlistCount})
+                res.render('userView/wishlist',{user:true, userFullName, cartCount, products, wishlistCount})
 
             }           
             
@@ -613,13 +623,15 @@ module.exports = {
         
             if(url.parse(req.headers.referer).pathname === undefined || url.parse(req.headers.referer).pathname !== '/cart'){
 
-                res.render('access-denied', {user:true, cartCount, wishlistCount})
+                res.render('access-denied', {user:true, userFullName, cartCount, wishlistCount})
                     
             } else {
 
                 let decodedData = await tokenVerify(req.cookies.authToken)
                 let cartCount = await fetchCartCount(decodedData.value.userId)
                 let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+                let userFullName = (decodedData.value.userName).toUpperCase()
+
                 let orderTotal = await fetchOrderTotal(decodedData.value.userId, couponDiscount)
                 let savedAddressData = await fetchUserSavedAddress(decodedData.value.userId)
                 let savedAddressStatus
@@ -637,7 +649,7 @@ module.exports = {
                     value: (decodedData.value.userName).toUpperCase() + ' , '+ savedAddressData.address + ' , Ph:'+ decodedData.value.userMobile
                 }
         
-                res.render('userView/place-order',{user:true, cartCount, wishlistCount, orderTotal, 
+                res.render('userView/place-order',{user:true, userFullName, cartCount, wishlistCount, orderTotal, 
                     userId: decodedData.value.userId, 
                     userEmail: decodedData.value.userEmail, 
                     userMobile: decodedData.value.userMobile, 
@@ -652,7 +664,9 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-            res.render('access-denied', {user:true, cartCount, wishlistCount})
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
+            res.render('access-denied', {user:true, userFullName, cartCount, wishlistCount})
         }
     },
 
@@ -774,7 +788,9 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-            res.render('userView/order-history',{user:true, cartCount, wishlistCount})
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
+            res.render('userView/order-history',{user:true, userFullName, cartCount, wishlistCount})
             
         } catch (error) {
             console.log(error);
@@ -783,11 +799,16 @@ module.exports = {
     getOrderItems : (req,res)=> {
         res.render('userView/order-history-items',{user:true})
     },
-    getOrderConfirmed : (req,res)=> {
+    getOrderConfirmed : async(req,res)=> {
         try {
 
         let orderId = req.params.id
-        res.render('userView/order-confirmed',{user:true, orderId})
+        let decodedData = await tokenVerify(req.cookies.authToken)
+        let cartCount = await fetchCartCount(decodedData.value.userId)
+        let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+        let userFullName = (decodedData.value.userName).toUpperCase()
+
+        res.render('userView/order-confirmed',{user:true, orderId, userFullName, cartCount, wishlistCount})
             
         } catch (error) {
             console.log(error);
@@ -821,7 +842,9 @@ module.exports = {
             let userSavedAddress = await fetchUserSavedAddress(decodedData.value.userId)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-            res.render('userView/user-profile',{user:true, cartCount, wishlistCount, userSavedAddress:userSavedAddress.address, data:decodedData.value})
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
+            res.render('userView/user-profile',{user:true, userFullName, cartCount, wishlistCount, userSavedAddress:userSavedAddress.address, data:decodedData.value})
             
         } catch (error) {
             console.log(error);
@@ -834,7 +857,9 @@ module.exports = {
             let userSavedAddress = await fetchUserSavedAddress(decodedData.value.userId)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-            res.render('userView/change-user-info',{user:true, cartCount, wishlistCount, data: decodedData.value, userSavedAddress:userSavedAddress.address, changeUserInfoErr})
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
+            res.render('userView/change-user-info',{user:true, userFullName, cartCount, wishlistCount, data: decodedData.value, userSavedAddress:userSavedAddress.address, changeUserInfoErr})
             changeUserInfoErr = null
 
         } catch (error) {
@@ -895,7 +920,9 @@ module.exports = {
             let decodedData = await tokenVerify(req.cookies.authToken)
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-            res.render('userView/change-user-password',{user:true, cartCount, wishlistCount, data: decodedData.value, changeUserPasswordErr})
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
+            res.render('userView/change-user-password',{user:true, userFullName, cartCount, wishlistCount, data: decodedData.value, changeUserPasswordErr})
             changeUserPasswordErr = null
             
         } catch (error) {

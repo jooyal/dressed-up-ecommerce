@@ -146,8 +146,13 @@ body {
 #navbar li a:hover,
 #navbar li button:hover,
 #navbar li button.active,
-#navbar li a.active {
+#navbar li a.active,
+.header-profile-toggle:hover {
   color: #088178;
+}
+
+.header-profile-toggle:hover::after {
+  content: none !important;
 }
 
 #navbar li a.active::after,
@@ -1509,6 +1514,6 @@ lottie-player {
   margin-bottom: -5px;
   margin-right: -23px;
   z-index: 9;
-  font-size: .8em !important;
+  font-size: .85em !important;
   font-weight: 300 !important;
 }

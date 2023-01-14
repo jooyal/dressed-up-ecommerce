@@ -8,8 +8,7 @@
                 <li><a style="font-size: 14px; font-weight: 500;" href="/men">MEN</a></li>
                 <li><a style="font-size: 14px; font-weight: 500;" href="/women">WOMEN</a></li>
                 <li><a style="font-size: 14px; font-weight: 500;" href="/living">LIVING</a></li>
-                <li><a style="font-size: 14px; font-weight: 500;" href="/order-history">Order History</a></li>
-                <li><button style="font-size: 14px; font-weight: 500; border: none; background: #d7d4f3;" onclick="doLogOut()">Log Out</button></li>
+                
                 <li><a style="font-size: 14px;" href="/wishlist">
                     <div style="flex-direction: column;" class="d-flex align-items-center">
                         <span class="badge bg-danger wishlist-notification-badge" id="wishlistCountBadge">{{wishlistCount}}</span>
@@ -17,18 +16,30 @@
                         <span style="font-size: 13px; font-weight: 500;">Wishlist</span>
                     </div></i></a>
                 </li>
-                <li style=" padding-top: 16px;"><a style="font-size: 14px;" href="/user-profile">
-                    <div style="flex-direction: column;" class="d-flex align-items-center">
-                        <i class="fa-solid fa-user"></i>
-                        <span style="font-size: 13px; font-weight: 500;">Profile</span>
-                    </div></a>
-                </li>
+                
                 <li id="lg-bag"><a href="/cart">
                     <div style="flex-direction: column;" class="d-flex align-items-center">
                     <span class="badge bg-danger top-notification-badge" id="cartCountBadge">{{cartCount}}</span>
                     <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                     <span style="font-size: 13px; font-weight: 500;">Cart</span>
                 </div></a></li>
+                    <li>
+                        <div class="dropdown">
+                        <button style="border: none; background-color: #d7d4f3; width: 170px;" class=" dropdown-toggle btn header-profile-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>
+                            <span style="font-size: 13px; font-weight: 500;"> {{userFullName}}</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><button class="dropdown-item" style="font-size: 14px; font-weight: 500; border: none;" onclick="doLogOut()">LOG OUT</button></li>
+                            <li>
+                                <a style="font-size: 14px;" href="/user-profile">
+                                    <span style="font-size: 14px; padding-left: 15px; font-weight: 500;">VIEW PROFILE</span>
+                                </a>  
+                            </li>
+                            <li class="mb-2 mt-1"><a style="font-size: 14px; padding-left: 15px; font-weight: 500;" href="/order-history">ORDER HISTORY</a></li>
+                        </ul>
+                        </div>
+                    </li>
             </ul>
         </div>
         <div id="mobile">
