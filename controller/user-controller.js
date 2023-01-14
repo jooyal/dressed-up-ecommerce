@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems } = require('../model/user-helper.js')
 
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -689,7 +689,8 @@ module.exports = {
                 if(checkCouponValidity.status){
                     couponDiscount = checkCouponValidity.discount;
                 } else {
-                    couponDiscount = 0
+                    couponCode = '';
+                    couponDiscount = 0;
                 }
             }
             
@@ -703,7 +704,7 @@ module.exports = {
                 orderDetails.userId = decodedData.value.userId
                 orderDetails.name = (decodedData.value.userName).toUpperCase()
                 orderDetails.mobile = decodedData.value.userMobile
-                orderDetails.deliveryAddress = savedAddressData.address
+                orderDetails.address = savedAddressData.address
                 orderDetails.paymentMethod = paymentMethod
                 orderDetails.orderDiscountCode = couponCode
                 orderDetails.orderDiscountPercent = couponDiscount + ' %'
@@ -712,7 +713,7 @@ module.exports = {
                 orderDetails.userId = decodedData.value.userId
                 orderDetails.name = req.body.orderName;
                 orderDetails.mobile = req.body.orderMobile;
-                orderDetails.deliveryAddress = req.body.deliveryAddress;
+                orderDetails.address = req.body.deliveryAddress;
                 orderDetails.paymentMethod = paymentMethod
                 orderDetails.orderDiscountCode = couponCode
                 orderDetails.orderDiscountPercent = couponDiscount + ' %'
@@ -726,7 +727,7 @@ module.exports = {
                 // console.log(orderTotal.grandTotal);
                 // console.log(products);
 
-                let response = await placeNewOrder(orderDetails, orderTotal.grandTotal, products)
+                let response = await placeNewOrder(orderDetails, orderTotal, products)
 
                 if(response.paymentMethod==='COD'){
                     res.json({orderId : response.orderId, codPayment: true, status:true})
@@ -790,14 +791,68 @@ module.exports = {
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
             let userFullName = (decodedData.value.userName).toUpperCase()
 
-            res.render('userView/order-history',{user:true, userFullName, cartCount, wishlistCount})
+            let userOrderHistory = await fetchUserOrderHistory(decodedData.value.userId)
+
+            console.log(userOrderHistory[0]);
+
+            if(userOrderHistory[0] !== undefined){
+                res.render('userView/order-history',{user:true, userFullName, cartCount, wishlistCount, userOrderHistory})
+            } else {
+                res.render('userView/order-history-empty',{user:true, userFullName, cartCount, wishlistCount})
+            }
+
+            // res.render('userView/order-history',{user:true, userFullName, cartCount, wishlistCount})
             
         } catch (error) {
             console.log(error);
         }
     },
-    getOrderItems : (req,res)=> {
-        res.render('userView/order-history-items',{user:true})
+    getOrderItems : async(req,res)=> {
+        try {
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
+            let orderId = req.params.orderId;
+
+            let orderDetails = await fetchOrderDetails(orderId)
+            let products = await fetchOrderItems(orderId)
+
+            if(orderDetails.discountCode == ''){
+                orderDetails.discountCode = '-';
+            }
+
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].size === 'productSizeSmall') {
+                    products[i].size = 'Small'
+                }else if (products[i].size === 'productSizeMedium') {
+                    products[i].size = 'Medium'
+                }else if (products[i].size === 'productSizeLarge') {
+                    products[i].size = 'Large'
+                }else if (products[i].size === 'productSizeXLarge') {
+                    products[i].size = 'X Large'
+                }else if (products[i].size === 'productSizeXXLarge') {
+                    products[i].size = 'XX Large'
+                }else if (products[i].size === 'productSize32') {
+                    products[i].size = '32'
+                }else if (products[i].size === 'productSize34') {
+                    products[i].size = '34'
+                }else if (products[i].size === 'productSize36') {
+                    products[i].size = '36'
+                }else if (products[i].size === 'productSize38') {
+                    products[i].size = '38'
+                }else if (products[i].size === 'productSize40') {
+                    products[i].size = '40'
+                }else if (products[i].size === 'productFreeSize') {
+                    products[i].size = 'Free-Size'
+                }
+            }
+
+            res.render('userView/order-history-items',{user:true, cartCount, wishlistCount, userFullName, orderDetails, products})
+            
+        } catch (error) {
+            console.log(error);
+        }
     },
     getOrderConfirmed : async(req,res)=> {
         try {

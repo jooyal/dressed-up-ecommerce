@@ -900,7 +900,7 @@ fetchUserSavedAddress : (userId)=>{
   })
 },
 
-placeNewOrder : (orderDetails, total, products)=>{
+placeNewOrder : (orderDetails, totalAmtObj, products)=>{
   return new Promise(async(resolve, reject)=>{
     try {
 
@@ -908,17 +908,21 @@ placeNewOrder : (orderDetails, total, products)=>{
       
       let orderObject = {
         deliveryDetails:{
+            name: orderDetails.name,
             mobileNumber : orderDetails.mobile,
             address : orderDetails.address
         },
         userId : ObjectId(orderDetails.userId),
         paymentMethod : orderDetails.paymentMethod,
         products : products,
-        totalAmount : total,
+        totalBeforeDiscount: totalAmtObj.sumTotalBeforeDisc,
         discountCode : orderDetails.orderDiscountCode,
         discountPercent : orderDetails.orderDiscountPercent,
+        discountAmount: totalAmtObj.discountAmt,
+        totalBeforeTax : totalAmtObj.sumTotalAfterDiscount,
+        taxAmount : totalAmtObj.taxAmt,
+        grandTotalAmount : totalAmtObj.grandTotal,
         orderStatus : status,
-        shipmentStatus : false,
         date: new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})
       }
 
@@ -1012,6 +1016,83 @@ changePaymentStatus : (orderId)=>{
       } else {
         reject({message: 'Failed to update status.', status:false})
       }
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+fetchUserOrderHistory : (userId)=>{
+  return new Promise( async(resolve, reject) => {
+    try {
+
+      let orderHistory = await db.get().collection(ORDER_COLLECTION).find({userId:ObjectId(userId)}).toArray()
+      
+      if(orderHistory){
+        resolve(orderHistory)
+      } else {
+        reject({message: 'Error while retrieveing Order History'})
+      }
+
+    } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+fetchOrderDetails : (orderId)=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+
+      let orderDetails = await db.get().collection(ORDER_COLLECTION).findOne({_id:ObjectId(orderId)})
+      resolve(orderDetails)
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+fetchOrderItems : (orderId)=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+
+      let orderedProducts = await db.get().collection(ORDER_COLLECTION).aggregate([
+        {
+          $match: {_id:ObjectId(orderId)}
+        },
+        {
+          $unwind: '$products'
+        },
+        {
+          $project: {
+            item: '$products.item',
+            size: '$products.size',
+            quantity: '$products.quantity'
+          }
+        },
+        {
+          $lookup: {
+            from: PRODUCT_COLLECTION,
+            localField: 'item',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+          $project:{
+              item:1,size:1,quantity:1,product:{$arrayElemAt:['$product',0]}
+          }
+        },
+        {
+          $project: {
+            item:1,size:1,quantity:1,product:1, subTotal:{$multiply:[{$toInt: '$product.productPrice'},'$quantity']}
+          }
+        }
+      ]).toArray()
+
+      resolve(orderedProducts);
       
     } catch (error) {
       reject(error)

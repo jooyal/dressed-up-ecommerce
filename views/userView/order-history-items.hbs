@@ -1,57 +1,73 @@
     <!-- cart items details-->
     <div class="small-container mb-5">
-        <h6 class="pb-2 " style="font-weight:300;">Order Id : 765rftu678f687tyftytit</h6>
-        <h4>Delivery Details</h4>
+        <h3>Delivery Details</h3>
+
+      <h6 class="py-2 " style="font-weight:300;">Order Id : 765rftu678f687tyftytit</h6>
+
       <div style="border: solid; border-color: #088178;" class="d-flex flex-column my-4 p-3">
-        <h5><span style="color: #088178;">Name Of The Customer : </span> Joseph Joyal</h5>
-        <h5><span style="color: #088178;">Phone No. : </span> 9876543210</h5>
-        <h5><span style="color: #088178;">Delivery Address : </span> jtjgvjggjjhjhbjhbjhbjbh</h5>
-        <h5><span style="color: #088178;">Payment Method : </span> ONLINE</h5>
-        <h5><span style="color: #088178;">Order Status : </span> Placed</h5>
+        <h5><span style="color: #088178;">Name Of The Customer : </span> {{orderDetails.deliveryDetails.name}}</h5>
+        <h5><span style="color: #088178;">Phone No. : </span> {{orderDetails.deliveryDetails.mobileNumber}}</h5>
+        <h5><span style="color: #088178;">Delivery Address : </span> {{orderDetails.deliveryDetails.address}}</h5>
+        <h5><span style="color: #088178;">Payment Method : </span> {{orderDetails.paymentMethod}}</h5>
+        <h5><span style="color: #088178;">Order Date & Time : </span> {{orderDetails.date}}</h5>
+        <h5><span style="color: #088178;">Order Status : </span> {{orderDetails.orderStatus}}</h5>
       </div>
 
       <table>
         <tr>
           <th>Product</th>
+          <th>Size</th>
           <th>Quantity</th>
           <th>Subtotal</th>
         </tr>
+
+          {{#each products}}
+
         <tr>
           <td>
             <div class="cart-info">
-              <img src="/productImages/" style="width: 110px; height: 147.5px;" alt="Tshirt" />
+              <a href="/product-details/{{this.item}}"><img src="/productImages/{{this.product.image1}}" style="width: 110px; height: 147.5px;" alt="Tshirt" /></a>
               <div>
-                <p>Orange Printed Tshirt</p>
-                <small>Unit Price: &#8377;78.00</small>
+                <p>{{this.product.productName}}</p>
+                <small>Unit Price: &#8377;{{this.product.productPrice}}</small>
                 <br />
               </div>
             </div>
           </td>
           <td>
-            <input type="number" value="5" disabled />
+            {{this.size}}
           </td>
-          <td>&#8377;78.00</td>
+          <td>
+            <input type="number" value="{{this.quantity}}" disabled />
+          </td>
+          <td>&#8377;{{this.subTotal}}</td>
         </tr>
+
+          {{/each}}
         
       </table>
 
       <div class="total-price">
         <table>
           <tr>
-            <td>Total</td>
-            <td>&#8377;234.00</td>
+            <td>Total Price Before Tax & Discount</td>
+            <td>&#8377 <span id="sumTotalId">{{orderDetails.totalBeforeDiscount}}</span></td>
           </tr>
           <tr>
-            <td>Coupon Discount</td>
-            <td>&#8377;0</td>
+            <td>Discount Amount  (<span id="discPercentage">{{orderDetails.discountPercent}}</span>)</td>
+            <td>&#8377 <span id="discAmountId">{{orderDetails.discountAmount}}</span></td>
           </tr>
           <tr>
-            <td>Tax</td>
-            <td>&#8377;35.00</td>
+            <td>Price After Discount</td>
+            <td>&#8377 <span id="amtAfterDiscount">{{orderDetails.totalBeforeTax}}</span></td>
           </tr>
           <tr>
-            <td>Subtotal</td>
-            <td>&#8377;234.00</td>
+            <td>Tax (GST @ 12%)</td>
+            <td>&#8377 <span id="taxAmountId">{{orderDetails.taxAmount}}</span></td>
+          </tr>
+          <tr>
+            <td>Grand Total</td>
+            <td>&#8377 <span id="grandTotalId">{{orderDetails.grandTotalAmount}}</span></td>
           </tr>
         </table>
       </div>

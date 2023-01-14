@@ -7,20 +7,25 @@
           <th>Price</th>
           <th>Options</th>
         </tr>
+
+                  {{#each userOrderHistory}}
+                  
         <tr>
           <td>
-            Order Id :7575766788ghgyuyuty
+            Order Id : {{this._id}}
           </td>
           <td>
-            21/12/2022, 12:30PM
+            {{this.date}}
           </td>
           <td> 
-            &#8377; 8788
+            &#8377; {{this.grandTotalAmount}}
           </td>
           <td>
             <a href="/view-order-items/{{this._id}}" class="btn btn-warning">View Items</a>
+            {{!-- <button class="btn btn-warning" onclick="viewOrderItems({{this._id}})"></button> --}}
           </td>
         </tr>
+                  {{/each}}
         
       </table>
 
