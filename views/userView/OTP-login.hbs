@@ -2,21 +2,44 @@
     <section class="wrapper mt-5 pt-5">
 		<div class="container">
 			<div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 text-center">
-				<form class="rounded bg-white shadow p-5">
+				<div class="rounded bg-white shadow p-5">
 					<h3 class="text-dark fw-bolder fs-4 mb-3">Log in with OTP</h3>
 
 					<div class="form-floating mb-3">
-						<input type="password" class="form-control" name="userPassword" id="floatingPassword" placeholder="Password">
-						<label class="text-muted" for="floatingPassword">Enter Your Registered Mobile No.</label>
+						<input type="number" class="form-control" id="phoneForOTP" oninput="checkPhone()" placeholder="password">
+						<label class="text-muted" for="phoneForOTP"><small>Enter Your Registered 10-digit Mobile No.</small></label>
                         {{!-- <span class="password-info mt-2">Forgot password? <a href="">reset it here</a></span> --}}
 					</div> 
-					<a type="submit" href="OTP-login-verification" class="btn btn-primary submit_btn w-100 my-4">Request OTP</a> 
-					{{!-- <div class="fw-normal text-muted mb-2">
-						Don't have an account ? <a style="font-size: 15px;" href="/signup" class="text-primary fw-bold text-decoration-none">Sign Up here</a>
-					</div> --}}
-				</form>
+					<button type="submit" onclick="requestOTP()" id="requestOTPButton" class="btn btn-primary submit_btn w-100 my-4">Request OTP</button> 
+					<small class="text-danger" id="errorMsgOTP">{{OTPErrMsg}}</small>
+				</div>
 			</div>
 		</div>
 	</section>
+
+	<script>
+
+		let checkPhone = ()=>{
+			let mobile = document.getElementById('phoneForOTP').value
+			let errorField = document.getElementById('errorMsgOTP')
+			let requestButton = document.getElementById('requestOTPButton')
+			errorField.innerHTML = ''
+
+			if(mobile.length === 0){
+				errorField.innerHTML = 'Enter Your Registered 10 Digit Mobile Number To Request For OTP'
+				requestButton.disabled = true
+			} else if(mobile.length < 10){
+				requestButton.disabled = true
+			} else if(mobile.length > 10){
+				errorField.innerHTML = 'Only 10 digits allowed.'
+				requestButton.disabled = true
+			} else {
+				requestButton.disabled = false
+			}
+		}
+
+		checkPhone()
+
+	</script>
 
 

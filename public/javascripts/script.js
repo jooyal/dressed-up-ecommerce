@@ -660,3 +660,47 @@ let verifyPayment = (payment, order, orderId)=>{
       }
     })
   }
+
+
+//   To request for OTP
+
+let requestOTP = ()=>{
+    let mobileNumber = document.getElementById('phoneForOTP').value
+
+    $.ajax({
+        url: 'OTP-login',
+        method: 'post',
+        data: {
+            mobile: mobileNumber
+        },
+        success: (response)=>{
+            if(response.status===true){
+                location.href = '/OTP-login-verification/'+mobileNumber
+
+            } else {
+                document.getElementById('phoneForOTP').value = ''
+                document.getElementById('errorMsgOTP').innerHTML = response.error
+            }
+        }
+    })
+}
+
+let verifyOTP = (otp, mobile)=>{
+    $.ajax({
+        url: '/OTP-login-verification',
+        method: 'post',
+        data: {
+            mobile: mobile,
+            otp: otp
+        },
+        success: (response)=>{
+            if(response.status === false){
+                document.getElementById('otpfieldErr').innerHTML = response.error
+
+            } else {
+                alert(response.message)
+                location.href = "/home"
+            }
+        }
+    })
+}

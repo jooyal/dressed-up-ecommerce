@@ -193,6 +193,24 @@ module.exports = {
       }
     })
   },
+
+  doMobileOTPLogin : (mobile)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        
+        let userData = await db.get().collection(USER_COLLECTION).findOne({userMobile: mobile})
+
+        if(userData){
+          resolve({status: true, user: userData})
+        } else {
+          resolve({status:false, error: 'Mobile number not found in the database'})
+        }
+
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
   
   addProductToCart : (userId, productId, productSize, productQuantity)=>{
     // console.log('accessed');
@@ -1093,6 +1111,24 @@ fetchOrderItems : (orderId)=>{
       ]).toArray()
 
       resolve(orderedProducts);
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
+},
+
+userPhoneExistCheck : (mobile)=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+
+      let existCheck = await db.get().collection(USER_COLLECTION).findOne({userMobile: mobile})
+
+      if(existCheck){
+        resolve(true)
+      } else {
+        resolve(false);
+      }
       
     } catch (error) {
       reject(error)

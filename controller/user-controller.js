@@ -1,6 +1,6 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems } = require('../model/user-helper.js')
-
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems, userPhoneExistCheck, doMobileOTPLogin } = require('../model/user-helper.js')
+const {requestOTP, verifyOTP} = require('../utilities/otpRequest')
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
 //global variables
@@ -165,13 +165,97 @@ module.exports = {
         }
     },
 
+    postOTPLogin : async(req,res)=>{
+        try {
+
+            if(checkIfValidTokenExist(req)===true){
+                res.redirect('/home')
+            }else {
+    
+                let mobileNumber = ('+91'+req.body.mobile);
+                let response = await userPhoneExistCheck(mobileNumber)
+    
+                if(response === true){
+                
+                    requestOTP(mobileNumber)
+    
+                    res.json({status:true, mobile: mobileNumber})
+                } else {
+                    let error = 'User with mobile number '+ mobileNumber+" doesn't exist!"
+                    res.json({status:false, error})
+                }
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
     otpLoginVerification : (req,res)=> {
 
         if(checkIfValidTokenExist(req)===true){
             res.redirect('/home')
         }else {
+            let mobileNo = req.params.id
+
             let title = 'Enter the One Time Password sent to your account.'
-            res.render('userView/OTP-login-verification',{title})
+            res.render('userView/OTP-login-verification',{title, mobileNo})
+        }
+    },
+
+    postOTPLoginVerification : async(req,res)=>{
+        try {
+            
+            let mobile = '+91'+req.body.mobile
+            let otpUnchecked = req.body.otp
+            let match = otpUnchecked.match(/(\d+)/);
+
+            let mobileExist = await userPhoneExistCheck(mobile)
+
+            let otp = (match[0]);
+
+            // console.log(mobile + '  '+ otpUnchecked + '  '+ otp)
+
+            if(otp.length<6){
+                console.log('otp error');
+                res.json({status:false, error:'OTP is invalid.'})
+
+            } else if(mobileExist === false){
+
+                res.json({status:false, error:"User with mobile number "+ mobile+" doesn't exist!"})
+
+            } else {
+                let response = await verifyOTP(otp, mobile)
+
+                if(response.status === true){
+                    // Function to do login using mobile number.
+                    let response = await doMobileOTPLogin(mobile)
+                    if(response.status === true){
+
+                        const payload = {
+                            userId: response.user._id,
+                            userName: response.user.fullName,
+                            userEmail: response.user.userEmail,
+                            userMobile: response.user.userMobile
+                        }  
+                        let accessToken = await userTokenGenerator(payload)
+    
+                        res.cookie("authToken", accessToken, {
+                            httpOnly: true
+                        })
+                        .json({status:true, message:'OTP validated successfully', redirect: true})
+
+                    } else {
+                        res.json({status:false, error:'Mobile number not found in the database.'})
+                    }
+                    
+                } else {
+                    res.json({status:false, error:'OTP is incorrect, try again'})
+                }
+            }
+            
+        } catch (error) {
+            console.log(error);
         }
     },
 
