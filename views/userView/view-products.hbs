@@ -1,3 +1,5 @@
+    <script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+    
     {{!-- Item added to cart popup --}}
     <div class="alert-added-to-cart">
       <div class="cart-alert-card">
@@ -25,12 +27,12 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    FILTERS
+                    Filter By Price
                 </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body ">
-                    <input style="width: 10px;" type="radio" name="category" id="men" value="men">
+                    {{!-- <input style="width: 10px;" type="radio" name="category" id="men" value="men">
                     <label style="font-size: 14px;" for="men">MEN</label><br>
                     <input style="width: 10px;" type="radio" name="category" id="women" value="women">
                     <label style="font-size: 14px;" for="women">WOMEN</label><br>
@@ -39,19 +41,40 @@
                     <input style="width: 10px;" type="radio" name="category" id="accessories" value="accessories">
                     <label style="font-size: 14px;" for="accessories">ACCESSORIES</label><br>
                     <input style="width: 10px;" type="radio" name="category" id="living" value="living">
-                    <label style="font-size: 14px;" for="living">LIVING</label>
+                    <label style="font-size: 14px;" for="living">LIVING</label> --}}
+ 
+                    <input class="mt-2" type="range" id="priceRangeForProducts" min="0" max="5000" oninput="labelDisplay()" value="5000" step="1000"><br>
+                    Rs. 0 - Rs. <label for="priceRangeForProducts" id="labelForPriceRange">5000</label>
                 </div>
                 </div>
             </div>
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Colour
+                    {{!-- Color --}}Type
                 </button>
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <input style="width: 10px;" type="checkbox" name="color" id="cblack" value="black">
+
+                    <div class="custom-control custom-radio mt-2">
+                        <input id="allWearSelect" value="all" name="proTypeSelection" type="radio" class="custom-control-input" oninput="viewAllProducts()" checked>
+                        <label class="custom-control-label" for="allWearSelect">All</label>
+                    </div>
+                    <div class="custom-control custom-radio mt-2">
+                        <input id="topWearSelect" value="top" name="proTypeSelection" type="radio" class="custom-control-input" oninput="viewAllProducts()" >
+                        <label class="custom-control-label" for="topWearSelect">Top Wear</label>
+                    </div>
+                    <div class="custom-control custom-radio mt-2">
+                        <input id="bottomWearSelect" value="bottom" name="proTypeSelection" type="radio" class="custom-control-input" oninput="viewAllProducts()">
+                        <label class="custom-control-label" for="bottomWearSelect">Bottom Wear</label>
+                    </div>
+                    <div class="custom-control custom-radio mt-2">
+                        <input id="otherWearSelect" value="nosize" name="proTypeSelection" type="radio" class="custom-control-input" oninput="viewAllProducts()">
+                        <label class="custom-control-label" for="otherWearSelect">Other</label>
+                    </div>
+
+                    {{!-- <input style="width: 10px;" type="checkbox" name="color" id="cblack" value="black">
                     <label style="font-size: 14px;" for="cblack">BLACK</label>
                     <canvas id="cblack" style="width: 12px; height: 12px; border-radius: 1px; border-width: 1px; border: solid; border-color: rgb(216, 216, 216); background-color: black;"></canvas>
                     <span>|</span>
@@ -82,11 +105,11 @@
                     <input style="width: 10px;" type="checkbox" name="color" id="cpink" value="pink">
                     <label style="font-size: 14px;" for="cpink">PINK</label>
                     <canvas id="cpink" style="width: 12px; height: 12px; border-radius: 1px; border-width: 1px; border: solid; border-color: rgb(216, 216, 216); background-color: pink;"></canvas>
-                     <br>
+                     <br> --}}
                 </div>
                 </div>
             </div>
-            <div class="accordion-item">
+            {{!-- <div class="accordion-item">
                 <h2 class="accordion-header" id="headingThree">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                     Size
@@ -119,14 +142,15 @@
                     
                 </div>
                 </div>
-            </div>
+            </div> --}}
             </div>
     </div>
 
 {{!-- Right Part --}}
+    <input type="text" id="productCategoryForAllProductsView" value="{{category}}" hidden />
 
-        <div style="position: relative; margin-left: 20%; width: 80%;">
-            <div class="pro-container">
+        <div id="viewAllProductsContainer" style="position: relative; min-height: 100vh; margin-left: 20%; width: 80%;">
+            <div id="productsDivToRefresh" class="pro-container">
             {{#each allProducts}}
             <div class="pro" style="padding-bottom: 70px;">
                 <a class="product-card-link" href="/product-details/{{this._id}}">
@@ -155,3 +179,44 @@
             </div>
         </div>
 </section>
+
+
+<script>
+    let labelDisplay = ()=>{
+        let rangeLabel = document.getElementById('labelForPriceRange')
+        let rangeInput = document.getElementById('priceRangeForProducts')
+
+        rangeLabel.innerHTML = rangeInput.value
+
+        viewAllProducts()
+    }
+    //labelDisplay()
+</script>
+
+<script id="templateForDisplayingProducts" type="text/x-handlebars-template">
+
+            <div class="pro" style="padding-bottom: 70px;">
+                <a class="product-card-link" href="/product-details/{{this._id}}">
+                  <img src="/productImages/{{this.image1}}" alt="">
+                </a>
+                <div class="des">
+                    <a style="text-decoration: none;" class="product-card-link" href="/product-details/{{this._id}}">
+                      <span>{{this.productBrand}}</span>
+                      <h5>{{this.productName}}</h5>
+                    </a>
+                    {{!-- <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div> --}}
+                    <div class="d-flex flex-row" style="position: absolute; bottom: 30px; ">
+                    <h4>&#8377; {{this.productPrice}}</h4>
+                    <button style="border: none; background-color: white; margin-left: 7em; padding-bottom: 10px; height: 20px;" onclick="addToWishlist('{{this._id}}')" id="iconInsideProCardLink" class="shopping-icon"><i class="fa-solid fa-heart" id="iconInsideProCard"></i></button>
+                    <button style="border: none; background-color: white; margin-left: 2em; padding-bottom: 10px; height: 20px;" onclick="addToCart('{{this._id}}')" id="iconInsideProCardLink" class="shopping-icon" ><i class=" fa-sharp fa-solid fa-cart-shopping" id="iconInsideProCard"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+</script>

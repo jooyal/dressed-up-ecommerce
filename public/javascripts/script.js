@@ -704,3 +704,49 @@ let verifyOTP = (otp, mobile)=>{
         }
     })
 }
+
+// Function to view all products
+
+let viewAllProducts = ()=>{
+
+    let category = document.getElementById('productCategoryForAllProductsView').value
+    let maxPrice = document.getElementById('priceRangeForProducts').value
+    let type
+
+    let all = document.getElementById('allWearSelect')
+    let top = document.getElementById('topWearSelect')
+    let bottom = document.getElementById('bottomWearSelect')
+    let other = document.getElementById('otherWearSelect')
+
+    if(all.checked){
+        type = 'all'
+    } else if(top.checked) {
+        type = 'top'
+    } else if(bottom.checked) {
+        type = 'bottom'
+    } else if (other.checked) {
+        type = 'nosize'
+    }
+
+    $.ajax({
+        url:'/view-products',
+        method: 'post',
+        data: {
+            category: category,
+            maxPrice: maxPrice,
+            type: type
+        },
+        success: (data)=>{
+            renderDiv(data.updatedAllProducts);
+        }
+    })
+}
+
+
+let renderDiv = (data)=>{
+    let source   = $("#templateForDisplayingProducts").html();
+    let template = Handlebars.compile(source);
+
+    let html = template(data)
+    $("#viewAllProductsContainer").empty().append(html);
+}

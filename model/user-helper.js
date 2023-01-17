@@ -1134,6 +1134,52 @@ userPhoneExistCheck : (mobile)=>{
       reject(error)
     }
   })
+},
+
+fetchSortedProducts : (category, maxPrice, type)=>{
+
+  let topStatus, bottomStatus, nosizeStatus
+
+  if(type == 'top'){
+    topStatus = true
+    bottomStatus = false
+    nosizeStatus = false
+  } else if(type == 'bottom'){
+    topStatus = false
+    bottomStatus = true
+    nosizeStatus = false
+  } else if(type == 'nosize') {
+    topStatus = false
+    bottomStatus = false
+    nosizeStatus = true
+  } else if(type == 'all') {
+    topStatus = true
+    bottomStatus = true
+    nosizeStatus = true
+  }
+
+  return new Promise( async(resolve, reject) => {
+    try {
+
+      let products = await db.get().collection(PRODUCT_COLLECTION).aggregate([
+        {
+          $match:{
+            $and:[
+            {productCategory: category},
+            {top:topStatus},
+            {bottom:bottomStatus},
+            {nosize: nosizeStatus}
+          ]}
+        }
+      ]).toArray()
+
+      console.log(products);
+      resolve(products);
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 

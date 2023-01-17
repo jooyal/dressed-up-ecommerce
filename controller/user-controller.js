@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems, userPhoneExistCheck, doMobileOTPLogin } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems, userPhoneExistCheck, doMobileOTPLogin, fetchSortedProducts } = require('../model/user-helper.js')
 const {requestOTP, verifyOTP} = require('../utilities/otpRequest')
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -297,7 +297,7 @@ module.exports = {
             let userFullName = (decodedData.value.userName).toUpperCase()
 
             let allProducts = await fetchCategoryProducts('men')
-            res.render('userView/view-products',{user:true, userFullName, allProducts, title, cartCount, wishlistCount})
+            res.render('userView/view-products',{user:true, category:'men', userFullName, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }
@@ -312,7 +312,7 @@ module.exports = {
             let userFullName = (decodedData.value.userName).toUpperCase()
 
             let allProducts = await fetchCategoryProducts('women')
-            res.render('userView/view-products',{user:true, userFullName, allProducts, title, cartCount, wishlistCount})
+            res.render('userView/view-products',{user:true, category:'women', userFullName, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }
@@ -327,7 +327,29 @@ module.exports = {
             let userFullName = (decodedData.value.userName).toUpperCase()
 
             let allProducts = await fetchCategoryProducts('living')
-            res.render('userView/view-products',{user:true, userFullName, allProducts, title, cartCount, wishlistCount})
+            res.render('userView/view-products',{user:true, category:'living', userFullName, allProducts, title, cartCount, wishlistCount})
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    postViewAllProducts : async(req,res)=>{
+        try {
+            let title = 'Explore All Products | Living & Home'
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
+            let category = req.body.category
+            let maxPrice = req.body.maxPrice
+            let typeOfProduct = req.body.type
+
+            let allProducts = await fetchSortedProducts(category, maxPrice, typeOfProduct)
+
+            res.json({updatedAllProducts: allProducts})
+
+
+            // res.render('userView/view-products',{user:true, userFullName, allProducts, title, cartCount, wishlistCount})
         } catch (error) {
             console.log(error);
         }

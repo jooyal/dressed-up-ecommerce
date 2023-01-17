@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo, getChangeUserPassword, postChangeUserPassword, getPlaceOrder, postPlaceOrder, postCheckIfCouponValid, postVerifyPayment, postOTPLogin, postOTPLoginVerification } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo, getChangeUserPassword, postChangeUserPassword, getPlaceOrder, postPlaceOrder, postCheckIfCouponValid, postVerifyPayment, postOTPLogin, postOTPLoginVerification, postViewProducts, postViewAllProducts } = require('../controller/user-controller')
 
-/* GET home page. */
+/* pages without authorization. */
 router.get('/',landingPage);
-router.get('/home', userAuthorization, userHome)
 router.get('/signup', signupPage)
 router.post('/signup',postSignUp)
 router.get('/login',loginPage)
@@ -14,7 +13,16 @@ router.get('/OTP-login',otpLogin)
 router.post('/OTP-login',postOTPLogin)
 router.get('/OTP-login-verification/:id',otpLoginVerification)
 router.post('/OTP-login-verification',postOTPLoginVerification)
-// router.get('/view-products',viewProducts) all products cant be viewed, only category view is enabled.
+router.get('/contact-us',getContactUs)
+router.get('/delivery-information',getDeliveryInformation)
+router.get('/about-us',getAboutUs)
+router.get('/privacy-policy',getPrivacyPolicy)
+router.get('/contact-us',getContactUs)
+router.get('/help',getUserHelp)
+
+/* pages with authorization */
+router.get('/home', userAuthorization, userHome)
+router.post('/view-products', userAuthorization, postViewAllProducts)
 router.get('/product-details/:id', userAuthorization, productDetails)
 router.get('/cart', userAuthorization, getCart)
 router.get('/add-to-cart/:id', userAuthorization, getAddProductToCart)
@@ -45,11 +53,5 @@ router.get('/change-user-info', userAuthorization, getChangeUserInfo)
 router.post('/change-user-info', userAuthorization, postChangeUserInfo)
 router.get('/change-user-password', userAuthorization, getChangeUserPassword)
 router.post('/change-user-password', userAuthorization, postChangeUserPassword)
-router.get('/contact-us',getContactUs)
-router.get('/delivery-information',getDeliveryInformation)
-router.get('/about-us',getAboutUs)
-router.get('/privacy-policy',getPrivacyPolicy)
-router.get('/contact-us',getContactUs)
-router.get('/help',getUserHelp)
 
 module.exports = router;
