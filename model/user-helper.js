@@ -1152,29 +1152,185 @@ fetchSortedProducts : (category, maxPrice, type)=>{
     topStatus = false
     bottomStatus = false
     nosizeStatus = true
-  } else if(type == 'all') {
-    topStatus = true
-    bottomStatus = true
-    nosizeStatus = true
-  }
+  } 
 
   return new Promise( async(resolve, reject) => {
     try {
 
-      let products = await db.get().collection(PRODUCT_COLLECTION).aggregate([
-        {
-          $match:{
-            $and:[
-            {productCategory: category},
-            {top:topStatus},
-            {bottom:bottomStatus},
-            {nosize: nosizeStatus}
-          ]}
-        }
-      ]).toArray()
+      if(type === 'all'){
 
-      console.log(products);
-      resolve(products);
+        let products = await db.get().collection(PRODUCT_COLLECTION).aggregate([
+          {
+            $match:{productCategory: category}
+          },
+          {
+            $project: {
+              productPrice : {$toInt : '$productPrice'},
+              _id : 1,
+              productName:1,
+              productBrand:1,
+              productCategory:1,
+              productType:1,
+              productSizeSmall:1,
+              productSizeMedium:1,
+              productSizeLarge:1,
+              productSizeXLarge:1,
+              productSizeXXLarge:1,
+              top:1,
+              productSize32:1,
+              productSize34:1,
+              productSize36:1,
+              productSize38:1,
+              productSize40:1,
+              bottom:1,
+              nosize:1,
+              productFreeSize:1,
+              productColor:1,
+              productMRP:1,
+              productDescription:1,
+              date:1,
+              image1:1,
+              image2:1,
+              image3:1,
+              image4:1
+  
+            }
+          },
+          {
+            $project : {
+              productPriceBelowMax:{ $lt : ['$productPrice', maxPrice] },
+              _id : 1,
+              productName:1,
+              productBrand:1,
+              productCategory:1,
+              productType:1,
+              productSizeSmall:1,
+              productSizeMedium:1,
+              productSizeLarge:1,
+              productSizeXLarge:1,
+              productSizeXXLarge:1,
+              top:1,
+              productSize32:1,
+              productSize34:1,
+              productSize36:1,
+              productSize38:1,
+              productSize40:1,
+              bottom:1,
+              nosize:1,
+              productFreeSize:1,
+              productColor:1,
+              productPrice:1,
+              productMRP:1,
+              productDescription:1,
+              date:1,
+              image1:1,
+              image2:1,
+              image3:1,
+              image4:1
+            }
+          },
+          {
+            $match:{
+              productPriceBelowMax:true
+            }
+          }
+          
+          
+        ]).toArray()
+  
+        console.log(products);
+        resolve(products);
+
+      }else {
+
+        let products = await db.get().collection(PRODUCT_COLLECTION).aggregate([
+          {
+            $match:{
+              $and:[
+              {productCategory: category},
+              {top:topStatus},
+              {bottom:bottomStatus},
+              {nosize: nosizeStatus}
+            ]}
+          },
+          {
+            $project: {
+              productPrice : {$toInt : '$productPrice'},
+              _id : 1,
+              productName:1,
+              productBrand:1,
+              productCategory:1,
+              productType:1,
+              productSizeSmall:1,
+              productSizeMedium:1,
+              productSizeLarge:1,
+              productSizeXLarge:1,
+              productSizeXXLarge:1,
+              top:1,
+              productSize32:1,
+              productSize34:1,
+              productSize36:1,
+              productSize38:1,
+              productSize40:1,
+              bottom:1,
+              nosize:1,
+              productFreeSize:1,
+              productColor:1,
+              productMRP:1,
+              productDescription:1,
+              date:1,
+              image1:1,
+              image2:1,
+              image3:1,
+              image4:1
+  
+            }
+          },
+          {
+            $project : {
+              productPriceBelowMax:{ $lt : ['$productPrice', maxPrice] },
+              _id : 1,
+              productName:1,
+              productBrand:1,
+              productCategory:1,
+              productType:1,
+              productSizeSmall:1,
+              productSizeMedium:1,
+              productSizeLarge:1,
+              productSizeXLarge:1,
+              productSizeXXLarge:1,
+              top:1,
+              productSize32:1,
+              productSize34:1,
+              productSize36:1,
+              productSize38:1,
+              productSize40:1,
+              bottom:1,
+              nosize:1,
+              productFreeSize:1,
+              productColor:1,
+              productPrice:1,
+              productMRP:1,
+              productDescription:1,
+              date:1,
+              image1:1,
+              image2:1,
+              image3:1,
+              image4:1
+            }
+          },
+          {
+            $match:{
+              productPriceBelowMax:true
+            }
+          }
+          
+          
+        ]).toArray()
+  
+        console.log(products);
+        resolve(products);
+      }
       
     } catch (error) {
       reject(error)

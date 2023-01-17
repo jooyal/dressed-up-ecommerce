@@ -7,6 +7,10 @@ const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 let signupError = null;
 let changeUserInfoErr = null;
 let changeUserPasswordErr = null;
+let allProductsGlobal = null;
+let globalCategory = null;
+let selectedTypeGlobal = null;
+let maxPriceGlobal = null;
 
 module.exports = {
   landingPage : async (req, res, next)=> {
@@ -335,21 +339,21 @@ module.exports = {
 
     postViewAllProducts : async(req,res)=>{
         try {
-            let title = 'Explore All Products | Living & Home'
-            let decodedData = await tokenVerify(req.cookies.authToken)
-            let cartCount = await fetchCartCount(decodedData.value.userId)
-            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
-            let userFullName = (decodedData.value.userName).toUpperCase()
+
             let category = req.body.category
-            let maxPrice = req.body.maxPrice
+            let maxPrice = parseInt(req.body.maxPrice)
             let typeOfProduct = req.body.type
+
+            //  console.log(category+maxPrice+typeOfProduct);
+            globalCategory = category
 
             let allProducts = await fetchSortedProducts(category, maxPrice, typeOfProduct)
 
-            res.json({updatedAllProducts: allProducts})
+            allProductsGlobal = allProducts
+            maxPriceGlobal = maxPrice
+            selectedTypeGlobal = typeOfProduct
 
-
-            // res.render('userView/view-products',{user:true, userFullName, allProducts, title, cartCount, wishlistCount})
+            res.json({status:true})
         } catch (error) {
             console.log(error);
         }
@@ -361,6 +365,25 @@ module.exports = {
     //     let allProducts = await 
     //     res.render('userView/view-products',{user:true, title})
     // },
+
+    getViewProducts : async(req,res)=>{
+        try {
+            let title = 'Explore All Products | Living & Home'
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
+            let allProducts = allProductsGlobal
+            res.render('userView/view-products',{user:true, maximumPrice: maxPriceGlobal, selectedType: selectedTypeGlobal, category:globalCategory, userFullName, allProducts, title, cartCount, wishlistCount})
+            allProductsGlobal = null;
+            globalCategory = null;
+            selectedTypeGlobal = null;
+            maxPriceGlobal = null;
+        } catch (error) {
+            console.log(error);
+        }
+    },
 
     productDetails : async (req,res)=> {
         try {

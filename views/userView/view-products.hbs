@@ -1,4 +1,4 @@
-    <script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.2.0/handlebars.js" integrity="sha512-+P5+Q4rnaJzPKAvlsCBSD45d9LWg9YJePSSyhZY1JfiJTQBkJZcSEl9qgsUCJsO5yw/82RK9rsAPcl0E+p1cIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     {{!-- Item added to cart popup --}}
     <div class="alert-added-to-cart">
@@ -148,10 +148,13 @@
 
 {{!-- Right Part --}}
     <input type="text" id="productCategoryForAllProductsView" value="{{category}}" hidden />
+    <input type="text" id="selectedMaxPriceForAllProductsView" value="{{maximumPrice}}" hidden />
+    <input type="text" id="selectedTypeForAllProductsView" value="{{selectedType}}" hidden />
 
         <div id="viewAllProductsContainer" style="position: relative; min-height: 100vh; margin-left: 20%; width: 80%;">
-            <div id="productsDivToRefresh" class="pro-container">
+            <div class="pro-container">
             {{#each allProducts}}
+            <div class="productsDivToRefresh" style="display: contents;">
             <div class="pro" style="padding-bottom: 70px;">
                 <a class="product-card-link" href="/product-details/{{this._id}}">
                   <img src="/productImages/{{this.image1}}" alt="">
@@ -174,6 +177,7 @@
                     <button style="border: none; background-color: white; margin-left: 2em; padding-bottom: 10px; height: 20px;" onclick="addToCart('{{this._id}}')" id="iconInsideProCardLink" class="shopping-icon" ><i class=" fa-sharp fa-solid fa-cart-shopping" id="iconInsideProCard"></i></button>
                     </div>
                 </div>
+            </div>
             </div>
             {{/each}}
             </div>
@@ -190,33 +194,48 @@
 
         viewAllProducts()
     }
+
+    // to change the values in the radio and range once the view-product get request is called.
+
+    let maxPriceForRange = document.getElementById('selectedMaxPriceForAllProductsView').value
+    let rangeLabelEdit = document.getElementById('labelForPriceRange')
+    let rangeInputEdit = document.getElementById('priceRangeForProducts')
+    console.log(maxPriceForRange)
+    if(maxPriceForRange == 1000){
+        rangeLabelEdit.innerHTML = '1000'
+        rangeInputEdit.value = 1000
+    } else if(maxPriceForRange == 2000){
+        rangeLabelEdit.innerHTML = '2000'
+        rangeInputEdit.value = 2000
+    } else if(maxPriceForRange == 3000){
+        rangeLabelEdit.innerHTML = '3000'
+        rangeInputEdit.value = 3000
+    } else if(maxPriceForRange == 4000){
+        rangeLabelEdit.innerHTML = '4000'
+        rangeInputEdit.value = 4000
+    } else if(maxPriceForRange == 5000){
+        rangeLabelEdit.innerHTML = '5000'
+        rangeInputEdit.value = 5000
+    } else if(maxPriceForRange == '0'){
+        rangeLabelEdit.innerHTML = '0'
+        rangeInputEdit.value = 0
+    }
+
+    let selectedType = document.getElementById('selectedTypeForAllProductsView').value
+    let allRadio = document.getElementById('allWearSelect')
+    let topRadio = document.getElementById('topWearSelect')
+    let bottomRadio = document.getElementById('bottomWearSelect')
+    let otherRadio = document.getElementById('otherWearSelect')
+
+    if(selectedType === 'all'){
+        allRadio.checked = true
+    } else if(selectedType === 'top'){
+        topRadio.checked = true
+    } else if(selectedType === 'bottom'){
+        bottomRadio.checked = true
+    } else if(selectedType === 'other'){
+        otherRadio.checked = true
+    } 
+
     //labelDisplay()
-</script>
-
-<script id="templateForDisplayingProducts" type="text/x-handlebars-template">
-
-            <div class="pro" style="padding-bottom: 70px;">
-                <a class="product-card-link" href="/product-details/{{this._id}}">
-                  <img src="/productImages/{{this.image1}}" alt="">
-                </a>
-                <div class="des">
-                    <a style="text-decoration: none;" class="product-card-link" href="/product-details/{{this._id}}">
-                      <span>{{this.productBrand}}</span>
-                      <h5>{{this.productName}}</h5>
-                    </a>
-                    {{!-- <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div> --}}
-                    <div class="d-flex flex-row" style="position: absolute; bottom: 30px; ">
-                    <h4>&#8377; {{this.productPrice}}</h4>
-                    <button style="border: none; background-color: white; margin-left: 7em; padding-bottom: 10px; height: 20px;" onclick="addToWishlist('{{this._id}}')" id="iconInsideProCardLink" class="shopping-icon"><i class="fa-solid fa-heart" id="iconInsideProCard"></i></button>
-                    <button style="border: none; background-color: white; margin-left: 2em; padding-bottom: 10px; height: 20px;" onclick="addToCart('{{this._id}}')" id="iconInsideProCardLink" class="shopping-icon" ><i class=" fa-sharp fa-solid fa-cart-shopping" id="iconInsideProCard"></i></button>
-                    </div>
-                </div>
-            </div>
-            
 </script>

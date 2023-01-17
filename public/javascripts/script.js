@@ -718,7 +718,7 @@ let viewAllProducts = ()=>{
     let bottom = document.getElementById('bottomWearSelect')
     let other = document.getElementById('otherWearSelect')
 
-    if(all.checked){
+    if(all.checked) {
         type = 'all'
     } else if(top.checked) {
         type = 'top'
@@ -726,6 +726,8 @@ let viewAllProducts = ()=>{
         type = 'bottom'
     } else if (other.checked) {
         type = 'nosize'
+    } else {
+        type = 'all'
     }
 
     $.ajax({
@@ -737,16 +739,18 @@ let viewAllProducts = ()=>{
             type: type
         },
         success: (data)=>{
-            renderDiv(data.updatedAllProducts);
+            if(data.status){
+                location.href = '/view-products'
+            }
         }
     })
 }
 
 
-let renderDiv = (data)=>{
-    let source   = $("#templateForDisplayingProducts").html();
-    let template = Handlebars.compile(source);
+// let renderDiv = (data)=>{
+//     let source   = $("#templateForDisplayingProducts").html();
+//     let template = Handlebars.compile(source);
 
-    let html = template(data)
-    $("#viewAllProductsContainer").empty().append(html);
-}
+//     let html = template(data)
+//     $(".productsDivToRefresh").empty().append(html);
+// }
