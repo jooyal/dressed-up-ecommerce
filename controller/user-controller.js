@@ -497,7 +497,15 @@ module.exports = {
             let products = await fetchCartProducts(decodedData.value.userId)
             // console.log(products); 
             if(products.cartExist===false){
-                res.json({msg :'cart is empty'})
+                let title = 'Cart Empty!'
+                let total = await fetchCartTotal(decodedData.value.userId)
+                let cartCount = await fetchCartCount(decodedData.value.userId)
+                let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+                let userFullName = (decodedData.value.userName).toUpperCase()
+
+                res.render('userView/cart-empty',{user:true, title, cartCount, wishlistCount, userFullName, total})
+
+
             }else {
                 let total = await fetchCartTotal(decodedData.value.userId)
                 let cartCount = await fetchCartCount(decodedData.value.userId)
@@ -633,7 +641,13 @@ module.exports = {
         //check if wishlist exist or not. if not, render no wishlist page.
             if (products.wishlistExist === false) {
 
-                res.send('wishlist does not exist for the user.');
+                let title = 'Cart Empty!'
+                let total = await fetchCartTotal(decodedData.value.userId)
+                let cartCount = await fetchCartCount(decodedData.value.userId)
+                let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+                let userFullName = (decodedData.value.userName).toUpperCase()
+
+                res.render('userView/wishlist-empty',{user:true, title, cartCount, wishlistCount, userFullName, total})
 
             } else {
 
@@ -1014,7 +1028,7 @@ module.exports = {
         res.render('userView/about-us',{user:true})
     },
     getDeliveryInformation :(req,res)=> {
-        res.render('userView/delivery-information',{user:true})
+        res.render('userView/delivery-information',{user:false})
     },
     getPrivacyPolicy :(req,res)=> {
         res.render('userView/privacy-policy',{user:true})

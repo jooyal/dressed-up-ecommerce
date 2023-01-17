@@ -558,7 +558,7 @@ let placeOrder = (userId)=>{
                     document.getElementById('placeOrderError').innerHTML = null;
 
                     if(response.codPayment === true){
-                        alert('Order Placed Successfully!')
+                        // alert('Order Placed Successfully!')
                         location.href = "/order-confirmed/"+response.orderId
 
                     }else {
@@ -698,7 +698,7 @@ let verifyOTP = (otp, mobile)=>{
                 document.getElementById('otpfieldErr').innerHTML = response.error
 
             } else {
-                alert(response.message)
+                // alert(response.message)
                 location.href = "/home"
             }
         }
