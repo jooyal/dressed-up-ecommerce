@@ -1517,3 +1517,180 @@ lottie-player {
   font-size: .85em !important;
   font-weight: 300 !important;
 }
+
+
+/* Removed from cart */
+
+.removed-from-cart-alert-card {
+
+  width: 350px;
+  height: 350px;
+  border-radius: 25px;
+  border:solid,#04746c;
+  background-color: rgb(255, 126, 126);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-removed-from-cart {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  z-index: 99992;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s ease-in-out;
+}
+
+.alert-removed-from-cart-appear {
+  opacity: 100 !important;
+}
+
+/* Removed from wishlist */
+
+.removed-from-wishlist-alert-card {
+
+  width: 350px;
+  height: 350px;
+  border-radius: 25px;
+  border:solid,#04746c;
+  background-color: rgb(255, 126, 126);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-removed-from-wishlist {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  z-index: 99992;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s ease-in-out;
+}
+
+.alert-removed-from-wishlist-appear {
+  opacity: 100 !important;
+}
+
+
+/* User Loggedout */
+
+.logged-out-alert-card {
+
+  width: 350px;
+  height: 350px;
+  border-radius: 25px;
+  border:solid,#04746c;
+  background-color: rgb(215, 255, 202);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-logged-out {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  z-index: 99992;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s ease-in-out;
+}
+
+.alert-logged-out-appear {
+  opacity: 100 !important;
+}
+
+
+/* Coupon applied successfully */
+.coupon-applied-successfully-alert-card {
+
+  width: 350px;
+  height: 350px;
+  border-radius: 25px;
+  border:solid,#04746c;
+  background-color: rgb(215, 255, 202);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-coupon-applied-successfully {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  z-index: 99992;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s ease-in-out;
+}
+
+.alert-coupon-applied-successfully-appear {
+  opacity: 100 !important;
+}
+
+
+/* payment-successful */
+.payment-success-alert-card {
+
+  width: 350px;
+  height: 350px;
+  border-radius: 25px;
+  border:solid,#04746c;
+  background-color: rgb(215, 255, 202);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-payment-success {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  z-index: 99992;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s ease-in-out;
+}
+
+.alert-payment-success-appear {
+  opacity: 100 !important;
+}

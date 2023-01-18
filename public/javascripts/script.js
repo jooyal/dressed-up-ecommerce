@@ -105,8 +105,9 @@ let changeProQuantity = (userId, cartId, productId, firstAddedTime, productSize,
             //if product is removed, as page is then reloaded, there is no need for changing via
             //ajax, the count will be automatically changed after refresh
             if(response.removeProduct){
-                alert('Product removed from cart!')
-                location.reload()
+                // alert('Product removed from cart!')
+                // location.reload()
+                removedFromCartPopupAppear()
             }else { 
                 
                 document.getElementById(firstAddedTime).value = qty+parseInt(count);
@@ -134,8 +135,9 @@ let removeCartProduct = (cartId, firstAddedTime, productName)=>{
             },
             success : (response)=>{
                 if(response){
-                    alert('Product removed from cart!')
-                    location.reload()
+                    // alert('Product removed from cart!')
+                    // location.reload()
+                    removedFromCartPopupAppear()
                 }
             }
         })
@@ -215,15 +217,17 @@ let moveToCartFromWishlist = (wishlistId, size, item, time)=>{
         method:'post',
         success: (response)=>{
             if(response.status){
-                alert('Product added to cart!')
-                location.reload()
+                // alert('Product added to cart!')
+                // location.reload()
+                movedFromWishlistPopupAppear()
             }
         }
     })
 }
 
 //to remove a product from wishlist
-let removeProductFromCart = (wishlistId, productAddedTime)=>{
+
+let removeProductFromWishlist = (wishlistId, productAddedTime)=>{
     $.ajax({
         url: '/remove-from-wishlist',
         method: 'post',
@@ -233,8 +237,9 @@ let removeProductFromCart = (wishlistId, productAddedTime)=>{
         },
         success: (response)=>{
             if(response.status){
-                alert('Product removed from wishlist!')
-                location.reload()
+                // alert('Product removed from wishlist!')
+                // location.reload()
+                removedFromWishlistPopupAppear()
             }
         }
     })
@@ -251,8 +256,9 @@ let doLogOut = ()=>{
             method : 'get',
             success : (response)=>{
                 if (response.status) {
-                    alert('You have successfully Logged Out!')
-                    location.href="/"
+                    // alert('You have successfully Logged Out!')
+                    // location.href="/"
+                    LoggedOutPopupAppear()
                 } else {
                     alert('You are already logged out!')
                 }
@@ -340,8 +346,9 @@ let performLogOut = ()=>{
         method : 'get',
         success : (response)=>{
             if (response.status) {
-                alert('You have successfully Logged Out!')
-                location.href="/"
+                // alert('You have successfully Logged Out!')
+                // location.href="/"
+                LoggedOutPopupAppear()
             } else {
                 alert('You are already logged out!')
             }
@@ -392,7 +399,8 @@ let applyCouponDiscount = (userId)=>{
                     document.getElementById('amtAfterDiscount').innerHTML = response.totalAfterDisc;
                     document.getElementById('taxAmountId').innerHTML = response.taxAmt;
                     document.getElementById('grandTotalId').innerHTML = response.grandTotal;
-                    alert('Coupon Applied Successfully!')
+                    // alert('Coupon Applied Successfully!')
+                    CouponAppliedSuccessPopupAppear()
                 }
             }
         })
@@ -488,8 +496,22 @@ let checkForErrorsAndPlaceOrder = (userId)=>{
 
     let checkbox = document.getElementById('selectSavedAddress');
 
-    if(checkbox.checked === false){
+    if(checkbox){
+        if(checkbox.checked === false){
 
+            if(!validateName() && !validateAddress() && !validateMobile() && !validatePincode()){
+                document.getElementById('placeOrderError').innerHTML = 'Enter All Required Fields To Continue.'
+    
+            } else {
+                placeOrder(userId)
+    
+            }
+    
+        } else if (checkbox.checked === true){
+            placeOrder(userId)
+    
+        }
+    } else {
         if(!validateName() && !validateAddress() && !validateMobile() && !validatePincode()){
             document.getElementById('placeOrderError').innerHTML = 'Enter All Required Fields To Continue.'
 
@@ -497,13 +519,7 @@ let checkForErrorsAndPlaceOrder = (userId)=>{
             placeOrder(userId)
 
         }
-
-    } else if (checkbox.checked === true){
-        placeOrder(userId)
-
     }
-
-    
 }
 
 let placeOrder = (userId)=>{
@@ -526,10 +542,12 @@ let placeOrder = (userId)=>{
     }else {
         document.getElementById('placeOrderError').innerHTML = null;
 
-        if(!savedAddressSelection.checked){
-            deliveryAddress = addressLine2 + ', ' + addressLine3
-        } else {
-            deliveryAddress = null
+        if(savedAddressSelection){
+            if(!savedAddressSelection.checked){
+                deliveryAddress = addressLine2 + ', ' + addressLine3
+            } else {
+                deliveryAddress = null
+            }
         }
 
         if(cod.checked===true){
@@ -562,12 +580,21 @@ let placeOrder = (userId)=>{
                         location.href = "/order-confirmed/"+response.orderId
 
                     }else {
-                        if(!savedAddressSelection.checked){
-                            let userInfo = {
-                                userName : userName,
-                                userMobile : userMobile,
+                        if(savedAddressSelection){
+                            if(!savedAddressSelection.checked){
+                                let userInfo = {
+                                    userName : userName,
+                                    userMobile : userMobile,
+                                }
+                                razorPayment(response.rzpObj, userInfo, response.orderId)
+                            } else {
+                                let userInfo = {
+                                    userName : document.getElementById('userFullNameForPayment').value,
+                                    userEmail : document.getElementById('userEmailIdForPayment').value,
+                                    userMobile : parseInt(document.getElementById('userMobileNoForPayment').value)
+                                }
+                                razorPayment(response.rzpObj, userInfo, response.orderId)
                             }
-                            razorPayment(response.rzpObj, userInfo, response.orderId)
 
                         } else {
                             let userInfo = {
@@ -652,8 +679,9 @@ let verifyPayment = (payment, order, orderId)=>{
       },
       success: (response)=>{
         if(response.status){
-            alert('Payment Successful!')
-            location.href = "/order-confirmed/" + orderId;
+            PaymentSuccessPopupAppear(orderId)
+            // alert('Payment Successful!')
+            // location.href = "/order-confirmed/" + orderId;
         }else {
           alert('Payment Failed!');
         }
@@ -754,3 +782,92 @@ let viewAllProducts = ()=>{
 //     let html = template(data)
 //     $(".productsDivToRefresh").empty().append(html);
 // }
+
+
+// popup for product removed from cart
+
+let removedFromCartPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieRemovedFromCart')
+    document.querySelector('.alert-removed-from-cart').classList.add('alert-removed-from-cart-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-removed-from-cart').classList.remove('alert-removed-from-cart-appear');
+            lottie.stop()
+            location.reload()
+        },2000)
+}
+
+// popup for product added to cart from wishlist
+
+let movedFromWishlistPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieAddToCart')
+    document.querySelector('.alert-added-to-cart').classList.add('alert-added-to-cart-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-added-to-cart').classList.remove('alert-added-to-cart-appear');
+            lottie.stop()
+            location.reload()
+        },2000)
+    }
+
+
+    // popup for product removed from wishlist
+
+let removedFromWishlistPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieRemovedFromWishlist')
+    document.querySelector('.alert-removed-from-wishlist').classList.add('alert-removed-from-wishlist-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-removed-from-wishlist').classList.remove('alert-removed-from-wishlist-appear');
+            lottie.stop()
+            location.reload()
+        },2000)
+}
+
+
+// popup for user logged-out
+let LoggedOutPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieUserLoggedOut')
+    document.querySelector('.alert-logged-out').classList.add('alert-logged-out-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-logged-out').classList.remove('alert-logged-out-appear');
+            lottie.stop()
+            location.href = '/'
+        },2000)
+    }
+
+
+// popup for coupon applied successfully
+let CouponAppliedSuccessPopupAppear = ()=>{
+    let lottie = document.querySelector('#lottieCouponSuccess')
+    document.querySelector('.alert-coupon-applied-successfully').classList.add('alert-coupon-applied-successfully-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-coupon-applied-successfully').classList.remove('alert-coupon-applied-successfully-appear');
+            lottie.stop()
+        },2000)
+    }
+
+
+// payment successful alert card
+let PaymentSuccessPopupAppear = (orderId)=>{
+    let lottie = document.querySelector('#lottiePaymentSuccess')
+    document.querySelector('.alert-payment-success').classList.add('alert-payment-success-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-payment-success').classList.remove('alert-payment-success-appear');
+            lottie.stop()
+            location.href = "/order-confirmed/" + orderId;
+        },2000)
+    }

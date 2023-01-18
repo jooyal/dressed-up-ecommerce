@@ -766,6 +766,11 @@ module.exports = {
         
             if(url.parse(req.headers.referer).pathname === undefined || url.parse(req.headers.referer).pathname !== '/cart'){
 
+                let decodedData = await tokenVerify(req.cookies.authToken)
+                let cartCount = await fetchCartCount(decodedData.value.userId)
+                let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+                let userFullName = (decodedData.value.userName).toUpperCase()
+
                 res.render('access-denied', {user:true, userFullName, cartCount, wishlistCount})
                     
             } else {
@@ -796,7 +801,7 @@ module.exports = {
                     userId: decodedData.value.userId, 
                     userEmail: decodedData.value.userEmail, 
                     userMobile: decodedData.value.userMobile, 
-                    userFullName: decodedData.value.userName, 
+                    userFullName: userFullName,
                     userSavedAddress})
 
             }
@@ -936,7 +941,7 @@ module.exports = {
 
             let userOrderHistory = await fetchUserOrderHistory(decodedData.value.userId)
 
-            console.log(userOrderHistory[0]);
+            // console.log(userOrderHistory[0]);
 
             if(userOrderHistory[0] !== undefined){
                 res.render('userView/order-history',{user:true, userFullName, cartCount, wishlistCount, userOrderHistory})

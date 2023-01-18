@@ -1,3 +1,21 @@
+    {{!-- Coupon applied sucessfully popup --}}
+    <div class="alert-coupon-applied-successfully">
+      <div class="coupon-applied-successfully-alert-card">
+        <lottie-player class="align-items-center" src="/lottieFiles/greentick.json" id="lottieCouponSuccess"  background="transparent"  speed=".9" style="width: 200px; height: 200px;"></lottie-player>
+        <h3 class="text-success text-center">Coupon Applied<br/>Successfully!</h3>
+      </div>
+    </div>
+    {{!-- End of the popup --}}
+
+    {{!-- Coupon applied sucessfully popup --}}
+    <div class="alert-payment-success">
+      <div class="payment-success-alert-card">
+        <lottie-player class="align-items-center" src="/lottieFiles/greentick.json" id="lottiePaymentSuccess"  background="transparent"  speed=".9" style="width: 200px; height: 200px;"></lottie-player>
+        <h3 class="text-success text-center">Payment<br/>Successful !</h3>
+      </div>
+    </div>
+    {{!-- End of the popup --}}
+
 <div class="container pb-5">
   <div class="py-5 text-center">
     
@@ -138,7 +156,8 @@
   let addressLine4Err = document.getElementById('orderMobileErr')
   let placeOrderError = document.getElementById('placeOrderError')
 
-  checkbox.addEventListener('click',()=>{
+  if(checkbox){
+    checkbox.addEventListener('click',()=>{
     if(checkbox.checked){
       addressLine1.disabled = true;
       addressLine2.disabled = true;
@@ -161,6 +180,7 @@
       addressLine4.disabled = false
     }
   })
+  }
 </script>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
