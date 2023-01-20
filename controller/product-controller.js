@@ -1,9 +1,10 @@
-const { addProduct, addProductImage, fetchAllProducts } = require('../model/admin-helper.js')
+const { addProduct, addProductImage, fetchAllProducts, fetchAllOrders } = require('../model/admin-helper.js')
 const path = require('path');
 
 module.exports = {
   getAddProduct : (req,res)=> {
-    res.render('adminView/add-product',{admin:true})
+    let title = 'Add New Product | ADMIN | Dressed Up'
+    res.render('adminView/add-product', title, {admin:true})
   },
   postAddProduct : (req,res)=> {
     addProduct(req.body).then(async (insertedId)=>{
@@ -37,13 +38,26 @@ module.exports = {
       console.log(err)
     })
   },
+
   getAllProducts : async (req,res)=>{
     try {
       let products = await fetchAllProducts()
-      console.log(products)
-      res.render('adminView/product-list',{products,admin:true})
+      // console.log(products)
+      let title = 'View All Products | Admin | Dressed Up'
+      res.render('adminView/product-list',{products, title, admin:true})
     } catch (error) {
       console.log(error)
+    }
+  },
+
+  getAllOrders : async(req,res)=>{
+    try {
+      let orders = await fetchAllOrders()
+      let title = 'View All Orders | Admin | Dressed Up'
+      console.log(orders);
+      res.render('adminView/order-list',{orders, title, admin:true})
+    } catch (error) {
+      console.log(error);
     }
   }
 

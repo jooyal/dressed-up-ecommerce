@@ -1,0 +1,26 @@
+
+    <section class="wrapper mt-5">
+		<div class="container">
+			<div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 text-center">
+				
+				<form class="rounded bg-white shadow p-5" method="post" action="/login">
+					<h3 class="text-dark fw-bolder fs-4 mb-3">Log In</h3>
+						<p class="text-danger">{{loginError}}</p> <!--Log In Error Message-->
+					<div class="form-floating mb-3">
+						<input type="email" class="form-control" name="adminEmail" id="floatingInput" placeholder="name@example.com">
+						<label class="text-muted" for="floatingInput">Email address</label>
+					</div>
+					<div class="form-floating mb-3">
+						<input type="password" class="form-control" name="adminPassword" id="floatingPassword" placeholder="Password">
+						<label class="text-muted" for="floatingPassword">Password</label>
+                        {{!-- <span class="password-info mt-2">Forgot password? <a href="">reset it here</a></span> --}}
+					</div> 
+					<button type="submit" class="btn btn-primary submit_btn w-100 my-4">Continue</button> 
+					<div class="text-center text-muted text-uppercase mb-2">or</div>
+					<a type="submit" href="/OTP-login" class="btn btn-warning submit_btn w-70 my-2">Log In With OTP</a> 
+				</form>
+			</div>
+		</div>
+	</section>
+
+

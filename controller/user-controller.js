@@ -771,7 +771,7 @@ module.exports = {
                 let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
                 let userFullName = (decodedData.value.userName).toUpperCase()
 
-                res.render('access-denied', {user:true, userFullName, cartCount, wishlistCount})
+                res.status(403).render('access-denied', {user:true, userFullName, cartCount, wishlistCount})
                     
             } else {
 
@@ -1205,6 +1205,21 @@ module.exports = {
                     grandTotal : orderTotal.grandTotal
                 })
             }
+            
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    getAvailableOffers : async(req,res)=>{
+        try {
+
+            let decodedData = await tokenVerify(req.cookies.authToken)
+            let cartCount = await fetchCartCount(decodedData.value.userId)
+            let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
+            let userFullName = (decodedData.value.userName).toUpperCase()
+
+            res.render('userView/available-offers',{user:true, userFullName, cartCount, wishlistCount,})
             
         } catch (error) {
             console.log(error);

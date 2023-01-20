@@ -1,4 +1,8 @@
-<h1 class="m-4 text-center">Add Product</h1>
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1 class="ms-5">Add Product</h1>
+    </div><!-- End Page Title -->
 
 <form class="px-5 py-5" action="/admin/add-product" method="post" enctype="multipart/form-data" >
   <div class="mb-3">
@@ -20,9 +24,9 @@
     <label for="productCategoryWomen" class="form-label">Women</label>
     <input type="radio" name="productCategory" value="women" id="productCategoryWomen">
     <br/>
-    <label for="productCategoryAccessories" class="form-label">Accessories</label>
+    {{!-- <label for="productCategoryAccessories" class="form-label">Accessories</label>
     <input type="radio" name="productCategory" value="accessories" id="productCategoryAccessories">
-    <br/>
+    <br/> --}}
     <label for="productCategoryLiving" class="form-label">Living</label>
     <input type="radio" name="productCategory" value="living" id="productCategoryLiving">
     </input>
@@ -185,22 +189,33 @@
     <label for="productImage4">Image 4</label>
     <input type="file" name="productImage4"  onchange="viewImage(event,'productImage4')" id="productImage4" accept="image/png, image/webp, image/jpeg" size="" /> <!--"application/pdf"-->
 
-    <div id="imageDisplay" class="d-flex flex-row">
-      <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage1Show" src="" alt=""><label>Image-1</label></div>
-      <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage2Show" src="" alt=""><label>Image-2</label></div>
-      <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage3Show" src="" alt=""><label>Image-3</label></div>
-      <div><img style="height: 160px; width: 150px;" class="m-5" id="productImage4Show" src="" alt=""><label>Image-4</label></div>
+    <div id="imageDisplay" class="d-flex flex-row mt-3">
+      <div class="d-flex flex-column"><img style="height: 160px; width: 150px;" class="m-2" id="productImage1Show" src="" alt=""><label class="ms-5">Image-1</label></div>
+      <div class="d-flex flex-column"><img style="height: 160px; width: 150px;" class="m-2" id="productImage2Show" src="" alt=""><label class="ms-5">Image-2</label></div>
+      <div class="d-flex flex-column"><img style="height: 160px; width: 150px;" class="m-2" id="productImage3Show" src="" alt=""><label class="ms-5">Image-3</label></div>
+      <div class="d-flex flex-column"><img style="height: 160px; width: 150px;" class="m-2" id="productImage4Show" src="" alt=""><label class="ms-5">Image-4</label></div>
     </div>
    </div>
 
   <button style="display: none;" type="submit" id="product-submit" class="btn btn-primary mt-5">Submit</button>
 </form>
+</main>
+
+<style>
+  .item-display-none{
+  display: none;
+}
+
+.item-display-true {
+  display: block !important;
+}
+</style>
 
 <script>
   function selectSize() {
     categoryMen = document.querySelector('#productCategoryMen').checked
     categoryWomen = document.querySelector('#productCategoryWomen').checked
-    categoryAccessories = document.querySelector('#productCategoryAccessories').checked
+    // categoryAccessories = document.querySelector('#productCategoryAccessories').checked
     categoryLiving = document.querySelector('#productCategoryLiving').checked
 
     selectedShirt = document.querySelector('#productTypeShirt').checked
@@ -212,7 +227,7 @@
     selectedJewellery = document.querySelector('#productTypeJewellery').checked
     selectedOther = document.querySelector('#productTypeOther').checked
 
-    if((categoryAccessories && categoryLiving && categoryWomen && categoryMen) === false) {
+    if((categoryLiving && categoryWomen && categoryMen) === false) {
       document.querySelector('#type-confirm-error').innerHTML = 'Please select a product type and category to continue.'
     }
 

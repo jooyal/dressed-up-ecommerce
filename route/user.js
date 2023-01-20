@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo, getChangeUserPassword, postChangeUserPassword, getPlaceOrder, postPlaceOrder, postCheckIfCouponValid, postVerifyPayment, postOTPLogin, postOTPLoginVerification, postViewProducts, postViewAllProducts, getViewProducts } = require('../controller/user-controller')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo, getChangeUserPassword, postChangeUserPassword, getPlaceOrder, postPlaceOrder, postCheckIfCouponValid, postVerifyPayment, postOTPLogin, postOTPLoginVerification, postViewProducts, postViewAllProducts, getViewProducts, getAvailableOffers } = require('../controller/user-controller')
 
 /* pages without authorization. */
 router.get('/',landingPage);
@@ -19,6 +19,8 @@ router.get('/about-us',getAboutUs)
 router.get('/privacy-policy',getPrivacyPolicy)
 router.get('/contact-us',getContactUs)
 router.get('/help',getUserHelp)
+router.get('/404-error',get404error)
+router.get('/access-denied',getAccessDenied)
 
 /* pages with authorization */
 router.get('/home', userAuthorization, userHome)
@@ -41,8 +43,6 @@ router.get('/order-history', userAuthorization, getOrderHistory)
 router.get('/view-order-items/:orderId', userAuthorization, getOrderItems)
 router.post('/verify-payment', userAuthorization, postVerifyPayment)
 router.get('/order-confirmed/:id', userAuthorization, getOrderConfirmed)
-router.get('/404-error',get404error)
-router.get('/access-denied',getAccessDenied)
 router.get('/signout', userAuthorization, doSignOut)
 router.get('/logout', redirectToSignout)
 router.get('/wishlist', userAuthorization, getWishlist)
@@ -54,5 +54,6 @@ router.get('/change-user-info', userAuthorization, getChangeUserInfo)
 router.post('/change-user-info', userAuthorization, postChangeUserInfo)
 router.get('/change-user-password', userAuthorization, getChangeUserPassword)
 router.post('/change-user-password', userAuthorization, postChangeUserPassword)
+router.get('/available-offers', userAuthorization, getAvailableOffers)
 
 module.exports = router;

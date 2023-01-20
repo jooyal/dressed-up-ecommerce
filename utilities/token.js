@@ -5,7 +5,7 @@ require('dotenv').config();
 module.exports = {
     userTokenGenerator : async(payload)=>{        
         try {
-          const accessToken = await jwt.sign({value: payload}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '900s'})
+          const accessToken = await jwt.sign({value: payload}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '600s'})
           return accessToken
 
         } catch (error) {

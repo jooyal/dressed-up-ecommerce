@@ -1,0 +1,88 @@
+lottie-player {
+    margin: 0 auto;
+    height: 10px;
+  }
+  
+  .loader {
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: rgb(255, 247, 255); */
+    backdrop-filter: blur(10px);
+    z-index: 99991;
+    transition: opacity 0.75s, visibility 0.75s;
+  }
+  
+  .loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .small-container {
+  padding: 50px 30px;
+  width: 80%;
+  margin: auto;
+  /* border: 2px solid red; */
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  /* border: 3px solid blue; */
+}
+.cart-info {
+  display: flex;
+  flex-wrap: wrap;
+  /* border: 3px solid green; */
+}
+th {
+  text-align: left;
+  padding: 10px 5px;
+  color: #fff;
+  background-color: rgb(6, 85, 103);
+  font-weight: normal;
+  /* border: 3px solid red; */
+}
+td {
+  padding: 10px 5px;
+  /* border: 2px solid black; */
+}
+td input {
+  width: 50px;
+  height: 30px;
+  padding: 5px;
+  /* padding: 8px 3px 8px 7px; */
+}
+td a {
+  color: rgb(6, 85, 103);
+  font-size: 12px;
+  text-decoration: none;
+}
+td img {
+  /* width: 120px;
+  height: 120px; */
+  /* width: 100%; */
+  display: inline-block;
+  margin-right: 10px;
+}
+.total-price {
+  display: flex;
+  justify-content: flex-end;
+  /* border: 2px solid blue; */
+}
+.total-price table {
+  border-top: 3px solid rgb(6, 85, 103);
+  width: 100%;
+  max-width: 400px;
+  /* border: 2px solid red; */
+}
+td:last-child {
+  text-align: right;
+}
+th:last-child {
+  text-align: right;
+}

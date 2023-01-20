@@ -1,0 +1,43 @@
+  <main id="main" class="main">
+
+    <div class="pagetitle pt-2 ms-5">
+      <h1>Order History</h1>
+    </div>
+    {{!-- <h2 class="text-center pt-4">Order History</h2> --}}
+    
+    <!-- cart items details-->
+    <div class="small-container">
+      <table>
+        <tr>
+          <th>Order Id</th>
+          <th>Date and time</th>
+          <th>Status</th>
+          <th>Price</th>
+          <th>Options</th>
+        </tr>
+
+                  {{#each userOrderHistory}}
+                  
+        <tr>
+          <td>
+            Order Id : {{this._id}}
+          </td>
+          <td>
+            {{this.date}}
+          </td>
+          <td> 
+            &#8377; {{this.grandTotalAmount}}
+          </td>
+          <td>
+            <a href="/view-order-items/{{this._id}}" class="btn btn-warning">View Items</a>
+            {{!-- <button class="btn btn-warning" onclick="viewOrderItems({{this._id}})"></button> --}}
+          </td>
+        </tr>
+                  {{/each}}
+        
+      </table>
+
+    
+      </div>
+    </div>
+</main>

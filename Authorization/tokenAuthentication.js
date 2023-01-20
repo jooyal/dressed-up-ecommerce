@@ -18,7 +18,7 @@ module.exports = {
       try {
         const data = await tokenVerify(token)
         
-        //if no data is decoded(token might have expired or tampered with)
+        //if no data is decoded(or token might have expired or tampered with)
         if(!data){
           console.log('no data in token');
           //if no data in token, delete cookie.

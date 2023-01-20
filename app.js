@@ -57,7 +57,17 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  if(err.status == 404){
+    res.status(404).render('404-error');
+
+  } else if(err.status == 403){
+    res.status(403).render('access-denied');
+
+  } else {
+    res.render('error');
+  }
+
 });
+
 
 module.exports = app;

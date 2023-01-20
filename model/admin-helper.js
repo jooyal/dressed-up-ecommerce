@@ -1,5 +1,5 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION } = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION, ORDER_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
 
 module.exports = {
@@ -33,11 +33,23 @@ module.exports = {
       }
     })
   },
+
   fetchAllProducts : ()=>{
     return new Promise((resolve, reject) => {
       try {
         let products = db.get().collection(PRODUCT_COLLECTION).find().toArray()
         resolve(products)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  fetchAllOrders : ()=>{
+    return new Promise((resolve, reject) => {
+      try {
+        let orders = db.get().collection(ORDER_COLLECTION).find().toArray()
+        resolve(orders)
       } catch (error) {
         reject(error)
       }
