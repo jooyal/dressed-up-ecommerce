@@ -318,3 +318,61 @@
   }
 
 })();
+
+
+// function to change order status by admin.
+
+let changeOrderStatus = (orderId, newStatus)=>{
+  $.ajax({
+    url: '/admin/change-order-status',
+    method: 'post',
+    data: {
+      orderId : orderId,
+      status : newStatus
+    },
+    success : (response)=>{
+      if(response.status){
+        alert('Changed order status successfully!')
+        document.querySelector('#orderStatusId').innerHTML = response.newStatus
+      } else {
+        alert('Could not change the order status.')
+      }
+    }
+  })
+}
+
+let banSelectedUser = (userId)=>{
+  $.ajax({
+    url: '/admin/ban-selected-user',
+    method: 'post',
+    data: {
+      userId : userId
+    },
+    success : (response)=>{
+      if(response.status){
+        alert(response.message)
+        location.reload()
+      } else {
+        alert(response.message)
+      }
+    }
+  })
+}
+
+let unBanSelectedUser = (userId)=>{
+  $.ajax({
+    url: '/admin/unban-selected-user',
+    method: 'post',
+    data: {
+      userId : userId
+    },
+    success : (response)=>{
+      if(response.status){
+        alert(response.message)
+        location.reload()
+      } else {
+        alert(response.message)
+      }
+    }
+  })
+}

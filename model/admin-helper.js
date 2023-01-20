@@ -1,5 +1,5 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION, ORDER_COLLECTION } = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION, ORDER_COLLECTION, USER_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb')
 
 module.exports = {
@@ -51,6 +51,95 @@ module.exports = {
         let orders = db.get().collection(ORDER_COLLECTION).find().toArray()
         resolve(orders)
       } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  doChangeOrderStatus : (orderId, newStatus)=>{
+    return new Promise(async (resolve, reject) => {
+      try {
+        let confirmation = await db.get().collection(ORDER_COLLECTION).updateOne({_id: ObjectId(orderId)},
+        {$set : {orderStatus: newStatus}})
+
+        if(confirmation.modifiedCount == 1){
+          resolve({status:true, newStatus: newStatus, message:'modified successfully'})
+
+        }else {
+          resolve({status:false, error:'could not be modified'})
+
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  fetchAllUsers : ()=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        let allUsers = await db.get().collection(USER_COLLECTION).find().toArray()
+        if(allUsers){
+          resolve(allUsers);
+        }else {
+          reject({status:false, error: 'No users exist!'})
+        }
+
+      } catch (error) {
+        reject(error);
+      }
+    })
+  },
+
+  fetchUserDetails : (userId)=>{
+    return new Promise((resolve, reject) => {
+      try {
+        let userDetails = db.get().collection(USER_COLLECTION).findOne({_id:ObjectId(userId)})
+  
+        if(userDetails){
+          resolve(userDetails)
+        }else {
+          reject({status:false, error:'No matching user found.'})
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  doBanUser : (userId)=>{
+    return new Promise(async(resolve, reject)=>{
+      try {
+        let confirmation = await db.get().collection(USER_COLLECTION).updateOne({_id:ObjectId(userId)},
+        {$set: {isBlocked: true}})
+
+        if(confirmation.modifiedCount == 1){
+          resolve({status:true, message: 'user blocked successfully'})
+        } else {
+          resolve({status:false, message: 'user already blocked'})
+        }
+
+      } catch(error){
+        reject(error)
+      }
+    })
+  },
+
+  doUnBanUser : (userId)=>{
+    return new Promise(async(resolve, reject)=>{
+      try {
+        let confirmation = await db.get().collection(USER_COLLECTION).updateOne({_id:ObjectId(userId)},
+        {$set: {isBlocked: false}})
+
+        if(confirmation.modifiedCount == 1){
+          resolve({status:true, message: 'user unblocked successfully'})
+        } else {
+          resolve({status:false, message: 'user already unblocked'})
+        }
+
+      } catch(error){
         reject(error)
       }
     })

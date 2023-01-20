@@ -1,8 +1,13 @@
+      <main id="main" class="main">
+    
     <!-- cart items details-->
     <div class="small-container mb-5">
         <h3>Delivery Details</h3>
 
       <h6 class="py-2 " style="font-weight:300;">Order Id : {{orderDetails._id}}</h6>
+
+        <button onclick="changeOrderStatus('{{orderDetails._id}}', 'shipped')" class="btn btn-success">Change Status To Shipped</button>
+        <button onclick="changeOrderStatus('{{orderDetails._id}}', 'cancelled')" class="btn btn-danger">Change Status To Cancelled</button>
 
       <div style="border: solid; border-color: #088178;" class="d-flex flex-column my-4 p-3">
         <h5><span style="color: #088178;">Name Of The Customer : </span> {{orderDetails.deliveryDetails.name}}</h5>
@@ -10,7 +15,7 @@
         <h5><span style="color: #088178;">Delivery Address : </span> {{orderDetails.deliveryDetails.address}}</h5>
         <h5><span style="color: #088178;">Payment Method : </span> {{orderDetails.paymentMethod}}</h5>
         <h5><span style="color: #088178;">Order Date & Time : </span> {{orderDetails.date}}</h5>
-        <h5><span style="color: #088178;">Order Status : </span> {{orderDetails.orderStatus}}</h5>
+        <h5><span style="color: #088178;">Order Status : </span> <span id="orderStatusId">{{orderDetails.orderStatus}}</span></h5>
       </div>
 
       <table>
@@ -77,4 +82,4 @@
       </div>
     </div>
 
-    
+    </main>

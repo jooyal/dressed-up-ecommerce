@@ -86,3 +86,8 @@ td:last-child {
 th:last-child {
   text-align: right;
 }
+.total-price tr:last-child td {
+  background-color: rgba(6, 85, 103, 0.578);
+  color: #fff;
+  /* margin-top: 0px; */
+}

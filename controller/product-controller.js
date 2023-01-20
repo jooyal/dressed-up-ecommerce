@@ -1,5 +1,6 @@
 const { addProduct, addProductImage, fetchAllProducts, fetchAllOrders } = require('../model/admin-helper.js')
 const path = require('path');
+const { fetchOrderItems, fetchOrderDetails } = require('../model/user-helper.js');
 
 module.exports = {
   getAddProduct : (req,res)=> {
@@ -50,16 +51,7 @@ module.exports = {
     }
   },
 
-  getAllOrders : async(req,res)=>{
-    try {
-      let orders = await fetchAllOrders()
-      let title = 'View All Orders | Admin | Dressed Up'
-      console.log(orders);
-      res.render('adminView/order-list',{orders, title, admin:true})
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  
 
 
 }

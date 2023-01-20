@@ -91,11 +91,16 @@ module.exports = {
     return new Promise( async(resolve, reject) => {
       let status = await db.get().collection(USER_COLLECTION).findOne({_id:ObjectId(userId)})
 
-      if(status.isBlocked){
+      if(!status){
         reject()
       }else {
-        resolve()
+        if(status.isBlocked){
+          reject()
+        }else {
+          resolve()
+        }
       }
+
     })
   },
 
@@ -149,6 +154,7 @@ module.exports = {
           data.userAddress = null;
           delete data.confirmUserPassword;
           delete data.termsCheckBox;
+          data.joinedDate = new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})
           //hashing password
           data.userPassword = await bcrypt.hash(data.userPassword,10);
 

@@ -3,51 +3,56 @@
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
   
   <main id="main" class="main">
+
+    
     {{!-- <h2 class="text-center pt-4">Order History</h2> --}}
     
     <!-- cart items details-->
     <div class="small-container">
-      <div class="pagetitle mb-4">
-      <h1>All Orders</h1>
-    </div>
+        <div class="pagetitle mb-4">
+            <h1>All Users</h1>
+        </div>
+
       <table id="orderListTable">
         <thead>
         <tr>
-          <th>Order Id</th>
           <th>User Id</th>
           <th>Customer Name</th>
-          <th>Date and time</th>
+          <th>Email</th>
+          <th>Phone</th>
           <th>Status</th>
-          <th>Price</th>
           <th>Options</th>
         </tr>
         </thead>
         <tbody>
-                  {{#each orders}}
+                  {{#each users}}
         <tr>
           <td>
-            Order Id : {{this._id}}
+            User Id : {{this._id}}
           </td>
           <td>
-            User Id : {{this.userId}}
+            {{this.fullName}}
           </td>
           <td>
-            {{this.deliveryDetails.name}}
+            {{this.userEmail}}
           </td>
           <td>
-            {{this.date}}
+            {{this.userMobile}}
           </td>
           <td>
-            {{this.orderStatus}}
-          </td>
-          <td> 
-            &#8377; {{this.grandTotalAmount}}
+            {{#if this.isBlocked}}
+            <span class="text-danger">Blocked</span>
+            {{else}}
+            <span class="text-success">Active</span>
+            {{/if}}
           </td>
           <td>
-            <a href="/admin/view-order-details/{{this._id}}" class="btn btn-warning">View Details</a>
-            {{!-- <a href="/change-order-status/{{this._id}}" class="btn btn-success mt-1">Change Status</a> --}}
-            {{!-- <button class="btn btn-warning" onclick="viewOrderItems({{this._id}})">View Items</button>
-            <button class="btn btn-success mt-1" onclick="viewOrderItems({{this._id}})">Change Status</button> --}}
+            <a style=" font-weight: bold;" href="/admin/view-user-details/{{this._id}}" class="btn btn-warning">Full Details</a>
+            {{#if this.isBlocked}}
+            <button style=" font-weight: bold;" onclick="unBanSelectedUser('{{this._id}}')" class="btn btn-success mt-1">Activate User</button>
+            {{else}}
+            <button style=" font-weight: bold;" onclick="banSelectedUser('{{this._id}}')" class="btn btn-danger mt-1">Ban User</button>
+            {{/if}}
           </td>
         </tr>
                   {{/each}}
@@ -57,7 +62,7 @@
     
       </div>
     </div>
-</main>
+  </main>
 
 <script>
     $(document).ready( function () {

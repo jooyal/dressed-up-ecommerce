@@ -1,0 +1,50 @@
+        <main id="main" class="main">
+            <div class="tab-content pt-2 ps-3">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                  <h5 class="card-title">Profile Details</h5>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                    <div class="col-lg-9 col-md-8 mb-2">{{userDetails.fullName}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email</div>
+                    <div class="col-lg-9 col-md-8 mb-2">{{userDetails.userEmail}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Phone No.</div>
+                    <div class="col-lg-9 col-md-8 mb-2">{{userDetails.userMobile}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Address</div>
+                    <div class="col-lg-9 col-md-8 mb-2">{{userDetails.userAddress}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Status</div>
+                    <div class="col-lg-9 col-md-8  mb-2">
+                        {{#if userDetails.isBlocked}}
+                        <span id="userBlockedTrueSpan" class="btn btn-danger">Blocked</span>
+                        {{else}}
+                        <span id="userBlockedFalseSpan" class="btn btn-success">Active</span>
+                        {{/if}}
+                    </div>
+                  </div>
+
+                  <div class="row  mb-2">
+                    <div class="col-lg-3 col-md-4 label">Joined Date</div>
+                    <div class="col-lg-9 col-md-8">{{userDetails.joinedDate}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">User Id</div>
+                    <div class="col-lg-9 col-md-8">{{userDetails._id}}</div>
+                  </div>
+
+                </div>
+            </div>
+        </main>
