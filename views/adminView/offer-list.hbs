@@ -1,0 +1,57 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+  
+  <main id="main" class="main">
+    {{!-- <h2 class="text-center pt-4">Order History</h2> --}}
+    
+    <!-- cart items details-->
+    <div class="small-container">
+      <div class="pagetitle mb-4">
+      <h1>All Offers</h1>
+    </div>
+     <a class="btn btn-success mb-3" href="/admin/create-offer">Create New Offer</a>
+      <table id="offerListTable">
+        <thead>
+        <tr>
+          <th>Offer Id</th>
+          <th>Coupon Code</th>
+          <th>Expires In</th>
+          <th>Discount Percent</th>
+          <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+                  {{#each offers}}
+        <tr>
+          <td>
+            {{this._id}}
+          </td>
+          <td>
+            {{this.code}}
+          </td>
+          <td>
+            {{this.expiresIn}}
+          </td>
+          <td>
+            {{this.percentage}} %
+          </td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteDiscountOffer('{{this._id}}')">Delete</button>
+            <a class="btn btn-success mt-1" href="/admin/edit-offer/{{this._id}}">Edit</a>
+          </td>
+        </tr>
+                  {{/each}}
+        </tbody>
+      </table>
+
+    
+      </div>
+    </div>
+</main>
+
+<script>
+    $(document).ready( function () {
+      $('#offerListTable').DataTable();
+      } );
+</script>

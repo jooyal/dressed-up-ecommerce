@@ -4,8 +4,8 @@ const { fetchOrderItems, fetchOrderDetails } = require('../model/user-helper.js'
 
 module.exports = {
   getAddProduct : (req,res)=> {
-    let title = 'Add New Product | ADMIN | Dressed Up'
-    res.render('adminView/add-product', title, {admin:true})
+    let title = 'Add New Product | Admin | Dressed Up'
+    res.render('adminView/add-product', {title, admin:true})
   },
   postAddProduct : (req,res)=> {
     addProduct(req.body).then(async (insertedId)=>{

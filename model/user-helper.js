@@ -893,8 +893,8 @@ fetchOrderTotal : (userId, couponDiscount)=>{
 checkIfCouponValid : (couponCode)=>{
   return new Promise(async(resolve, reject) => {
     try {
-      console.log(couponCode);
-      let response = await db.get().collection(OFFER_COLLLECTION).findOne({offer: couponCode})
+      // console.log(couponCode);
+      let response = await db.get().collection(OFFER_COLLLECTION).findOne({code: couponCode})
       console.log(response);
       if(!response || response.percentage === undefined){
         resolve({status:false, message:'Not a valid Coupon Code'})

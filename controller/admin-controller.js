@@ -1,4 +1,4 @@
-const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser } = require('../model/admin-helper.js')
+const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer } = require('../model/admin-helper.js')
 const { fetchOrderDetails, fetchOrderItems } = require('../model/user-helper.js')
 
 module.exports = {
@@ -129,6 +129,148 @@ module.exports = {
         res.json(response)
       }
 
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getAllCoupons : async(req,res)=>{
+    try {
+      let title = 'View All Coupons | Admin | Dressed Up'
+      let offers = await fetchAllCoupons()
+
+      if(offers.status!==false){
+        res.render('adminView/offer-list', {title, offers, admin:true})
+      }else {
+        res.json(offers.message)
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getDeleteDiscountOffer : async(req, res)=>{
+    try {
+      let offerId = req.body.offerId;
+      let response = await doDeleteDiscountOffer(offerId)
+      if(response){
+        res.json({status:response.status, message:response.message})
+      }else {
+        res.json({status:false, error:"Offer Does Not Exist!"})
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getCreateOffer : (req,res)=>{
+    try {
+      let title = 'Create New Coupon Discount | Admin | Dressed Up'
+      res.render('adminView/create-offer', {title, admin:true})
+      
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getAddNewDiscountOffer : async(req,res)=>{
+    try {
+      let expiresIn = req.body.expiresIn
+      let currentTime = new Date().getTime()
+      let code = req.body.code
+      let discount = req.body.discount
+
+      if(!code || !discount || !expiresIn){
+          res.json({status:false, error:'Enter All Fields To Continue'})
+
+      }else if (code.length<8){
+          res.json({status:false, error:'8 characters required for the Coupon Code'})
+
+      }else if(discount>80){
+          res.json({status:false, error:'Maximum discount allowed is 80%'})
+
+      }else if(expiresIn<currentTime+86400000){
+          res.json({status:false, error:'Minimum duration of 24 hours required.'})
+
+      }else {
+        let response = await fetchAddNewDiscountOffer(req.body)
+        if(response){
+          res.json(response)
+        }else {
+          res.json({status:false, error:'Sorry! Could not add the coupon. Internal server error.'})
+        }
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getEditDiscountOffer : async(req,res)=>{
+    try {
+      let title = 'Edit Coupon Discount | Admin | Dressed Up';
+      let offerId = req.params.id
+      let offer = await fetchOfferData(offerId)
+
+      if(offer.status!==false){
+        let date = new Date(offer.expiresIn)
+        offer.expiresIn = date
+        res.render('adminView/edit-offer', {title, offer, admin:true})
+      }else {
+        res.json(offer.error)
+      }    
+      
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  postEditDiscountOffer : async(req,res)=>{
+    try {
+
+      let discount = req.body.discount
+      let offerId = req.body.offerId
+      let offerCheck = fetchOfferData(offerId)
+
+      if(offerCheck.status!==false){
+
+        let addedTime = offerCheck.addedTime
+        let expiresIn = req.body.expiresIn
+        let response
+        
+        if(!discount){
+            res.json({status:false, error: 'Enter Discount To Continue'})
+
+        }else if(discount>80){
+            res.json({status:false, error: 'Maximum discount allowed is 80%'})
+
+        }else {
+            if(expiresIn){
+                if(expiresIn<addedTime+86400000){
+                    res.json({status:false, error: 'A minimum of 24 hours validity required from coupon added time.'})
+
+                }else {
+                  response = await doEditDiscountOffer(offerId, discount, expiresIn)
+
+                }
+            }else {
+              response = await doEditDiscountOffer(offerId, discount)
+
+            }
+        }
+        
+        if(response){
+          res.json(response)
+        }else {
+          res.json({status:false, error:'Sorry! Could not edit the coupon. Internal server error.'})
+        }
+
+      }else {
+        res.json(offerCheck.error)
+      }
+      
     } catch (error) {
       console.log(error);
     }

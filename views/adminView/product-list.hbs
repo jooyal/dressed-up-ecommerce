@@ -20,7 +20,7 @@
           <th>Product Name</th>
           <th>Brand Name</th>
           <th>Color</th>
-          <th>Size / Quantity</th>
+          {{!-- <th>Size / Quantity</th> --}}
           <th >Price</th>
           <th>Photos</th>
           <th>Options</th>
@@ -47,17 +47,7 @@
           <td>
             {{this.productColor}}
           </td>
-          <td>
-            
-            {{!-- <script>
-                //if(topValue.innerHTML==true){
-                  //document.getElementById('topSize').classList.add('item-display-true')
-                //}else if(bottomValue.innerHTML==true){
-                  //document.getElementById('bottomSize').classList.add('item-display-true')
-                //}else if(topValue.innerHTML==false && bottomValue.innerHTML==false){
-                  //document.getElementById('freeSize').classList.add('item-display-true')
-                }
-              </script> --}}
+          {{!-- <td>
             <div id="topSize">
             S - {{this.productSizeSmall}}<br/>
             M - {{this.productSizeMedium}}<br/>
@@ -76,7 +66,7 @@
               Free Size - {{this.productFreeSize}}
             </div>
     
-          </td>
+          </td> --}}
           <td> 
             <p>&#8377; {{this.productPrice}}</p>
           </td>
@@ -88,7 +78,7 @@
           </td>
           <td>
             <a href="/view-order-items/{{this._id}}" class="btn btn-warning my-3">Edit</a>
-            <a href="/view-order-items/{{this._id}}" class="btn btn-danger">Delete</a>
+            <a href="/view-order-items/{{this._id}}" class="btn btn-danger">Unlist</a>
           </td>
         </tr>
         {{/each}}

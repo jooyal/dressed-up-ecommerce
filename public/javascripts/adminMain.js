@@ -341,6 +341,8 @@ let changeOrderStatus = (orderId, newStatus)=>{
   })
 }
 
+// function to ban a user
+
 let banSelectedUser = (userId)=>{
   $.ajax({
     url: '/admin/ban-selected-user',
@@ -359,6 +361,8 @@ let banSelectedUser = (userId)=>{
   })
 }
 
+// function to unban a user
+
 let unBanSelectedUser = (userId)=>{
   $.ajax({
     url: '/admin/unban-selected-user',
@@ -375,4 +379,88 @@ let unBanSelectedUser = (userId)=>{
       }
     }
   })
+}
+
+// function to delete an offer
+
+let deleteDiscountOffer = (offerId)=>{
+  $.ajax({
+    url: '/admin/delete-discount-offer',
+    method: 'post',
+    data: {
+      offerId: offerId
+    },
+    success : (response)=>{
+      if(response.status===true){
+        alert(response.message)
+        location.reload()
+      }else {
+        alert(response.error)
+      }
+    }
+  })
+}
+
+// function to add new discount offer
+
+let addNewDiscountOffer = (code, discount, expiry)=>{
+  $.ajax({
+    url: '/admin/add-new-discount-offer',
+    method: 'post',
+    data: {
+      code: code,
+      discount: discount,
+      expiresIn: expiry
+    },
+    success : (response)=>{
+      if(response.status){
+        alert(response.message)
+        location.href = '/admin/view-coupons'
+
+      }else {
+        alert(response.error)
+      }
+    }
+
+  })
+}
+
+// edit discount offer
+
+let editDiscountOffer = (discount, offerId, expiresIn)=>{
+
+  let editData
+  if(expiresIn){
+    editData= {
+      offerId: offerId,
+      discount: discount,
+      expiresIn: expiresIn
+    }
+  }else {
+    editData= {
+      offerId: offerId,
+      discount: discount
+    }
+  }
+  // console.log(editData);
+
+  let confirmation = confirm('Are you sure to change the coupon info?')
+
+  if(confirmation){
+    $.ajax({
+      url: '/admin/edit-discount-offer',
+      method: 'post',
+      data: editData,
+      success: (response)=>{
+        console.log(response);
+        if(response.status){
+          alert(response.message)
+          location.href = '/admin/view-coupons'
+  
+        }else {
+          alert(response.error)
+        }
+      }
+    })
+  }
 }

@@ -1,0 +1,76 @@
+        <main id="main" class="main">
+            <div class="tab-content pt-2 ps-3">
+                <div class="pagetitle mt-3 mb-5">
+                <h1>Edit Offer</h1>
+                </div>
+                <p class="my-2">Offer Id: <span id="discountOfferId">{{offer._id}}</span></p>
+                    <div class="row mb-3">
+                      <label for="editCouponCode" class="col-md-4 col-lg-3 col-form-label">Coupon Code</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="editCouponCode" type="text" class="form-control" id="editCouponCode" maxlength="8" oninput="this.value = this.value.toUpperCase()" value="{{offer.code}}" disabled>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="editDiscountPercent" class="col-md-4 col-lg-3 col-form-label">Discount Percentage</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="editDiscountPercent" type="number" class="form-control" id="editDiscountPercent" value="{{offer.percentage}}" required>
+                        <label for="editDiscountPercent" class=" text-muted">Max allowed discount is 80%</label>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="editDiscountExpiryTime" class="col-md-4 col-lg-3 col-form-label">Expires In</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="editDiscountExpiryTime" type="datetime-local" class="form-control" id="editDiscountExpiryTime" required>
+                        <label for="editDiscountExpiryTime" class=" text-muted">Current Expiry Date: {{offer.expiresIn}}</label>
+                      </div>
+                    </div>
+                        
+                    <div class="text-center">
+                      <button onclick="checkForErrorsAndEditOffer()" class="btn btn-primary mt-4">Save Changes</button>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-danger text-center" id="editCouponError"></span>
+                    </div>
+                    <input type="number" id="offerAddedTime" value="{{offer.addedTime}}" hidden>
+
+            </div>
+        </main>
+
+        <script>
+            let checkForErrorsAndEditOffer = ()=>{
+                let discount = document.querySelector('#editDiscountPercent').value
+                let discountOfferId = document.querySelector('#discountOfferId').innerHTML
+                let expiresInAsDateAndTime = document.querySelector('#editDiscountExpiryTime').value
+                let addedDate = new Date(document.querySelector('#offerAddedTime').value)
+                let addedTime = addedDate.getTime()
+                let errorField = document.querySelector('#editCouponError')
+
+                let date = new Date(expiresInAsDateAndTime);
+                let expiresIn = date.getTime()
+
+                errorField.innerHTML = null;
+
+                if(!discount){
+                    errorField.innerHTML = 'Enter Discount To Continue'
+
+                }else if(discount>80){
+                    errorField.innerHTML = 'Maximum discount allowed is 80%'
+
+                }else {
+                    if(expiresIn){
+                        if(expiresIn<addedTime+86400000){
+                            errorField.innerHTML = 'A minimum of 24 hours validity required from coupon added time.'
+
+                        }else {
+                            editDiscountOffer(discount, discountOfferId, expiresIn)
+                        }
+                    }else {
+                        editDiscountOffer(discount, discountOfferId)
+                    }
+                }
+            }
+
+
+        </script>

@@ -1,6 +1,6 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION, ORDER_COLLECTION, USER_COLLECTION } = require('./dbConnection/collection.js')
-const {ObjectId} = require('mongodb')
+const { PRODUCT_COLLECTION, ORDER_COLLECTION, USER_COLLECTION, OFFER_COLLLECTION } = require('./dbConnection/collection.js')
+const {ObjectId} = require('mongodb');
 
 module.exports = {
   addProduct : (product)=>{
@@ -143,5 +143,116 @@ module.exports = {
         reject(error)
       }
     })
+  },
+
+  fetchAllCoupons : ()=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        let offers = await db.get().collection(OFFER_COLLLECTION).find().toArray()
+
+        if(offers){
+          resolve(offers)
+        }else {
+          resolve({status: false, message: 'No offers exist!'})
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  doDeleteDiscountOffer : (offerId)=>{
+    return new Promise( async(resolve, reject) => {
+      try {
+        let confirmation = await db.get().collection(OFFER_COLLLECTION).deleteOne({_id:ObjectId(offerId)})
+        if(confirmation){
+          resolve({status:true, message:'Offer Removed Successfully'})
+        }else {
+          resolve({status:false, error:'Error, Could not remove the offer'})
+        }
+
+
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  fetchAddNewDiscountOffer : (data)=>{
+    return new Promise( async(resolve, reject) => {
+      try {
+        let offerObject = {
+          code: data.code,
+          percentage: parseInt(data.discount),
+          expiresIn: parseInt(data.expiresIn),
+          addedTime: new Date().getTime()
+        }
+
+        let alreadyExistCheck = await db.get().collection(OFFER_COLLLECTION).findOne({code: data.code})
+
+        if(!alreadyExistCheck){
+          let response = await db.get().collection(OFFER_COLLLECTION).insertOne(offerObject)
+          // console.log(response);
+          if(response.acknowledged){
+            resolve({status:true, message:'Offer Code Inserted Successfully!'})
+          }else {
+            resolve({status:false, message:'Sorry! Could not add the coupon. Please try again.'})
+          }
+          
+        }else {
+          resolve({status:false, error:'Offer Code Already Exist In Database'})
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  fetchOfferData : (offerId)=>{
+    return new Promise((resolve, reject) => {
+      try {
+        let data = db.get().collection(OFFER_COLLLECTION).findOne({_id: ObjectId(offerId)})
+        if(data){
+          resolve(data)
+
+        }else {
+          resolve({status:false, error:'No Coupon found with the specified ID.'})
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  doEditDiscountOffer : (offerId, discount, expiresIn)=>{
+    return new Promise( async(resolve, reject) => {
+      try {
+        let editStatus
+
+          if(expiresIn){
+            editStatus = await db.get().collection(OFFER_COLLLECTION).updateOne({_id: ObjectId(offerId)},
+            {$set:{percentage: discount, expiresIn: expiresIn}})
+
+          }else {
+            editStatus = await db.get().collection(OFFER_COLLLECTION).updateOne({_id: ObjectId(offerId)},
+            {$set:{percentage: discount}})
+          }
+
+      if(editStatus.modifiedCount === 1){
+        resolve({status:true, message: 'Offer updated Successfully!'})
+      } else {
+        resolve({status:false, error: 'Failed to update offer.'})
+      }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
+
+
+
 }

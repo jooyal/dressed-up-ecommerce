@@ -1,0 +1,72 @@
+        <main id="main" class="main">
+            <div class="tab-content pt-2 ps-3">
+                <div class="pagetitle mt-3 mb-5">
+                <h1>Add New Offer</h1>
+                </div>
+                    <div class="row mb-3">
+                      <label for="couponCode" class="col-md-4 col-lg-3 col-form-label">Coupon Code</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="couponCode" type="text" class="form-control" id="couponCode" maxlength="8" oninput="this.value = this.value.toUpperCase()" required>
+                        <label for="couponCode" class="col-md-4 col-lg-3 col-form-label text-muted">8 Characters Required</label>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="discountPercent" class="col-md-4 col-lg-3 col-form-label">Discount Percentage</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="discountPercent" type="number" class="form-control" id="discountPercent" required>
+                        <label for="discountPercent" class=" text-muted">Max allowed discount is 80%</label>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="discountExpiryTime" class="col-md-4 col-lg-3 col-form-label">Expires In</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="discountExpiryTime" type="datetime-local" class="form-control" id="discountExpiryTime" required>
+                        <label for="discountPercent" class=" text-muted">Minimum duration of 24 hours required.</label>
+                      </div>
+                    </div>
+                        
+                    <div class="text-center">
+                      <button onclick="checkForErrorsAndAddOffer()" class="btn btn-primary mt-4">Save Changes</button>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-danger text-center" id="addCouponError"></span>
+                    </div>
+
+            </div>
+        </main>
+
+        <script>
+            let checkForErrorsAndAddOffer = ()=>{
+                let code = document.querySelector('#couponCode').value
+                let discount = document.querySelector('#discountPercent').value
+                let expiresInAsDateAndTime = document.querySelector('#discountExpiryTime').value
+                let errorField = document.querySelector('#addCouponError')
+
+                let date = new Date(expiresInAsDateAndTime);
+                let expiresIn = date.getTime()
+
+                let currentTime = new Date().getTime()
+
+                errorField.innerHTML = null;
+
+                if(!code || !discount || !expiresIn){
+                    errorField.innerHTML = 'Enter All Fields To Continue'
+
+                }else if (code.length<8){
+                    errorField.innerHTML = '8 characters required for the Coupon Code'
+
+                }else if(discount>80){
+                    errorField.innerHTML = 'Maximum discount allowed is 80%'
+
+                }else if(expiresIn<currentTime+86400000){
+                    errorField.innerHTML = 'Minimum duration of 24 hours required.'
+
+                }else {
+                    addNewDiscountOffer(code, discount, expiresIn)
+                }
+            }
+
+
+        </script>
