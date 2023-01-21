@@ -384,21 +384,26 @@ let unBanSelectedUser = (userId)=>{
 // function to delete an offer
 
 let deleteDiscountOffer = (offerId)=>{
-  $.ajax({
-    url: '/admin/delete-discount-offer',
-    method: 'post',
-    data: {
-      offerId: offerId
-    },
-    success : (response)=>{
-      if(response.status===true){
-        alert(response.message)
-        location.reload()
-      }else {
-        alert(response.error)
+  
+  let confirmation = confirm('Are you sure to Delete the offer?')
+
+  if(confirmation){
+    $.ajax({
+      url: '/admin/delete-discount-offer',
+      method: 'post',
+      data: {
+        offerId: offerId
+      },
+      success : (response)=>{
+        if(response.status===true){
+          alert(response.message)
+          location.reload()
+        }else {
+          alert(response.error)
+        }
       }
-    }
-  })
+    })
+  }
 }
 
 // function to add new discount offer

@@ -234,7 +234,7 @@ module.exports = {
 
           if(expiresIn){
             editStatus = await db.get().collection(OFFER_COLLLECTION).updateOne({_id: ObjectId(offerId)},
-            {$set:{percentage: discount, expiresIn: expiresIn}})
+            {$set:{percentage: discount, expiresIn: parseInt(expiresIn)}})
 
           }else {
             editStatus = await db.get().collection(OFFER_COLLLECTION).updateOne({_id: ObjectId(offerId)},
