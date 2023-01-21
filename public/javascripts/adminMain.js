@@ -469,3 +469,51 @@ let editDiscountOffer = (discount, offerId, expiresIn)=>{
     })
   }
 }
+
+// unlist a product 
+
+let unListSelectedProduct = (productId, productName)=>{
+
+  let confirmation = confirm('Are you sure you want to unlist '+ productName)
+  if(confirmation){
+    // console.log(productId);
+    $.ajax({
+      url: '/admin/unlist-selected-product',
+      method: 'post',
+      data: {
+        productId: productId
+      },
+      success: (response)=>{
+        if(response.status){
+          alert(response.message);
+          location.reload()
+        }else {
+          alert(response.error)
+        }
+      }
+    })
+  }
+}
+
+let reListSelectedProduct = (productId, productName)=>{
+
+  let confirmation = confirm('Are you sure you want to relist '+ productName)
+  if(confirmation){
+    // console.log(productId);
+    $.ajax({
+      url: '/admin/relist-selected-product',
+      method: 'post',
+      data: {
+        productId: productId
+      },
+      success: (response)=>{
+        if(response.status){
+          alert(response.message);
+          location.reload()
+        }else {
+          alert(response.error)
+        }
+      }
+    })
+  }
+}

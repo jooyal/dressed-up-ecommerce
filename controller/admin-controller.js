@@ -1,4 +1,4 @@
-const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer } = require('../model/admin-helper.js')
+const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct } = require('../model/admin-helper.js')
 const { fetchOrderDetails, fetchOrderItems } = require('../model/user-helper.js')
 
 module.exports = {
@@ -239,7 +239,7 @@ module.exports = {
         let addedTime = offerCheck.addedTime
         let expiresIn = req.body.expiresIn
         let response
-        
+
         if(!discount){
             res.json({status:false, error: 'Enter Discount To Continue'})
 
@@ -271,6 +271,36 @@ module.exports = {
         res.json(offerCheck.error)
       }
       
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  postUnlistSelectedProduct : async(req,res)=>{
+    try {
+      let response = await doUnlistSelectedProduct(req.body.productId)
+
+      if(response){
+        res.json(response)
+      }else{
+        res.json({status:false, error:'Sorry! Could not unlist the product. Internal server error.'})
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  postRelistSelectedProduct : async(req,res)=>{
+    try {
+      let response = await doRelistSelectedProduct(req.body.productId)
+
+      if(response){
+        res.json(response)
+      }else{
+        res.json({status:false, error:'Sorry! Could not relist the product. Internal server error.'})
+      }
+
     } catch (error) {
       console.log(error);
     }

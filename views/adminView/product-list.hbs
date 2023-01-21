@@ -21,6 +21,7 @@
           <th>Brand Name</th>
           <th>Color</th>
           {{!-- <th>Size / Quantity</th> --}}
+          <th>Unlisted</th>
           <th >Price</th>
           <th>Photos</th>
           <th>Options</th>
@@ -46,6 +47,13 @@
           </td>
           <td>
             {{this.productColor}}
+          </td>
+          <td>
+            {{#if this.unlist}}
+            <span class="p-1 rounded" style="color:white; border: solid, 1px; background-color: red;">true</span>
+            {{else}}
+            <span class="p-1 rounded" style="color:white; border: solid, 1px; background-color: green;">false</span>
+            {{/if}}
           </td>
           {{!-- <td>
             <div id="topSize">
@@ -78,7 +86,13 @@
           </td>
           <td>
             <a href="/view-order-items/{{this._id}}" class="btn btn-warning my-3">Edit</a>
-            <a href="/view-order-items/{{this._id}}" class="btn btn-danger">Unlist</a>
+
+            {{#if this.unlist}}
+            <button onclick="reListSelectedProduct('{{this._id}}','{{this.productName}}')" class="btn btn-success">Relist</button>
+            {{else}}
+            <button onclick="unListSelectedProduct('{{this._id}}','{{this.productName}}')" class="btn btn-danger">Unlist</button>
+            {{/if}}
+
           </td>
         </tr>
         {{/each}}

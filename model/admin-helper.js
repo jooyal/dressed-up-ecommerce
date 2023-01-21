@@ -234,11 +234,11 @@ module.exports = {
 
           if(expiresIn){
             editStatus = await db.get().collection(OFFER_COLLLECTION).updateOne({_id: ObjectId(offerId)},
-            {$set:{percentage: discount, expiresIn: parseInt(expiresIn)}})
+                          {$set:{percentage: discount, expiresIn: parseInt(expiresIn)}})
 
           }else {
             editStatus = await db.get().collection(OFFER_COLLLECTION).updateOne({_id: ObjectId(offerId)},
-            {$set:{percentage: discount}})
+                          {$set:{percentage: discount}})
           }
 
       if(editStatus.modifiedCount === 1){
@@ -247,6 +247,42 @@ module.exports = {
         resolve({status:false, error: 'Failed to update offer.'})
       }
         
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  doUnlistSelectedProduct : (productId)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        let confirmation = await db.get().collection(PRODUCT_COLLECTION).updateOne({_id:ObjectId(productId)},
+                            {$set:{unlist:true}})
+        
+        if(confirmation.modifiedCount ===1){
+          resolve({status:true, message:'Product Unlisted Successfully!'})
+        }else {
+          resolve({status:false, error:'Product Already Unlisted!'})
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  doRelistSelectedProduct : (productId)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        let confirmation = await db.get().collection(PRODUCT_COLLECTION).updateOne({_id:ObjectId(productId)},
+                            {$set:{unlist:false}})
+        
+        if(confirmation.modifiedCount ===1){
+          resolve({status:true, message:'Product Relisted Successfully!'})
+        }else {
+          resolve({status:false, error:'Product Already listed!'})
+        }                    
+
       } catch (error) {
         reject(error)
       }
