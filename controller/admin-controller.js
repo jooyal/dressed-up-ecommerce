@@ -1,6 +1,6 @@
 const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct, checkIfAdminEmailExist, doAdminLogIn } = require('../model/admin-helper.js')
 const { fetchOrderDetails, fetchOrderItems, fetchProductDetails } = require('../model/user-helper.js')
-const { userTokenGenerator, adminTokenGenerator } = require('../utilities/token.js')
+const { userTokenGenerator, adminTokenGenerator, adminTokenVerify } = require('../utilities/token.js')
 
 // global objects
 let adminLoginError = null
@@ -55,10 +55,12 @@ module.exports = {
 
   getAllOrders : async(req,res)=>{
     try {
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
       let orders = await fetchAllOrders()
       let title = 'View All Orders | Admin | Dressed Up'
       // console.log(orders);
-      res.render('adminView/order-list',{orders, title, admin:true})
+      res.render('adminView/order-list',{orders, title, admin:true, adminName})
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +77,8 @@ module.exports = {
 
   getOrderDetails : async (req,res)=>{
     try {
-
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
       let orderId = req.params.id;
       let title = 'View Order Details | Admin | Dressed Up'
       let orderDetails = await fetchOrderDetails(orderId)
@@ -107,7 +110,7 @@ module.exports = {
         }
     }
 
-      res.render('adminView/view-order-details', {title, products, orderDetails, admin:true})
+      res.render('adminView/view-order-details', {title, products, orderDetails, adminName, admin:true})
 
     } catch (error) {
       console.log(error);
@@ -141,8 +144,10 @@ module.exports = {
     try {
       let title = 'View All Users | Admin | Dressed Up'
       let users = await fetchAllUsers()
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
 
-      res.render('adminView/user-list', {title, users, admin:true})
+      res.render('adminView/user-list', {title, adminName, users, admin:true})
 
     } catch (error) {
       console.log(error);
@@ -154,9 +159,11 @@ module.exports = {
       let userId = req.params.id;
       let userDetails = await fetchUserDetails(userId)
       let title
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
       if(userDetails){
         title = 'Details for '+ userDetails.fullName + ' | Admin | Dressed Up'
-        res.render('adminView/user-details', {userDetails, title, admin:true})
+        res.render('adminView/user-details', {userDetails, adminName, title, admin:true})
       }
       
     } catch (error) {
@@ -194,9 +201,11 @@ module.exports = {
     try {
       let title = 'View All Coupons | Admin | Dressed Up'
       let offers = await fetchAllCoupons()
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
 
       if(offers.status!==false){
-        res.render('adminView/offer-list', {title, offers, admin:true})
+        res.render('adminView/offer-list', {title, adminName, offers, admin:true})
       }else {
         res.json(offers.message)
       }
@@ -221,10 +230,12 @@ module.exports = {
     }
   },
 
-  getCreateOffer : (req,res)=>{
+  getCreateOffer : async(req,res)=>{
     try {
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
       let title = 'Create New Coupon Discount | Admin | Dressed Up'
-      res.render('adminView/create-offer', {title, admin:true})
+      res.render('adminView/create-offer', {title, adminName, admin:true})
       
     } catch (error) {
       console.log(error);
@@ -273,7 +284,9 @@ module.exports = {
       if(offer.status!==false){
         let date = new Date(offer.expiresIn)
         offer.expiresIn = date
-        res.render('adminView/edit-offer', {title, offer, admin:true})
+        let decodedData = await adminTokenVerify(req.cookies.authToken)
+        let adminName = decodedData.value.adminName
+        res.render('adminView/edit-offer', {title, offer, adminName, admin:true})
       }else {
         res.json(offer.error)
       }    
@@ -363,41 +376,48 @@ module.exports = {
   },
 
 
-  getAllCarouselImages : (req,res)=>{
+  getAllCarouselImages : async(req,res)=>{
     try {
       let title = 'All Carousel Images | Admin | Dressed Up'
-
-      res.render('adminView/all-carousel', {title, admin:true})
-
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  getChangeCarouselMen : (req,res)=>{
-    try {
-      let title = 'Change Men Carousel Images | Admin | Dressed Up'
-      res.render('adminView/change-carousel-men', {title, admin:true})
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
+      res.render('adminView/all-carousel', {title, adminName, admin:true})
 
     } catch (error) {
       console.log(error);
     }
   },
 
-  getChangeCarouselWomen : (req,res)=>{
+  getChangeCarouselMen : async(req,res)=>{
     try {
       let title = 'Change Men Carousel Images | Admin | Dressed Up'
-      res.render('adminView/change-carousel-women', {title, admin:true})
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
+      res.render('adminView/change-carousel-men', {title, adminName, admin:true})
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getChangeCarouselWomen : async(req,res)=>{
+    try {
+      let title = 'Change Men Carousel Images | Admin | Dressed Up'
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
+      res.render('adminView/change-carousel-women', {title, adminName, admin:true})
       
     } catch (error) {
       console.log(error);
     }
   },
 
-  getChangeCarouselLiving : (req,res)=>{
+  getChangeCarouselLiving : async(req,res)=>{
     try {
       let title = 'Change Men Carousel Images | Admin | Dressed Up'
-      res.render('adminView/change-carousel-living', {title, admin:true})
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
+      res.render('adminView/change-carousel-living', {title, adminName, admin:true})
 
     } catch (error) {
       console.log(error);

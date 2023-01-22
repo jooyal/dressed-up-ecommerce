@@ -3,12 +3,15 @@ const path = require('path');
 const fs = require('fs');
 const { fetchOrderItems, fetchOrderDetails, fetchProductDetails } = require('../model/user-helper.js');
 const e = require('express');
+const { adminTokenVerify } = require('../utilities/token.js');
 
 module.exports = {
 
-  getAddProduct : (req,res)=> {
+  getAddProduct : async(req,res)=> {
     let title = 'Add New Product | Admin | Dressed Up'
-    res.render('adminView/add-product', {title, admin:true})
+    let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
+    res.render('adminView/add-product', {title, adminName, admin:true})
   },
   
   postAddProduct : (req,res)=> {
@@ -47,9 +50,11 @@ module.exports = {
   getAllProducts : async (req,res)=>{
     try {
       let products = await fetchAllProducts()
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
       // console.log(products)
       let title = 'View All Products | Admin | Dressed Up'
-      res.render('adminView/product-list',{products, title, admin:true})
+      res.render('adminView/product-list',{products, title, adminName, admin:true})
     } catch (error) {
       console.log(error)
     }
@@ -61,8 +66,10 @@ module.exports = {
       let title = 'Edit Product details | Admin | Dressed Up';
       let productId = req.params.id;
       let productData = await fetchProductDetails(productId)
+      let decodedData = await adminTokenVerify(req.cookies.authToken)
+      let adminName = decodedData.value.adminName
 
-      res.render('adminView/edit-product',{title, productData, admin:true})
+      res.render('adminView/edit-product',{title, productData, adminName, admin:true})
       
     } catch (error) {
       console.log(error);
