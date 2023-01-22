@@ -517,3 +517,18 @@ let reListSelectedProduct = (productId, productName)=>{
     })
   }
 }
+
+// function to delete a selected product
+
+let deleteSelectedProduct = (productId)=>{
+  $.ajax({
+    url: '/admin/delete-selected-product',
+    method: 'post',
+    data: {
+      productId: productId
+    },
+    success : (response)=>{
+      
+    }
+  })
+}

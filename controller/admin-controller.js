@@ -1,5 +1,5 @@
 const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct } = require('../model/admin-helper.js')
-const { fetchOrderDetails, fetchOrderItems } = require('../model/user-helper.js')
+const { fetchOrderDetails, fetchOrderItems, fetchProductDetails } = require('../model/user-helper.js')
 
 module.exports = {
   getAdminHome : (req,res)=> {
@@ -304,7 +304,6 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-  }
-
+  },
 
 }

@@ -34,6 +34,66 @@ module.exports = {
     })
   },
 
+  editProductImage1 : (id, imageValue)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+          let inserted = await db.get().collection(PRODUCT_COLLECTION).updateOne({_id:ObjectId(id)},
+        {$set:{image1 : imageValue}})
+
+        if(inserted){
+          resolve(true)
+        }
+      } catch (error) {
+        reject (error)
+      }
+    })
+  },
+
+  editProductImage2 : (id, imageValue)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+          let inserted = await db.get().collection(PRODUCT_COLLECTION).updateOne({_id:ObjectId(id)},
+        {$set:{image2 : imageValue}})
+
+        if(inserted){
+          resolve(true)
+        }
+      } catch (error) {
+        reject (error)
+      }
+    })
+  },
+
+  editProductImage3 : (id, imageValue)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+          let inserted = await db.get().collection(PRODUCT_COLLECTION).updateOne({_id:ObjectId(id)},
+        {$set:{image3 : imageValue}})
+
+        if(inserted){
+          resolve(true)
+        }
+      } catch (error) {
+        reject (error)
+      }
+    })
+  },
+
+  editProductImage4 : (id, imageValue)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+          let inserted = await db.get().collection(PRODUCT_COLLECTION).updateOne({_id:ObjectId(id)},
+        {$set:{image4 : imageValue}})
+
+        if(inserted){
+          resolve(true)
+        }
+      } catch (error) {
+        reject (error)
+      }
+    })
+  },
+
   fetchAllProducts : ()=>{
     return new Promise((resolve, reject) => {
       try {
@@ -283,6 +343,26 @@ module.exports = {
           resolve({status:false, error:'Product Already listed!'})
         }                    
 
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  doEditProductDetails : (data)=>{
+    return new Promise( async(resolve, reject) => {
+      try {
+        let response = await db.get().collection(PRODUCT_COLLECTION).updateOne({_id: ObjectId(data.productId)},
+        {$set:{productName: data.productName, productCategory: data.productCategory,
+           productPrice: data.productPrice, productDescription: data.productDescription
+            }})
+
+        if(response){
+          resolve({status:true, message: 'Data updated successfully'})
+        }else {
+          reject()
+        }
+        
       } catch (error) {
         reject(error)
       }

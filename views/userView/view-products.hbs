@@ -173,8 +173,12 @@
                     </div> --}}
                     <div class="d-flex flex-row" style="position: absolute; bottom: 30px; ">
                     <h4>&#8377; {{this.productPrice}}</h4>
+                    {{#if this.unlist}}
+                    <p class="ms-5 pt-1 text-danger">out of stock</p>
+                    {{else}}
                     <button style="border: none; background-color: white; margin-left: 7em; padding-bottom: 10px; height: 20px;" onclick="addToWishlist('{{this._id}}')" id="iconInsideProCardLink" class="shopping-icon"><i class="fa-solid fa-heart" id="iconInsideProCard"></i></button>
                     <button style="border: none; background-color: white; margin-left: 2em; padding-bottom: 10px; height: 20px;" onclick="addToCart('{{this._id}}')" id="iconInsideProCardLink" class="shopping-icon" ><i class=" fa-sharp fa-solid fa-cart-shopping" id="iconInsideProCard"></i></button>
+                    {{/if}}
                     </div>
                 </div>
             </div>

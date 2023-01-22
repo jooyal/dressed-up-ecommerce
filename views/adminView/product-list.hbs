@@ -85,7 +85,7 @@
             <img style="height: 75px; width: 50px;" class="py-1" src="/productImages/{{this.image4}}" alt="">
           </td>
           <td>
-            <a href="/view-order-items/{{this._id}}" class="btn btn-warning my-3">Edit</a>
+            <a href="/admin/edit-product-details/{{this._id}}" class="btn btn-warning my-3">Edit</a>
 
             {{#if this.unlist}}
             <button onclick="reListSelectedProduct('{{this._id}}','{{this.productName}}')" class="btn btn-success">Relist</button>

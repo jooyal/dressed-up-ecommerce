@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getAdminHome, getChangeOrderStatus, getAllOrders, getOrderDetails, getAllUsers, getUserDetails, getBanUser, getUnBanUser, getAllCoupons, getDeleteDiscountOffer, getCreateOffer, getAddNewDiscountOffer, getEditDiscountOffer, postEditDiscountOffer, postUnlistSelectedProduct, postRelistSelectedProduct} = require('../controller/admin-controller.js')
-const { getAddProduct, postAddProduct, getAllProducts } = require('../controller/product-controller.js')
+const { getAdminHome, getChangeOrderStatus, getAllOrders, getOrderDetails, getAllUsers, getUserDetails, getBanUser, getUnBanUser, getAllCoupons, getDeleteDiscountOffer, getCreateOffer, getAddNewDiscountOffer, getEditDiscountOffer, postEditDiscountOffer, postUnlistSelectedProduct, postRelistSelectedProduct } = require('../controller/admin-controller.js')
+const { getAddProduct, postAddProduct, getAllProducts, getEditProductDetails, postEditProductDetails, postDeleteSelectedProduct } = require('../controller/product-controller.js')
 
 
 router.get('/',getAdminHome)
@@ -23,5 +23,8 @@ router.get('/edit-offer/:id', getEditDiscountOffer)
 router.post('/edit-discount-offer', postEditDiscountOffer)
 router.post('/unlist-selected-product', postUnlistSelectedProduct)
 router.post('/relist-selected-product', postRelistSelectedProduct)
+router.get('/edit-product-details/:id', getEditProductDetails)
+router.post('/edit-product-details', postEditProductDetails)
+router.post('/delete-selected-product', postDeleteSelectedProduct)
 
 module.exports = router;
