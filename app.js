@@ -36,7 +36,7 @@ db.connect((err)=>{
   if(err) {
     console.log('Connection Error! '+ err);
   } else {
-    console.log('Database connected successfully to port 27017.')
+    console.log('Database connected successfully to mongoDB atlas.')
   }
 });
 

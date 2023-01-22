@@ -1019,26 +1019,26 @@ module.exports = {
             console.log(error);
         }
     },
-    get404error : (req,res)=> {
-        res.render('404-error',{user:true})
-    },
-    getAccessDenied : (req,res)=> {
-        res.render('access-denied')
-    },
+    // get404error : (req,res)=> {
+    //     res.render('404-error',{user:true})
+    // },
+    // getAccessDenied : (req,res)=> {
+    //     res.render('access-denied')
+    // },
     getContactUs : (req,res)=> {
-        res.render('userView/contactus',{user:true})
+        res.render('userView/contactus')
     },
     getUserHelp :(req,res)=> {
-        res.render('userView/user-help',{user:true})
+        res.render('userView/user-help')
     },
     getAboutUs :(req,res)=> {
-        res.render('userView/about-us',{user:true})
+        res.render('userView/about-us')
     },
     getDeliveryInformation :(req,res)=> {
-        res.render('userView/delivery-information',{user:false})
+        res.render('userView/delivery-information')
     },
     getPrivacyPolicy :(req,res)=> {
-        res.render('userView/privacy-policy',{user:true})
+        res.render('userView/privacy-policy')
     },
     getUserProfile :async(req,res)=> {
         try {

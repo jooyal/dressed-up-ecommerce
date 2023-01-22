@@ -19,8 +19,8 @@ router.get('/about-us',getAboutUs)
 router.get('/privacy-policy',getPrivacyPolicy)
 router.get('/contact-us',getContactUs)
 router.get('/help',getUserHelp)
-router.get('/404-error',get404error)
-router.get('/access-denied',getAccessDenied)
+// router.get('/404-error',get404error)
+// router.get('/access-denied',getAccessDenied)
 
 /* pages with authorization */
 router.get('/home', userAuthorization, userHome)
