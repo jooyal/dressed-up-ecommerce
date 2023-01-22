@@ -541,3 +541,21 @@ let deleteSelectedProduct = (productId)=>{
     })
   }
 }
+
+let adminLogOut = ()=>{
+  let confirmation = confirm('Are you sure you want to log out?')
+  if(confirmation){
+    $.ajax({
+      url: '/admin/logout',
+      method: 'get',
+      success: (response)=>{
+        if(response.status){
+          alert('Logged Out Successfully!')
+          location.href = '/'
+        }else {
+          alert('You are already logged out!')
+        }
+      }
+    })
+  }
+}

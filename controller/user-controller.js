@@ -1,5 +1,5 @@
 const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems, userPhoneExistCheck, doMobileOTPLogin, fetchSortedProducts } = require('../model/user-helper.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems, userPhoneExistCheck, doMobileOTPLogin, fetchSortedProducts, fetchAllOffers } = require('../model/user-helper.js')
 const {requestOTP, verifyOTP} = require('../utilities/otpRequest')
 const { userTokenGenerator, tokenVerify } = require('../utilities/token')
 
@@ -89,7 +89,8 @@ module.exports = {
                             userId: response.userId,
                             userName: req.body.fullName,
                             userEmail: req.body.userEmail,
-                            userMobile: req.body.userMobile
+                            userMobile: req.body.userMobile,
+                            isAdmin: false
                           }
                         
                         let accessToken = await userTokenGenerator(payload)
@@ -140,7 +141,8 @@ module.exports = {
                         userId: response.user._id,
                         userName: response.user.fullName,
                         userEmail: response.user.userEmail,
-                        userMobile: response.user.userMobile
+                        userMobile: response.user.userMobile,
+                        isAdmin: false
                       }
                     
                     let accessToken = await userTokenGenerator(payload)
@@ -1218,8 +1220,9 @@ module.exports = {
             let cartCount = await fetchCartCount(decodedData.value.userId)
             let wishlistCount = await fetchWishlistCount(decodedData.value.userId)
             let userFullName = (decodedData.value.userName).toUpperCase()
-
-            res.render('userView/available-offers',{user:true, userFullName, cartCount, wishlistCount,})
+            let offers = await fetchAllOffers()
+            console.log(offers);
+            res.render('userView/available-offers',{user:true, userFullName, cartCount, wishlistCount, offers})
             
         } catch (error) {
             console.log(error);

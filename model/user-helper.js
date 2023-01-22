@@ -1342,6 +1342,22 @@ fetchSortedProducts : (category, maxPrice, type)=>{
       reject(error)
     }
   })
+},
+
+fetchAllOffers : ()=>{
+  return new Promise(async(resolve, reject) => {
+    try {
+      let offers = await db.get().collection(OFFER_COLLLECTION).find().toArray()
+      if(offers){
+        resolve(offers)
+      }else {
+        resolve({status:false, error:'No coupons available'})
+      }
+      
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 

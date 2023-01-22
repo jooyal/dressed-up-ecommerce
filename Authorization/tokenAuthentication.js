@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { checkIfUserBlocked } = require('../model/user-helper');
-const { tokenVerify, checkTokenExpired } = require('../utilities/token')
+const { tokenVerify, checkTokenExpired, checkAdminTokenExpired, adminTokenVerify } = require('../utilities/token')
 
 module.exports = {
   userAuthorization : async (req,res,next)=>{
@@ -52,12 +52,49 @@ module.exports = {
   checkIfValidTokenExist : (req)=>{
     const token = req.cookies.authToken
 
-    //if no token is present in cookies or if token expired, render login page.
+    //if no token is present in cookies or if token expired, return false.
 
     if(checkTokenExpired(token)===true || !token){
       return false
     }else {
       return true
     }
-  }
+  },
+
+  // admin authorization
+
+  adminAuthorization : async(req,res,next)=>{
+
+        const token = req.cookies.authToken
+       //if no token is present in cookies or if token expired, render access denied page.
+      if(!token || checkAdminTokenExpired(token)===true){
+        return res.render('access-denied',{title : 'Only Admin Have Access To This Page!'})
+      }
+        console.log('******** admin token accessed ********');
+
+        try {
+          const data = await adminTokenVerify(token)
+
+          //if no data is decoded(or token might have expired or tampered with)
+          if(!data){
+            console.log('no data in token');
+            //if no data in token, delete cookie.
+            res.clearCookie('authToken')
+            return res.status(403).render('access-denied',{title : 'Login Token Has Expired Or Been Tampered! Please Try Again.'})
+            
+          }else {
+            console.log('admin-authorized');
+            next();
+            return          
+          }
+        } catch(error) {
+          console.log(error);
+        }
+  },
+
+
+
+
+
+
 }

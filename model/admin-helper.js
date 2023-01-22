@@ -1,6 +1,7 @@
 const db = require('./dbConnection/connection.js');
-const { PRODUCT_COLLECTION, ORDER_COLLECTION, USER_COLLECTION, OFFER_COLLLECTION } = require('./dbConnection/collection.js')
+const { PRODUCT_COLLECTION, ORDER_COLLECTION, USER_COLLECTION, OFFER_COLLLECTION, ADMIN_COLLECTION } = require('./dbConnection/collection.js')
 const {ObjectId} = require('mongodb');
+const bcrypt = require('bcrypt');
 
 module.exports = {
   addProduct : (product)=>{
@@ -294,11 +295,11 @@ module.exports = {
 
           if(expiresIn){
             editStatus = await db.get().collection(OFFER_COLLLECTION).updateOne({_id: ObjectId(offerId)},
-                          {$set:{percentage: discount, expiresIn: parseInt(expiresIn)}})
+                          {$set:{percentage: parseInt(discount), expiresIn: parseInt(expiresIn)}})
 
           }else {
             editStatus = await db.get().collection(OFFER_COLLLECTION).updateOne({_id: ObjectId(offerId)},
-                          {$set:{percentage: discount}})
+                          {$set:{percentage: parseInt(discount)}})
           }
 
       if(editStatus.modifiedCount === 1){
@@ -383,7 +384,33 @@ module.exports = {
         reject(error)
       }
     })
-  }
+  },
+
+  doAdminLogIn : (data)=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        let confirmation = await db.get().collection(ADMIN_COLLECTION).findOne({email: data.adminEmail})
+
+        if(confirmation){
+          
+          let passwordConfirm = await bcrypt.compare(data.adminPassword, confirmation.password)
+
+          if(passwordConfirm){
+            resolve({status: true, message:'Admin verified successfully', adminData: confirmation})
+          }else {
+            resolve({status:false, error:'Password incorrect!'})
+          }
+
+        }else {
+          resolve({status: false, error:'Email does not exist!'})
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
 
 
 

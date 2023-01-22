@@ -1,9 +1,56 @@
-const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct } = require('../model/admin-helper.js')
+const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct, checkIfAdminEmailExist, doAdminLogIn } = require('../model/admin-helper.js')
 const { fetchOrderDetails, fetchOrderItems, fetchProductDetails } = require('../model/user-helper.js')
+const { userTokenGenerator, adminTokenGenerator } = require('../utilities/token.js')
+
+// global objects
+let adminLoginError = null
 
 module.exports = {
+  
   getAdminHome : (req,res)=> {
     res.render('adminView/admin-home',{admin:true})
+  },
+
+  getAdminLogin : (req,res)=>{
+    res.render('adminView/login', {title:'LogIn To Admin Dashboard | Dressed Up', adminLoginError})
+    adminLoginError = null
+  },
+
+  postAdminLogin : async(req,res)=>{
+    try {
+      let data = req.body
+      if(!data.adminEmail || !data.adminPassword){
+        adminLoginError = 'Email & Password are mandatory'
+        res.redirect('/admin/login')
+
+      }else {
+        let response = await doAdminLogIn(data)
+        if(response.status === false){
+          adminLoginError = response.error
+          res.redirect('/admin/login')
+        }else {
+          const payload = {
+            adminId: response.adminData._id,
+            adminName: response.adminData.fullName,
+            adminEmail: response.adminData.email,
+            isAdmin: true
+            // adminMobile: response.user.userMobile
+          }
+        
+          let accessToken = await adminTokenGenerator(payload)
+
+          console.log(accessToken);
+
+          res.cookie("authToken", accessToken, {
+              httpOnly: true
+          }).redirect('/admin')
+        }
+        
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   getAllOrders : async(req,res)=>{
@@ -12,6 +59,15 @@ module.exports = {
       let title = 'View All Orders | Admin | Dressed Up'
       // console.log(orders);
       res.render('adminView/order-list',{orders, title, admin:true})
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getAdminLogout : (req,res)=>{
+    try {
+      res.clearCookie('authToken').json({status:true});
+
     } catch (error) {
       console.log(error);
     }
