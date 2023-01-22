@@ -1,5 +1,6 @@
-const { addProduct, addProductImage, fetchAllProducts, fetchAllOrders, doEditProductDetails, editProductImage, editProductImage1, editProductImage2, editProductImage3, editProductImage4 } = require('../model/admin-helper.js')
+const { addProduct, addProductImage, fetchAllProducts, fetchAllOrders, doEditProductDetails, editProductImage, editProductImage1, editProductImage2, editProductImage3, editProductImage4, doDeleteSelectedProduct } = require('../model/admin-helper.js')
 const path = require('path');
+const fs = require('fs');
 const { fetchOrderItems, fetchOrderDetails, fetchProductDetails } = require('../model/user-helper.js');
 const e = require('express');
 
@@ -115,8 +116,60 @@ module.exports = {
 
   postDeleteSelectedProduct : async(req,res)=>{
     try {
-      let response = await 0
-      
+      let product = await fetchProductDetails(req.body.productId)
+      let response = await doDeleteSelectedProduct(req.body.productId)
+
+      if(response.status){
+        const filePath1 = './public/productImages/' + product.image1;
+        fs.unlink(filePath1, (err) => {
+          if (err) {
+            // Handle the error
+            console.error(err);
+          } else {
+            // The file was deleted successfully
+            console.log(`Successfully deleted ${filePath1}`);
+          }
+        });
+
+        const filePath2 = './public/productImages/' + product.image2;
+        fs.unlink(filePath2, (err) => {
+          if (err) {
+            // Handle the error
+            console.error(err);
+          } else {
+            // The file was deleted successfully
+            console.log(`Successfully deleted ${filePath2}`);
+          }
+        });
+
+        const filePath3 = './public/productImages/' + product.image3;
+        fs.unlink(filePath3, (err) => {
+          if (err) {
+            // Handle the error
+            console.error(err);
+          } else {
+            // The file was deleted successfully
+            console.log(`Successfully deleted ${filePath3}`);
+          }
+        });
+
+        const filePath4 = './public/productImages/' + product.image4;
+        fs.unlink(filePath4, (err) => {
+          if (err) {
+            // Handle the error
+            console.error(err);
+          } else {
+            // The file was deleted successfully
+            console.log(`Successfully deleted ${filePath4}`);
+          }
+        });
+
+        res.json(response)
+
+      }else {
+        res.json(response)
+      }
+
     } catch (error) {
       console.log(error);
     }

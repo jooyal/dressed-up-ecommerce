@@ -367,6 +367,22 @@ module.exports = {
         reject(error)
       }
     })
+  },
+
+  doDeleteSelectedProduct : (productId)=>{
+    return new Promise( async(resolve, reject) => {
+      try {
+        let response = await db.get().collection(PRODUCT_COLLECTION).deleteOne({_id: ObjectId(productId)})
+        if(response){
+          resolve({status:true, message: 'Product Removed Successfully!'})
+        }else {
+          resolve({status:false, error: 'Could Not Remove Product!'})
+        }
+
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
 
