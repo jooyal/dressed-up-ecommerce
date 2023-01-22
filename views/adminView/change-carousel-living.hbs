@@ -1,0 +1,47 @@
+<main id="main" class="main">
+<section>
+    
+    <div class="container col-md-6 align-items-center justify-contents-center">
+        
+        <form id="editProductDetailsForm" action="/admin/change-carousel-living" method="post" enctype="multipart/form-data">
+            <div>
+                <div class="pagetitle">
+                    <h1 class="my-4">Edit Carousel Images</h1>
+                </div><!-- End Page Title -->
+
+                <p>Current Carousel Images For Living Category</p>
+
+                <div class="d-flex flex-column mt-3">
+                    <div class="d-flex flex-column"><img style="height: 147.5px;" class="m-2"  src="/carouselImage/living-carousel-1.jpg" alt=""><label class="ms-4">Image-1</label></div>
+                    <div class="d-flex flex-column"><img style="height: 147.5px;" class="m-2"  src="/carouselImage/living-carousel-2.jpg" alt=""><label class="ms-4">Image-2</label></div>
+                    <div class="d-flex flex-column"><img style="height: 147.5px;" class="m-2"  src="/carouselImage/living-carousel-3.jpg" alt=""><label class="ms-4">Image-3</label></div>
+                </div>
+                
+                <label for="editProductImage1">Image 1</label>
+                <input type="file" name="livingCarouselImage1"  onchange="viewImage(event,'editProductImage1')" id="changeCarouselImage1" accept="image/png, image/webp, image/jpeg" size="" />
+                <br/>
+                <label for="editProductImage2">Image 2</label>
+                <input type="file" name="livingCarouselImage2"  onchange="viewImage(event,'editProductImage2')" id="changeCarouselImage2" accept="image/png, image/webp, image/jpeg" size="" />
+                <br/>
+                <label for="editProductImage3">Image 3</label>
+                <input type="file" name="livingCarouselImage3"  onchange="viewImage(event,'editProductImage3')" id="changeCarouselImage3" accept="image/png, image/webp, image/jpeg" size="" />
+                
+                <div id="imageDisplay" class="d-flex flex-column mt-3">
+                <div class="d-flex flex-column"><img style=" height: 147.5px;" class="m-2" id="editProductImage1Show" src="" alt=""><label class="ms-4">Image-1</label></div>
+                <div class="d-flex flex-column"><img style=" height: 147.5px;" class="m-2" id="editProductImage2Show" src="" alt=""><label class="ms-4">Image-2</label></div>
+                <div class="d-flex flex-column"><img style=" height: 147.5px;" class="m-2" id="editProductImage3Show" src="" alt=""><label class="ms-4">Image-3</label></div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-success my-5">Submit</button>
+        </form>
+        
+    </div>
+</section>
+</main>
+
+<script>
+    let viewImage = (event,id)=>{
+      document.getElementById(id+'Show').src = URL.createObjectURL(event.target.files[0])
+    }
+</script>

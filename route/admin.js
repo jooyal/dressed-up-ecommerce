@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAdminHome, getChangeOrderStatus, getAllOrders, getOrderDetails, getAllUsers, getUserDetails, getBanUser, getUnBanUser, getAllCoupons, getDeleteDiscountOffer, getCreateOffer, getAddNewDiscountOffer, getEditDiscountOffer, postEditDiscountOffer, postUnlistSelectedProduct, postRelistSelectedProduct } = require('../controller/admin-controller.js')
+const { getAdminHome, getChangeOrderStatus, getAllOrders, getOrderDetails, getAllUsers, getUserDetails, getBanUser, getUnBanUser, getAllCoupons, getDeleteDiscountOffer, getCreateOffer, getAddNewDiscountOffer, getEditDiscountOffer, postEditDiscountOffer, postUnlistSelectedProduct, postRelistSelectedProduct, getChangeCarousalImages, getChangeCarouselImages, getAllCarouselImages, getChangeCarouselMen, getChangeCarouselWomen, getChangeCarouselLiving, postChangeCarouselMen, postChangeCarouselWomen, postChangeCarouselLiving } = require('../controller/admin-controller.js')
 const { getAddProduct, postAddProduct, getAllProducts, getEditProductDetails, postEditProductDetails, postDeleteSelectedProduct } = require('../controller/product-controller.js')
 
 
@@ -26,5 +26,12 @@ router.post('/relist-selected-product', postRelistSelectedProduct)
 router.get('/edit-product-details/:id', getEditProductDetails)
 router.post('/edit-product-details', postEditProductDetails)
 router.post('/delete-selected-product', postDeleteSelectedProduct)
+router.get('/all-carousel', getAllCarouselImages),
+router.get('/change-carousel-men', getChangeCarouselMen)
+router.get('/change-carousel-women', getChangeCarouselWomen)
+router.get('/change-carousel-living', getChangeCarouselLiving)
+router.post('/change-carousel-men', postChangeCarouselMen)
+router.post('/change-carousel-women', postChangeCarouselWomen)
+router.post('/change-carousel-living', postChangeCarouselLiving)
 
 module.exports = router;

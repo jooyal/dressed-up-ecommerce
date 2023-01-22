@@ -306,4 +306,137 @@ module.exports = {
     }
   },
 
+
+  getAllCarouselImages : (req,res)=>{
+    try {
+      let title = 'All Carousel Images | Admin | Dressed Up'
+
+      res.render('adminView/all-carousel', {title, admin:true})
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getChangeCarouselMen : (req,res)=>{
+    try {
+      let title = 'Change Men Carousel Images | Admin | Dressed Up'
+      res.render('adminView/change-carousel-men', {title, admin:true})
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getChangeCarouselWomen : (req,res)=>{
+    try {
+      let title = 'Change Men Carousel Images | Admin | Dressed Up'
+      res.render('adminView/change-carousel-women', {title, admin:true})
+      
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getChangeCarouselLiving : (req,res)=>{
+    try {
+      let title = 'Change Men Carousel Images | Admin | Dressed Up'
+      res.render('adminView/change-carousel-living', {title, admin:true})
+
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+postChangeCarouselMen : async(req,res)=>{
+  try {
+    if(req.files!== null){
+
+      if(req.files.menCarouselImage1!== undefined){
+        let image1 = req.files.menCarouselImage1
+        // let imageName1 = req.body.productId + 1 + path.extname(image1.name);
+        await image1.mv('./public/carouselImage/men-carousel-1.jpg')
+      }
+      if(req.files.menCarouselImage2!== undefined){
+        let image2 = req.files.menCarouselImage2
+        await image2.mv('./public/carouselImage/men-carousel-2.jpg')
+      }
+      if(req.files.menCarouselImage3!== undefined){
+        let image3 = req.files.menCarouselImage3
+        await image3.mv('./public/carouselImage/men-carousel-3.jpg')
+      }
+
+      res.redirect('/admin/all-carousel')
+
+    }else {
+      res.redirect('/admin/all-carousel')
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+postChangeCarouselWomen : async(req,res)=>{
+  try {
+    if(req.files!== null){
+
+      if(req.files.womenCarouselImage1!== undefined){
+        let image1 = req.files.womenCarouselImage1
+        // let imageName1 = req.body.productId + 1 + path.extname(image1.name);
+        await image1.mv('./public/carouselImage/women-carousel-1.jpg')
+      }
+      if(req.files.womenCarouselImage2!== undefined){
+        let image2 = req.files.womenCarouselImage2
+        await image2.mv('./public/carouselImage/women-carousel-2.jpg')
+      }
+      if(req.files.womenCarouselImage3!== undefined){
+        let image3 = req.files.womenCarouselImage3
+        await image3.mv('./public/carouselImage/women-carousel-3.jpg')
+      }
+
+      res.redirect('/admin/all-carousel')
+
+    }else {
+      res.redirect('/admin/all-carousel')
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+postChangeCarouselLiving : async(req,res)=>{
+  try {
+    if(req.files!== null){
+
+      if(req.files.livingCarouselImage1!== undefined){
+        let image1 = req.files.livingCarouselImage1
+        // let imageName1 = req.body.productId + 1 + path.extname(image1.name);
+        await image1.mv('./public/carouselImage/living-carousel-1.jpg')
+      }
+      if(req.files.livingCarouselImage2!== undefined){
+        let image2 = req.files.livingCarouselImage2
+        await image2.mv('./public/carouselImage/living-carousel-2.jpg')
+      }
+      if(req.files.livingCarouselImage3!== undefined){
+        let image3 = req.files.livingCarouselImage3
+        await image3.mv('./public/carouselImage/living-carousel-3.jpg')
+      }
+
+      res.redirect('/admin/all-carousel')
+
+    }else {
+      res.redirect('/admin/all-carousel')
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+
+
+
+
 }
