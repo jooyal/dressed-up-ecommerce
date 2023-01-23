@@ -91,7 +91,7 @@ module.exports = {
     try {
       return new Promise( async(resolve, reject) => {
         let status = await db.get().collection(USER_COLLECTION).findOne({_id:ObjectId(userId)})
-        
+
         if(!status){
           reject()
         }else {
@@ -899,7 +899,7 @@ checkIfCouponValid : (couponCode)=>{
     try {
       // console.log(couponCode);
       let response = await db.get().collection(OFFER_COLLLECTION).findOne({code: couponCode})
-      console.log(response);
+      // console.log(response);
       if(!response || response.percentage === undefined){
         resolve({status:false, message:'Not a valid Coupon Code'})
       } else {

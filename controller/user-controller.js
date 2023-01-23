@@ -848,7 +848,7 @@ module.exports = {
 
             products = await getCartProductList(decodedData.value.userId)
 
-            console.log('address = '+req.body.deliveryAddress);
+            // console.log('address = '+req.body.deliveryAddress);
             if(req.body.deliveryAddress === '' || req.body.deliveryAddress === ', '){
                 let  savedAddressData = await fetchUserSavedAddress(decodedData.value.userId)
                 orderDetails.userId = decodedData.value.userId
@@ -1180,7 +1180,7 @@ module.exports = {
                 // res.json({status:false, error:response.message})
                 let decodedData = await tokenVerify(req.cookies.authToken)
                 let orderTotal = await fetchOrderTotal(decodedData.value.userId)
-                console.log(orderTotal);
+                // console.log(orderTotal);
                 res.json({
                     status:false, 
                     error:response.message, 
@@ -1195,7 +1195,7 @@ module.exports = {
                 let couponDiscount = response.discount;
                 let decodedData = await tokenVerify(req.cookies.authToken)
                 let orderTotal = await fetchOrderTotal(decodedData.value.userId, couponDiscount)
-                console.log(orderTotal);
+                // console.log(orderTotal);
                 res.json({
                     status:true, 
                     message:response.message, 

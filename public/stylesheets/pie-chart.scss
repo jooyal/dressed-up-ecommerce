@@ -1,0 +1,88 @@
+@import "compass/css3";
+
+$size:400;
+
+$elm:d1 d2 d3 d4 d5;
+$data:60 22 8 7 3;
+$color:#FC5B3F #FCB03C #6FB07F #068587 #1A4F63;
+
+@function calRot($data) {
+	$rot:$data* 360 / 100;
+	@return $rot;
+}
+//todo
+$rot:calRot(nth($data,1)) calRot(nth($data,2)) calRot(nth($data,3)) calRot(nth($data,4)) calRot(nth($data,5));			
+
+.wrapper{
+	width:$size + px;
+	height:$size + px;
+	background:nth($color, 1);
+	margin:100px auto;
+	border-radius:50%;
+	overflow:hidden;
+	position:relative;
+	
+	@for $i from 1 through length($data){
+	
+		$angle : nth($data, $i) * 360 / 100;
+		
+		.#{nth($elm, $i)} {
+			width:$size * 2 + px;
+			height:$size * 2 + px;	
+			position:absolute;
+			top:- $size/2 + px;
+			left:- $size/2 + px;
+			
+				$n:$i - 1;
+				$deff:(nth($rot,1) - nth($rot, $i))/2;
+				$ang:0;
+				@while $n > 0{
+					$ang:$ang + nth($rot,$n);
+					$n:$n - 1;
+				}
+				$cal:$ang - $deff;
+			
+				transform:rotate($cal + deg);
+
+			div{
+				width:$size * 2 + px;
+				height:$size * 2 + px;
+
+				&:after{
+					content:'';
+					width:0;
+					height:0;
+					display:block;
+					border: solid transparent;
+					border-width: $size + px;
+					border-top-color:nth($color, $i);
+					position:relative;
+	
+					$ang : ( $angle )/2 * (pi() / 180);
+					$width:$size * tan($ang);
+					$scale:$width / $size;
+					transform:scaleX($scale);
+				}
+				
+				span{
+					display:block;
+					width:100%;
+					position:absolute;
+					left:0;
+					top:34%;
+					font-size:12px;
+					text-align:center;
+					z-index:100;
+					color:#fff;
+					transform:rotate(-$cal - nth($rot, 1) / 2 + deg);
+				}
+			}
+		}
+	}
+  transform:rotate( nth($rot, 1) / 2 + deg);
+}
+
+body{
+  background:#111;
+}
+

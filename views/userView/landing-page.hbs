@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
+
+        <!-- Favicons -->
+    <link href="/commonImages/dressed-up-top-icon.png" rel="icon">
+    <link href="/commonImages/dressed-up-top-icon.png" rel="apple-touch-icon">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -68,9 +73,9 @@
 
     <!-- end of carousel 1 -->
 
-    <h3 class="text-center mt-5">Explore latest collections for</h3>
+    <h1 class="text-center pt-5 ">Explore Latest Collections For</h1>
 
-    <section id="feature" class="section-p1 px-auto">
+    {{!-- <section id="feature" class="section-p1 px-auto">
         <a href="/men"><div class="fe-box" >
             <img src="/homePageImage/men.png" alt="">
             <h6 class="fe-box-text">MEN</h6>
@@ -84,6 +89,25 @@
             <h6 class="fe-box-text">LIVING</h6>
         </div></a>
        
+    </section> --}}
+
+    <section>
+      <div class="row">
+        <div class="men-category-icon col-sm-4 p-5">
+          {{!-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta inventore dolor placeat facilis explicabo suscipit sapiente, saepe cumque nobis similique culpa laborum maiores quisquam ratione at modi consequuntur, commodi temporibus! --}}
+          <a href="/men"><img class="img-fluid" src="/commonImages/men.png" alt=""></a>
+        </div>
+
+        <div class="women-category-icon col-sm-4 p-5">
+          <a href="/women"><img class="img-fluid" src="/commonImages/women.png" alt=""></a>
+          {{!-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta inventore dolor placeat facilis explicabo suscipit sapiente, saepe cumque nobis similique culpa laborum maiores quisquam ratione at modi consequuntur, commodi temporibus! --}}
+        </div>
+
+        <div class="living-category-icon col-sm-4 p-5">
+          <a href="/living"><img class="img-fluid" src="/commonImages/living.png" alt=""></a>
+          {{!-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta inventore dolor placeat facilis explicabo suscipit sapiente, saepe cumque nobis similique culpa laborum maiores quisquam ratione at modi consequuntur, commodi temporibus! --}}
+        </div>
+      </div>
     </section>
     
     <!-- men collections -->
