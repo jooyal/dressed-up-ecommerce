@@ -88,20 +88,24 @@ module.exports = {
   },
 
   checkIfUserBlocked : (userId)=>{
-    return new Promise( async(resolve, reject) => {
-      let status = await db.get().collection(USER_COLLECTION).findOne({_id:ObjectId(userId)})
-
-      if(!status){
-        reject()
-      }else {
-        if(status.isBlocked){
+    try {
+      return new Promise( async(resolve, reject) => {
+        let status = await db.get().collection(USER_COLLECTION).findOne({_id:ObjectId(userId)})
+        
+        if(!status){
           reject()
         }else {
-          resolve()
+          if(status.isBlocked){
+            reject()
+          }else {
+            resolve()
+          }
         }
-      }
-
-    })
+  
+      })
+    } catch (error) {
+      reject(error)
+    }
   },
 
   fetchCartCount : (userId)=>{
@@ -947,7 +951,8 @@ placeNewOrder : (orderDetails, totalAmtObj, products)=>{
         taxAmount : totalAmtObj.taxAmt,
         grandTotalAmount : totalAmtObj.grandTotal,
         orderStatus : status,
-        date: new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})
+        date: new Date().toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}),
+        isoDate: new Date()
       }
 
       //inserting orderObject containing order details inside the 'order' collection.

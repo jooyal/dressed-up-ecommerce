@@ -848,7 +848,7 @@ module.exports = {
 
             products = await getCartProductList(decodedData.value.userId)
 
-            // console.log('status = '+req.body.deliveryAddress);
+            console.log('address = '+req.body.deliveryAddress);
             if(req.body.deliveryAddress === '' || req.body.deliveryAddress === ', '){
                 let  savedAddressData = await fetchUserSavedAddress(decodedData.value.userId)
                 orderDetails.userId = decodedData.value.userId

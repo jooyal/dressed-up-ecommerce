@@ -548,6 +548,8 @@ let placeOrder = (userId)=>{
             } else {
                 deliveryAddress = null
             }
+        }else {
+            deliveryAddress = addressLine2 + ', ' + addressLine3
         }
 
         if(cod.checked===true){
