@@ -1,8 +1,12 @@
 const express = require('express');
-const { adminAuthorization } = require('../Authorization/tokenAuthentication.js');
+const path = require('path');
+
+const parentDir = (path.resolve(__dirname, '..'));
+
+const { adminAuthorization } = require(parentDir + '/Authorization/tokenAuthentication.js');
 const router = express.Router();
-const { getAdminHome, getChangeOrderStatus, getAllOrders, getOrderDetails, getAllUsers, getUserDetails, getBanUser, getUnBanUser, getAllCoupons, getDeleteDiscountOffer, getCreateOffer, getAddNewDiscountOffer, getEditDiscountOffer, postEditDiscountOffer, postUnlistSelectedProduct, postRelistSelectedProduct, getChangeCarousalImages, getChangeCarouselImages, getAllCarouselImages, getChangeCarouselMen, getChangeCarouselWomen, getChangeCarouselLiving, postChangeCarouselMen, postChangeCarouselWomen, postChangeCarouselLiving, getAdminLogin, postAdminLogin, getAdminLogout } = require('../controller/admin-controller.js')
-const { getAddProduct, postAddProduct, getAllProducts, getEditProductDetails, postEditProductDetails, postDeleteSelectedProduct } = require('../controller/product-controller.js')
+const { getAdminHome, getChangeOrderStatus, getAllOrders, getOrderDetails, getAllUsers, getUserDetails, getBanUser, getUnBanUser, getAllCoupons, getDeleteDiscountOffer, getCreateOffer, getAddNewDiscountOffer, getEditDiscountOffer, postEditDiscountOffer, postUnlistSelectedProduct, postRelistSelectedProduct, getChangeCarousalImages, getChangeCarouselImages, getAllCarouselImages, getChangeCarouselMen, getChangeCarouselWomen, getChangeCarouselLiving, postChangeCarouselMen, postChangeCarouselWomen, postChangeCarouselLiving, getAdminLogin, postAdminLogin, getAdminLogout } = require(parentDir + '/controller/admin-controller.js')
+const { getAddProduct, postAddProduct, getAllProducts, getEditProductDetails, postEditProductDetails, postDeleteSelectedProduct } = require(parentDir + '/controller/product-controller.js')
 
 
 router.get('/login',getAdminLogin)

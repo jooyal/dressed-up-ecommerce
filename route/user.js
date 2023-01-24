@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { userAuthorization } = require('../Authorization/tokenAuthentication')
-const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo, getChangeUserPassword, postChangeUserPassword, getPlaceOrder, postPlaceOrder, postCheckIfCouponValid, postVerifyPayment, postOTPLogin, postOTPLoginVerification, postViewProducts, postViewAllProducts, getViewProducts, getAvailableOffers } = require('../controller/user-controller')
+const path = require('path');
+
+const parentDir = (path.resolve(__dirname, '..'));
+
+const { userAuthorization } = require(parentDir + '/Authorization/tokenAuthentication')
+const {landingPage, signupPage, loginPage, otpLogin, otpLoginVerification, userHome, viewProducts, productDetails, getCart, placeOrder, getOrderHistory, getOrderItems, getOrderConfirmed, get404error, getAccessDenied, getContactUs, getWishlist, getDeliveryInformation, getAboutUs, getPrivacyPolicy, getUserHelp, getUserProfile, getChangeUserInfo, getMenProducts, getWomenProducts, getLivingProducts, postSignUp, postLogin, logOut, doLogOut, doSignOut, redirectToSignout, addProductToCart, getAddProductToCart, postAddProductToCart, postChangeProQuantity, postRemoveProduct, getAddProducToWishlist, postAddProducToWishlist, postMoveProductFromWishlist, postRemoveProductFromWishlist, postChangeUserInfo, getChangeUserPassword, postChangeUserPassword, getPlaceOrder, postPlaceOrder, postCheckIfCouponValid, postVerifyPayment, postOTPLogin, postOTPLoginVerification, postViewProducts, postViewAllProducts, getViewProducts, getAvailableOffers } = require(parentDir + '/controller/user-controller')
+
+
 
 /* pages without authorization. */
 router.get('/',landingPage);

@@ -1,7 +1,11 @@
-const { checkIfValidTokenExist } = require('../Authorization/tokenAuthentication.js')
-const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems, userPhoneExistCheck, doMobileOTPLogin, fetchSortedProducts, fetchAllOffers } = require('../model/user-helper.js')
-const {requestOTP, verifyOTP} = require('../utilities/otpRequest')
-const { userTokenGenerator, tokenVerify } = require('../utilities/token')
+const path = require('path');
+
+const parentDir = (path.resolve(__dirname, '..'));
+
+const { checkIfValidTokenExist } = require(parentDir + '/Authorization/tokenAuthentication.js')
+const { fetchHomeProducts, fetchCategoryProducts, fetchProductDetails, fetchProDetailPageRecommend, fetchRecCategoryAndType, doSignUp, doLogin, addProductToCart, fetchCartProducts, checkProductType, fetchCartTotal, changeProductCount, fetchIndividualProSumTotal, removeCartProduct, fetchCartCount, addProductToWishlist, fetchWishlistProducts, moveFromWishlistToCart, removeFromWishlist, fetchWishlistCount, modifyUserData, changeUserPassword, checkIfPasswordTrue, fetchOrderTotal, checkIfCouponValid, fetchUserSavedAddress, getCartProductList, placeNewOrder, getRazorPay, verifyRazorpayPayment, changePaymentStatus, fetchUserOrderHistory, fetchOrderDetails, fetchOrderItems, userPhoneExistCheck, doMobileOTPLogin, fetchSortedProducts, fetchAllOffers } = require(parentDir + '/model/user-helper.js')
+const {requestOTP, verifyOTP} = require(parentDir + '/utilities/otpRequest')
+const { userTokenGenerator, tokenVerify } = require(parentDir + '/utilities/token')
 
 //global variables
 let signupError = null;

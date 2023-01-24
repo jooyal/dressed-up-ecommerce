@@ -4,11 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var adminRouter = require('./route/admin');
-var userRouter = require('./route/user');
+var adminRouter = require(__dirname + '/route/admin');
+var userRouter = require(__dirname + '/route/user');
 var hbs = require('express-handlebars')
 var fileUpload = require('express-fileupload');
-const db = require('./model/dbConnection/connection.js')
+const db = require(__dirname + '/model/dbConnection/connection.js')
+
+// console.log(__dirname)
 
 var app = express();
 

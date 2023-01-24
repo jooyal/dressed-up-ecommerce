@@ -1,9 +1,11 @@
-const { addProduct, addProductImage, fetchAllProducts, fetchAllOrders, doEditProductDetails, editProductImage, editProductImage1, editProductImage2, editProductImage3, editProductImage4, doDeleteSelectedProduct } = require('../model/admin-helper.js')
 const path = require('path');
 const fs = require('fs');
-const { fetchOrderItems, fetchOrderDetails, fetchProductDetails } = require('../model/user-helper.js');
+const parentDir = (path.resolve(__dirname, '..'));
+
+const { addProduct, addProductImage, fetchAllProducts, fetchAllOrders, doEditProductDetails, editProductImage, editProductImage1, editProductImage2, editProductImage3, editProductImage4, doDeleteSelectedProduct } = require(parentDir + '/model/admin-helper.js')
+const { fetchOrderItems, fetchOrderDetails, fetchProductDetails } = require(parentDir + '/model/user-helper.js');
 const e = require('express');
-const { adminTokenVerify } = require('../utilities/token.js');
+const { adminTokenVerify } = require(parentDir + '/utilities/token.js');
 
 module.exports = {
 

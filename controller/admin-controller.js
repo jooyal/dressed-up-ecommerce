@@ -1,6 +1,10 @@
-const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct, checkIfAdminEmailExist, doAdminLogIn } = require('../model/admin-helper.js')
-const { fetchOrderDetails, fetchOrderItems, fetchProductDetails } = require('../model/user-helper.js')
-const { userTokenGenerator, adminTokenGenerator, adminTokenVerify } = require('../utilities/token.js')
+const path = require('path');
+
+const parentDir = (path.resolve(__dirname, '..'));
+
+const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct, checkIfAdminEmailExist, doAdminLogIn } = require(parentDir + '/model/admin-helper.js')
+const { fetchOrderDetails, fetchOrderItems, fetchProductDetails } = require(parentDir + '/model/user-helper.js')
+const { userTokenGenerator, adminTokenGenerator, adminTokenVerify } = require(parentDir + '/utilities/token.js')
 
 // global objects
 let adminLoginError = null

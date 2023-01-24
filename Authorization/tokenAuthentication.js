@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
-const { checkIfUserBlocked } = require('../model/user-helper');
-const { tokenVerify, checkTokenExpired, checkAdminTokenExpired, adminTokenVerify } = require('../utilities/token')
+const path = require('path');
+
+const parentDir = (path.resolve(__dirname, '..'));
+const { checkIfUserBlocked } = require(parentDir + '/model/user-helper');
+const { tokenVerify, checkTokenExpired, checkAdminTokenExpired, adminTokenVerify } = require(parentDir + '/utilities/token')
 
 module.exports = {
   userAuthorization : async (req,res,next)=>{
