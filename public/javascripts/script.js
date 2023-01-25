@@ -410,21 +410,43 @@ let applyCouponDiscount = (userId)=>{
 
 
 
-let validateName = ()=> {
-    let name = document.getElementById('orderName').value;
+// let validateName = ()=> {
+//     let name = document.getElementById('orderName').value;
+//     let nameError = document.getElementById('orderNameErr')
+
+//     if(name.length == 0){
+//         nameError.innerHTML = 'Name is required';
+//         return false;
+//     }
+//     if(!name.match(/^[A-Za-z]+ [A-Za-z]+$/)) {
+//         nameError.innerHTML = 'Enter Your Full Name';
+//         return false;
+//     }
+//     nameError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+//         return true;
+// }
+
+function validateName() {
+    let inputName = document.getElementById('orderName').value;
     let nameError = document.getElementById('orderNameErr')
 
-    if(name.length == 0){
-        nameError.innerHTML = 'Name is required';
-        return false;
+    var name = inputName.trim();
+    var nameParts = name.split(" ");
+    var alphabet = /^[a-zA-Z\s]*$/;
+    if (nameParts.length < 2) {
+        nameError.innerHTML = "Please enter a full name with at least two parts (e.g. first and last name)";
+      return false;
     }
-    if(!name.match(/^[A-Za-z]+ [A-Za-z]+$/)) {
-        nameError.innerHTML = 'Enter Your Full Name';
-        return false;
+    else if(!alphabet.test(name)){
+      nameError.innerHTML = "Name should contain only Alphabets";
+      return false;
     }
+
     nameError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
-        return true;
-}
+    return true;
+  }
+  
+
 
 let validatePincode = ()=>{
     let pincode = document.getElementById('pincode').value

@@ -33,17 +33,17 @@
             <input type="text" id="userMobileNoForPayment" value="{{userMobile}}" hidden />
 
             <label for="orderName">Name</label>
-            <input type="text" class="form-control" name="orderName" onblur="validateName()" id="orderName" placeholder="Your Full Name" />
+            <input type="text" class="form-control" name="orderName" oninput="validateName(this.value)" id="orderName" placeholder="Your Full Name" />
               <div class="mb-1" style="color: red;" id="orderNameErr"></div>
             <label class="pt-2" for="address">Address</label>
-            <input type="text" class="form-control" name="address" onkeyup="validateAddress()" id="address" placeholder="Complete Address Including Landmark"/>
+            <input type="text" class="form-control" name="address" oninput="validateAddress()" id="address" placeholder="Complete Address Including Landmark"/>
               <div class="mb-1" style="color: red;" id="orderAddressErr"></div>
             <label class="pt-2" for="pincode">Pincode</label>
-            <input type="text" class="form-control" name="pincode" onblur="validatePincode()" id="pincode" placeholder="40XXXX" maxlength="6"/>
+            <input type="text" class="form-control" name="pincode" oninput="validatePincode()" id="pincode" placeholder="40XXXX" maxlength="6"/>
               <div class="mb-1" style="color: red;" id="orderPincodeErr"></div>
             <label class="pt-2" style=" display: block;" for="mobileNo">Mobile No.</label>
             <input style="min-width: 50px; max-width: 15%; display: inline-block;" type="num" class="form-control" disabled placeholder="+91" />
-            <input style="max-width: 82%; display: inline-block;" type="tel" class="form-control ms-1" name="mobile" onblur="validateMobile()" id="mobileNo" placeholder="XXXXXXXXXX" maxlength="10"/>
+            <input style="max-width: 82%; display: inline-block;" type="tel" class="form-control ms-1" name="mobile" oninput="validateMobile()" id="mobileNo" placeholder="XXXXXXXXXX" maxlength="10"/>
               <div class="mb-1" style="color: red;" id="orderMobileErr"></div>
 
           </div>
@@ -103,13 +103,12 @@
         <p style="display: inline-block;">Apply Coupon: </p>
         <input type="text" oninput="this.value = this.value.toUpperCase()" class="px-2" id="discountCoupon" name="coupon" value="" maxlength="8">
         <button style="border: none; color: black !important;" class="bg-warning text-white ms-2 rounded px-2 py-1" onclick="applyCouponDiscount('{{userId}}')">Submit</button>
-          <br>
-        <a style="text-decoration: none; color: blueviolet;" href="/available-offers">Explore available coupons</a>
-
+        
         <p class="text-danger my-1" id="couponApplyErr"></p>
         <p style="color: rgb(0, 209, 0);" class="my-1" id="couponApplySuccess"></p>
-        <br>
+        <a style="text-decoration: none; color: blueviolet;" href="/available-offers" target="_blank">Explore available coupons</a>
         
+
       <div class="total-price total-price-start mt-4">
         <table>
           <tr>
