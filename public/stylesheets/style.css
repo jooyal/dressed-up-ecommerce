@@ -1027,6 +1027,10 @@ th:last-child {
   .payment-details-flex {
     display: flex !important;
   }
+
+  .category-icon-menu {
+    display: flex;
+  }
 }
 
 @media (max-width: 799px) {
@@ -1140,6 +1144,9 @@ th:last-child {
   }
   .payment-details-flex {
     display: block !important;
+  }
+  .category-icon-menu {
+    display: flex;
   }
 }
 
@@ -1304,6 +1311,9 @@ th:last-child {
     font-family: 'great-vibes';
     font-size: 1.4rem !important;
     color: #088178;
+  }
+  .category-icon-menu {
+    display: block !important;
   }
 }
 
