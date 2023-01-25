@@ -5,7 +5,7 @@ const parentDir = (path.resolve(__dirname, '..'));
 
 const { adminAuthorization } = require(parentDir + '/Authorization/tokenAuthentication.js');
 const router = express.Router();
-const { postChangeTotalRevenueGST, postChangeTotalSaleNumber, getAdminHome, getChangeOrderStatus, getAllOrders, getOrderDetails, getAllUsers, getUserDetails, getBanUser, getUnBanUser, getAllCoupons, getDeleteDiscountOffer, getCreateOffer, getAddNewDiscountOffer, getEditDiscountOffer, postEditDiscountOffer, postUnlistSelectedProduct, postRelistSelectedProduct, getChangeCarousalImages, getChangeCarouselImages, getAllCarouselImages, getChangeCarouselMen, getChangeCarouselWomen, getChangeCarouselLiving, postChangeCarouselMen, postChangeCarouselWomen, postChangeCarouselLiving, getAdminLogin, postAdminLogin, getAdminLogout } = require(parentDir + '/controller/admin-controller.js')
+const { getSalesReport, postChangeTotalRevenueGST, postChangeTotalSaleNumber, getAdminHome, getChangeOrderStatus, getAllOrders, getOrderDetails, getAllUsers, getUserDetails, getBanUser, getUnBanUser, getAllCoupons, getDeleteDiscountOffer, getCreateOffer, getAddNewDiscountOffer, getEditDiscountOffer, postEditDiscountOffer, postUnlistSelectedProduct, postRelistSelectedProduct, getChangeCarousalImages, getChangeCarouselImages, getAllCarouselImages, getChangeCarouselMen, getChangeCarouselWomen, getChangeCarouselLiving, postChangeCarouselMen, postChangeCarouselWomen, postChangeCarouselLiving, getAdminLogin, postAdminLogin, getAdminLogout } = require(parentDir + '/controller/admin-controller.js')
 const { getAddProduct, postAddProduct, getAllProducts, getEditProductDetails, postEditProductDetails, postDeleteSelectedProduct } = require(parentDir + '/controller/product-controller.js')
 
 
@@ -44,5 +44,6 @@ router.post('/change-carousel-women', adminAuthorization, postChangeCarouselWome
 router.post('/change-carousel-living', adminAuthorization, postChangeCarouselLiving)
 router.post('/change-total-sale-number', adminAuthorization, postChangeTotalSaleNumber)
 router.post('/change-total-revenue-tax-amount', adminAuthorization, postChangeTotalRevenueGST)
+router.get('/sales-report', adminAuthorization, getSalesReport)
 
 module.exports = router;

@@ -3,7 +3,7 @@ const path = require('path');
 const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct, checkIfAdminEmailExist, doAdminLogIn, fetchTotalSalesNo, fetchCustomerTotal, fetchRevenueTotal, fetchLatestOrders } = require('../model/admin-helper');
 const { fetchOrderDetails, fetchOrderItems, fetchProductDetails } = require('../model/user-helper');
 const { userTokenGenerator, adminTokenGenerator, adminTokenVerify } = require('../utilities/token.js');
-
+const { buildPDF } = require('../utilities/pdfService')
 // global objects
 let adminLoginError = null
 
@@ -538,9 +538,38 @@ postChangeTotalRevenueGST : async(req,res)=>{
   } catch (error) {
     console.log(error);
   }
+},
+
+getSalesReport : async(req,res)=>{
+
+  let data = {}
+  data.salesNumberToday = await fetchTotalSalesNo('day');
+  data.salesAmountToday = await fetchRevenueTotal('day');
+  data.salesNumberMonth = await fetchTotalSalesNo('month');
+  data.salesAmountMonth = await fetchRevenueTotal('month');
+
+  return new Promise((resolve, reject) => {
+    try {
+      const stream = res.writeHead(200,{
+        'Content-Type' : 'application/pdf',
+        'Content-Disposition' : 'attachment; filename=invoice.pdf'
+      });
+
+      buildPDF(
+          data,
+          (chunk)=>{
+              stream.write(chunk);
+          },
+          ()=>{
+              stream.end();
+          }
+      );
+      
+    } catch (error) {
+      console.log(error);
+    }
+  })
 }
-
-
 
 
 
