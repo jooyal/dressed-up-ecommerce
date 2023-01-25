@@ -411,6 +411,124 @@ module.exports = {
     })
   },
 
+  fetchTotalSalesNo : (type)=>{
+    let param
+    if(type === 'day'){
+      param = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate())
+    } else if(type === 'month'){
+      param = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
+    } else if(type === 'year'){
+      param = new Date(new Date().getUTCFullYear(), 0, 1)
+    }
+    return new Promise(async(resolve, reject) => {
+      try {
+        let salesNumber = await db.get().collection(ORDER_COLLECTION).find({
+          $and:[{orderStatus: 'shipped'}, {isoDate: {$gte: param}}]
+        }).toArray() 
+
+        if(salesNumber){
+          resolve(salesNumber.length)
+        }else {
+          resolve(0);
+        }
+        
+      } catch (error) {
+        reject(error)  
+      }
+    })
+  },
+
+  fetchCustomerTotal : ()=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        let customerTotal = await db.get().collection(USER_COLLECTION).find().toArray()
+
+        if(customerTotal){
+          resolve(customerTotal.length)
+        }else {
+          resolve(0)
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  fetchRevenueTotal : (type)=>{
+
+    let param
+    if(type === 'day'){
+      param = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate())
+    } else if(type === 'month'){
+      param = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
+    } else if(type === 'year'){
+      param = new Date(new Date().getUTCFullYear(), 0, 1)
+    }
+
+    return new Promise(async(resolve, reject) => {
+      try {
+        let revenueTotal = await db.get().collection(ORDER_COLLECTION).aggregate([
+          {
+            $match : {
+              $and : [{orderStatus: 'shipped'}, {isoDate: {$gte: param}}]
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              total : {$sum: '$totalBeforeTax'},
+              tax: {$sum: '$taxAmount'}
+            }
+          },
+          {
+            $project: {
+              _id :0, total: 1, tax:1
+            }
+          }
+        ]).toArray()
+
+        if(revenueTotal[0]){
+          resolve(revenueTotal[0]);
+        }else {
+          resolve({ total: 0, tax: 0 })
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  fetchLatestOrders : ()=>{
+    return new Promise(async(resolve, reject) => {
+      try {
+        let orders = await db.get().collection(ORDER_COLLECTION).find().limit(25).toArray()
+
+        if(orders){
+          for(let i=0; i<orders.length; i++){
+            if(orders[i].orderStatus==='placed'){
+              orders[i].placed = true
+            } else if(orders[i].orderStatus==='pending'){
+              orders[i].pending = true
+            } else if(orders[i].orderStatus==='cancelled'){
+              orders[i].cancelled = true
+            } else if(orders[i].orderStatus==='shipped'){
+              orders[i].shipped = true
+            }
+          }
+          resolve(orders);
+
+        }else {
+          resolve()
+        }
+        
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
 
 
 

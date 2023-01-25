@@ -1,18 +1,23 @@
 const path = require('path');
 
-const parentDir = (path.resolve(__dirname, '..'));
-
-const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct, checkIfAdminEmailExist, doAdminLogIn } = require(parentDir + '/model/admin-helper.js')
-const { fetchOrderDetails, fetchOrderItems, fetchProductDetails } = require(parentDir + '/model/user-helper.js')
-const { userTokenGenerator, adminTokenGenerator, adminTokenVerify } = require(parentDir + '/utilities/token.js')
+const { fetchAllOrders, doChangeOrderStatus, fetchAllUsers, fetchUserDetails, doBanUser, doUnBanUser, fetchAllCoupons, doDeleteDiscountOffer, fetchAddNewDiscountOffer, fetchOfferData, doEditDiscountOffer, doUnlistSelectedProduct, doRelistSelectedProduct, checkIfAdminEmailExist, doAdminLogIn, fetchTotalSalesNo, fetchCustomerTotal, fetchRevenueTotal, fetchLatestOrders } = require('../model/admin-helper');
+const { fetchOrderDetails, fetchOrderItems, fetchProductDetails } = require('../model/user-helper');
+const { userTokenGenerator, adminTokenGenerator, adminTokenVerify } = require('../utilities/token.js');
 
 // global objects
 let adminLoginError = null
 
 module.exports = {
   
-  getAdminHome : (req,res)=> {
-    res.render('adminView/admin-home',{admin:true})
+  getAdminHome : async(req,res)=> {
+    let decodedData = await adminTokenVerify(req.cookies.authToken)
+    let adminName = decodedData.value.adminName
+    let totalSales = await fetchTotalSalesNo('day')
+    let customerTotal = await fetchCustomerTotal()
+    let revenueTotal = await fetchRevenueTotal('month')
+    let latestOrders = await fetchLatestOrders()
+
+    res.render('adminView/admin-home',{latestOrders, customerTotal, revenueTotal, adminName, totalSales, admin:true})
   },
 
   getAdminLogin : (req,res)=>{
@@ -514,6 +519,26 @@ postChangeCarouselLiving : async(req,res)=>{
     console.log(error);
   }
 },
+
+postChangeTotalSaleNumber : async(req,res)=>{
+  try {
+    let totalSales = await fetchTotalSalesNo(req.body.parameter)
+    res.json(totalSales)
+    
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+postChangeTotalRevenueGST : async(req,res)=>{
+  try {
+    let response = await fetchRevenueTotal(req.body.parameter)
+    res.json(response)
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 

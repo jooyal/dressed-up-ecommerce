@@ -559,3 +559,57 @@ let adminLogOut = ()=>{
     })
   }
 }
+
+let changeTotalNumberOfSales = (parameter)=>{
+  let totalNumberField = document.getElementById('totalNumberOfSales')
+  let totalNumberFieldParameter = document.getElementById('totalNumberFieldParameter')
+
+  $.ajax({
+    url: '/admin/change-total-sale-number',
+    method: 'post',
+    data: {
+      parameter: parameter
+    },
+    success : (response)=>{
+      if(response){
+        if(parameter === 'day'){
+          totalNumberFieldParameter.innerHTML = '| Today'
+        }else if(parameter === 'month'){
+          totalNumberFieldParameter.innerHTML = '| Month'
+        }else if(parameter === 'year'){
+          totalNumberFieldParameter.innerHTML = '| Year'
+        } 
+  
+        totalNumberField.innerHTML = response
+      }
+    }
+  })
+}
+
+let changeTotalRevenueAndGSTAmount = (parameter)=>{
+  let totalRevenueField = document.getElementById('totalAmountOfRevenue')
+  let totalTaxField = document.getElementById('totalGSTCollected')
+  let totalRevenueGSTFieldParameter = document.getElementById('totalRevenueGSTFieldParameter')
+
+  $.ajax({
+    url: '/admin/change-total-revenue-tax-amount',
+    method: 'post',
+    data: {
+      parameter: parameter
+    },
+    success: (response)=>{
+      if(response){
+        if(parameter === 'day'){
+          totalRevenueGSTFieldParameter.innerHTML = '| Today'
+        }else if(parameter === 'month'){
+          totalRevenueGSTFieldParameter.innerHTML = '| Month'
+        }else if(parameter === 'year'){
+          totalRevenueGSTFieldParameter.innerHTML = '| Year'
+        } 
+
+        totalRevenueField.innerHTML = response.total
+        totalTaxField.innerHTML = response.tax
+      }
+    }
+  })
+}
