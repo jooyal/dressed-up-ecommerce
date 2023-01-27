@@ -9,7 +9,7 @@
                 <li><a style="font-size: 14px; font-weight: 500;" href="/women">WOMEN</a></li>
                 <li><a style="font-size: 14px; font-weight: 500;" href="/living">LIVING</a></li>
                 
-                <li><a style="font-size: 14px;" href="/wishlist">
+                <li id="lg-bag"><a style="font-size: 14px;" href="/wishlist">
                     <div style="flex-direction: column;" class="d-flex align-items-center">
                         <span class="badge bg-danger wishlist-notification-badge" id="wishlistCountBadge">{{wishlistCount}}</span>
                         <i class="fa-solid fa-heart"></i>
@@ -44,10 +44,13 @@
                 </li>
             </ul>
         </div>
-        <div id="mobile">
-            <a href="/cart"><i style="font-size: 16px;" class="fa fa-shopping-bag pb-3" aria-hidden="true"></i></a>
+        <div id="mobile">            
+            <a href="/wishlist"><i style="font-size: 16px;" class="fa-solid fa-heart" aria-hidden="true"></i></a>
+            <span style="width: 10px; height: 17px;" class="badge bg-danger wishlist-notification-badge mb-3" id="wishlistCountBadge" aria-hidden="true">{{wishlistCount}}</span>
+            <a href="/cart"><i style="font-size: 16px;" class="fa fa-shopping-bag pb-2" aria-hidden="true"></i></a>
+            <span class="badge bg-danger top-notification-badge mb-3" id="cartCountBadge" aria-hidden="true">{{cartCount}}</span>
             <i id="bar"  style="font-size: 16px;" class="fa fa-bars" aria-hidden="true"></i>      
-                 
+            
         </div>
     </header>
 

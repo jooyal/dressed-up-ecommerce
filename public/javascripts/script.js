@@ -47,6 +47,92 @@ let popupAppear = ()=>{
         },2500)
 }
 
+let removedFromCartPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieRemovedFromCart')
+    document.querySelector('.alert-removed-from-cart').classList.add('alert-removed-from-cart-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-removed-from-cart').classList.remove('alert-removed-from-cart-appear');
+            lottie.stop()
+            location.reload()
+        },2000)
+}
+
+// popup for product added to cart from wishlist
+
+let movedFromWishlistPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieAddToCart')
+    document.querySelector('.alert-added-to-cart').classList.add('alert-added-to-cart-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-added-to-cart').classList.remove('alert-added-to-cart-appear');
+            lottie.stop()
+            location.reload()
+        },2000)
+    }
+
+
+    // popup for product removed from wishlist
+
+let removedFromWishlistPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieRemovedFromWishlist')
+    document.querySelector('.alert-removed-from-wishlist').classList.add('alert-removed-from-wishlist-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-removed-from-wishlist').classList.remove('alert-removed-from-wishlist-appear');
+            lottie.stop()
+            location.reload()
+        },2000)
+}
+
+
+// popup for user logged-out
+let LoggedOutPopupAppear = ()=>{
+    //console.log('Working');
+    let lottie = document.querySelector('#lottieUserLoggedOut')
+    document.querySelector('.alert-logged-out').classList.add('alert-logged-out-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-logged-out').classList.remove('alert-logged-out-appear');
+            lottie.stop()
+            location.href = '/'
+        },2000)
+    }
+
+
+// popup for coupon applied successfully
+let CouponAppliedSuccessPopupAppear = ()=>{
+    let lottie = document.querySelector('#lottieCouponSuccess')
+    document.querySelector('.alert-coupon-applied-successfully').classList.add('alert-coupon-applied-successfully-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-coupon-applied-successfully').classList.remove('alert-coupon-applied-successfully-appear');
+            lottie.stop()
+        },2000)
+    }
+
+
+// payment successful alert card
+let PaymentSuccessPopupAppear = (orderId)=>{
+    let lottie = document.querySelector('#lottiePaymentSuccess')
+    document.querySelector('.alert-payment-success').classList.add('alert-payment-success-appear');
+      
+    lottie.play()
+        setTimeout(()=>{
+            document.querySelector('.alert-payment-success').classList.remove('alert-payment-success-appear');
+            lottie.stop()
+            location.href = "/order-confirmed/" + orderId;
+        },2000)
+    }
+
 //function to add a product to cart from product card.
 let addToCart = (productId)=>{
     $.ajax({
@@ -408,6 +494,145 @@ let applyCouponDiscount = (userId)=>{
 
 }
 
+// signup form validation
+
+function validateSignupName() {
+    let inputName = document.getElementById('floatingFirstName').value;
+    let nameError = document.getElementById('firstNameErr')
+
+    var name = inputName.trim();
+    var nameParts = name.split(" ");
+    var alphabet = /^[a-zA-Z\s]*$/;
+    if (nameParts.length < 2) {
+        nameError.innerHTML = "Please enter a full name with at least two parts (e.g. first and last name)";
+      return false;
+    }
+    else if(!alphabet.test(name)){
+      nameError.innerHTML = "Name should contain only Alphabets";
+      return false;
+    }else {
+        
+    }
+
+    nameError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+    return true;
+  }
+
+//   let validateSignupMobile = ()=>{
+//     let mobile = document.getElementById('floatingMobileInput').value
+//     let mobileErr = document.getElementById('mobileNoErr')
+
+//     if(mobile.length == 0){
+//         mobileErr.innerHTML = 'Enter Your Mobile Number.'
+//         return false;
+//     }
+//     if(mobile.length > 10){
+//         mobileErr.innerHTML = 'Enter A Valid 10 Digit Mobile Number.'
+//         return false;
+//     }
+//     enableSubmit()
+//     mobileErr.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+//     return true;
+// }
+
+function validateSignupMobile (){
+    let mobile = document.getElementById('floatingMobileInput').value
+    let mobileErr = document.getElementById('mobileNoErr')
+
+    if(mobile.length !==10){
+        mobileErr.innerHTML = 'Enter a valid 10 digit mobile number'
+        return false;
+    }
+    mobileErr.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+    return true
+}
+
+function validateSignupEmail() {
+    let inputEmail = document.getElementById('floatingEmailInput').value;
+    let emailError = document.getElementById('emailErr');
+
+    var email = inputEmail.trim();
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(email)) {
+        emailError.innerHTML = "Please enter a valid email address.";
+        return false;
+    }
+
+    emailError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+    return true;
+}
+
+function validateSignupPassword() {
+    let inputPassword = document.getElementById('floatingPassword').value;
+    let passwordError = document.getElementById('passwordErr');
+
+    var password = inputPassword.trim();
+    var upperCase = new RegExp('[A-Z]');
+    var lowerCase = new RegExp('[a-z]');
+    var special = new RegExp('[!@#$%^&*(),.?":{}|<>]');
+    if (!upperCase.test(password)) {
+        passwordError.innerHTML = "Password must contain at least one uppercase letter.";
+        return false;
+    } else if (!lowerCase.test(password)) {
+        passwordError.innerHTML = "Password must contain at least one lowercase letter.";
+        return false;
+    } else if (!special.test(password)) {
+        passwordError.innerHTML = "Password must contain at least one special character.";
+        return false;
+    } else if (password.length < 8) {
+        passwordError.innerHTML = "Password must be at least 8 characters long.";
+        return false;
+    }
+
+    passwordError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+    return true;
+}
+
+
+function confirmSignupPassword() {
+    let password = document.getElementById('floatingPassword').value;
+    let confirmPassword = document.getElementById('floatingConfirmPassword').value;
+    let confirmPasswordErr = document.getElementById('confirmPasswordErr');
+
+    if(password != confirmPassword){
+        confirmPasswordErr.innerHTML = "Passwords do not match";
+        return false;
+    }
+
+    confirmPasswordErr.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+    return true;
+}
+
+function checkSignupAgreement() {
+    let checkbox = document.getElementById('gridCheck');
+    let checkboxErr = document.getElementById('gridCheckErr');
+
+    if(checkbox.checked) {
+        checkboxErr.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
+        return true;
+    }
+    else {
+        checkboxErr.innerHTML = "Please agree to the terms and conditions before proceeding.";
+        return false;
+    }
+}
+
+
+function enableSubmit () {
+    if(validateSignupName() && validateSignupMobile() && validateSignupEmail() &&
+     validateSignupPassword() && confirmSignupPassword() && checkSignupAgreement() ){
+        console.log('TRUE');
+        return true;
+    }
+}
+
+document.getElementById("signUpSubmit").addEventListener("click", function(event){
+    if (!enableSubmit()) {
+        event.preventDefault();
+    }
+});
+
+
 
 
 // let validateName = ()=> {
@@ -445,7 +670,6 @@ function validateName() {
     nameError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
     return true;
   }
-  
 
 
 let validatePincode = ()=>{
@@ -810,88 +1034,3 @@ let viewAllProducts = ()=>{
 
 // popup for product removed from cart
 
-let removedFromCartPopupAppear = ()=>{
-    //console.log('Working');
-    let lottie = document.querySelector('#lottieRemovedFromCart')
-    document.querySelector('.alert-removed-from-cart').classList.add('alert-removed-from-cart-appear');
-      
-    lottie.play()
-        setTimeout(()=>{
-            document.querySelector('.alert-removed-from-cart').classList.remove('alert-removed-from-cart-appear');
-            lottie.stop()
-            location.reload()
-        },2000)
-}
-
-// popup for product added to cart from wishlist
-
-let movedFromWishlistPopupAppear = ()=>{
-    //console.log('Working');
-    let lottie = document.querySelector('#lottieAddToCart')
-    document.querySelector('.alert-added-to-cart').classList.add('alert-added-to-cart-appear');
-      
-    lottie.play()
-        setTimeout(()=>{
-            document.querySelector('.alert-added-to-cart').classList.remove('alert-added-to-cart-appear');
-            lottie.stop()
-            location.reload()
-        },2000)
-    }
-
-
-    // popup for product removed from wishlist
-
-let removedFromWishlistPopupAppear = ()=>{
-    //console.log('Working');
-    let lottie = document.querySelector('#lottieRemovedFromWishlist')
-    document.querySelector('.alert-removed-from-wishlist').classList.add('alert-removed-from-wishlist-appear');
-      
-    lottie.play()
-        setTimeout(()=>{
-            document.querySelector('.alert-removed-from-wishlist').classList.remove('alert-removed-from-wishlist-appear');
-            lottie.stop()
-            location.reload()
-        },2000)
-}
-
-
-// popup for user logged-out
-let LoggedOutPopupAppear = ()=>{
-    //console.log('Working');
-    let lottie = document.querySelector('#lottieUserLoggedOut')
-    document.querySelector('.alert-logged-out').classList.add('alert-logged-out-appear');
-      
-    lottie.play()
-        setTimeout(()=>{
-            document.querySelector('.alert-logged-out').classList.remove('alert-logged-out-appear');
-            lottie.stop()
-            location.href = '/'
-        },2000)
-    }
-
-
-// popup for coupon applied successfully
-let CouponAppliedSuccessPopupAppear = ()=>{
-    let lottie = document.querySelector('#lottieCouponSuccess')
-    document.querySelector('.alert-coupon-applied-successfully').classList.add('alert-coupon-applied-successfully-appear');
-      
-    lottie.play()
-        setTimeout(()=>{
-            document.querySelector('.alert-coupon-applied-successfully').classList.remove('alert-coupon-applied-successfully-appear');
-            lottie.stop()
-        },2000)
-    }
-
-
-// payment successful alert card
-let PaymentSuccessPopupAppear = (orderId)=>{
-    let lottie = document.querySelector('#lottiePaymentSuccess')
-    document.querySelector('.alert-payment-success').classList.add('alert-payment-success-appear');
-      
-    lottie.play()
-        setTimeout(()=>{
-            document.querySelector('.alert-payment-success').classList.remove('alert-payment-success-appear');
-            lottie.stop()
-            location.href = "/order-confirmed/" + orderId;
-        },2000)
-    }

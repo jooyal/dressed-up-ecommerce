@@ -43,7 +43,7 @@
                     <input style="width: 10px;" type="radio" name="category" id="living" value="living">
                     <label style="font-size: 14px;" for="living">LIVING</label> --}}
  
-                    <input class="mt-2" type="range" id="priceRangeForProducts" min="0" max="5000" oninput="labelDisplay()" value="5000" step="1000"><br>
+                    <input class="mt-2" type="range" id="priceRangeForProducts" min="0" max="5000" onmouseup="labelDisplay()" onkeyup="arrowKeyLabelDisplay(event)" value="5000" step="1000"><br>
                     Rs. 0 - Rs. <label for="priceRangeForProducts" id="labelForPriceRange">5000</label>
                 </div>
                 </div>
@@ -240,6 +240,12 @@
     } else if(selectedType === 'other'){
         otherRadio.checked = true
     } 
+
+    let arrowKeyLabelDisplay = (event)=> {
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      labelDisplay();
+    }
+  }
 
     //labelDisplay()
 </script>

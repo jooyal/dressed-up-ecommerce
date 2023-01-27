@@ -6,44 +6,49 @@
 					<img src="images/logo.png" class="img-fluid" alt="logo">
 				</div> --}}
 
-				<form style="background-color: rgb(255, 255, 255);" class="rounded shadow p-5" method="post" action="">
+				<form onsubmit="enableSubmit()" style="background-color: rgb(255, 255, 255);" class="rounded shadow p-5" method="post" action="">
 					<h3 class="text-dark fw-bolder fs-4 mb-5">Create New Account</h3>
-
+					
+					<div class="text-danger" id="serverErrMsg">{{signupError}}</div>
 					{{!-- <a href="#" class="btn btn-light login_with w-100 mb-4">
 						<img src="images/google-icon.svg" class="img-fluid me-3">Sign in with Google</a>
 					</a>  --}}
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="floatingFirstName" name="fullName" placeholder="name@example.com">
+                        <input type="text" class="form-control" id="floatingFirstName" name="fullName" oninput="validateSignupName()" placeholder="name@example.com">
                         <label for="floatingFirstName">Full Name</label>
+						<div class="text-danger" id="firstNameErr"></div>
                     </div>
 					<div class="form-floating mb-3">
-						<input type="email" class="form-control" id="floatingInput" name="userEmail" placeholder="name@example.com">
-						<label for="floatingInput">Email address</label>
+						<input type="email" class="form-control" id="floatingEmailInput" name="userEmail" oninput="validateSignupEmail()" placeholder="name@example.com">
+						<label for="floatingEmailInput">Email address</label>
+						<div class="text-danger" id="emailErr"></div>
 					</div>
 					<div class="form-floating mb-3">
-						<input type="number" class="form-control" id="floatingInput" name="userMobile" placeholder="9876543210">
-						<label for="floatingInput">Mobile No.</label>
+						<input type="number" class="form-control" id="floatingMobileInput" name="userMobile" oninput="validateSignupMobile()" placeholder="9876543210">
+						<label for="floatingMobileInput">Mobile No.</label>
+						<div class="text-danger" id="mobileNoErr"></div>
 					</div>
 					<div class="form-floating mb-3">
-						<input type="password" class="form-control" id="floatingPassword" name="userPassword" placeholder="Password">
+						<input type="password" class="form-control" id="floatingPassword" name="userPassword" onkeyup="validateSignupPassword()" placeholder="Password">
 						<label for="floatingPassword">Password</label>
+						<span class="password-info mt-2">Use minimum 8 or more characters with a mix of uppercase, lowercase & symbols.</span>
+						<div class="text-danger" id="passwordErr"></div>
 					</div> 
                     <div class="form-floating mb-3">
-						<input type="password" class="form-control" id="floatingPassword" name="confirmUserPassword" placeholder="Password">
-						<label for="floatingPassword">Confirm Password</label>
-						<span class="password-info mt-2">Use minimum 8 or more characters with a mix of letters, numbers & symbols.</span>
+						<input type="password" class="form-control" id="floatingConfirmPassword" name="confirmUserPassword" onkeyup="confirmSignupPassword()" placeholder="Password">
+						<label for="floatingConfirmPassword">Confirm Password</label>
+						<div class="text-danger" id="confirmPasswordErr"></div>
 					</div> 
                     <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input mb-1" name="termsCheckBox" type="checkbox" id="gridCheck" style="border-color: gray; border: solid;" checked>
+                        <input class="form-check-input mb-1" name="termsCheckBox" type="checkbox" id="gridCheck" onclick="checkSignupAgreement()" style="border-color: gray; border: solid;">
                         <label class="form-check-label ms-2" for="gridCheck">
                           I Agree to <a style="font-size: 15px;" href="/privacy-policy">Privacy Policy</a>.
-                        </label>
+						</label>
                     </div>
-					<button type="submit" class="btn btn-primary submit_btn w-100 mt-4">Continue</button> 
+					<div class="text-danger" id="gridCheckErr"></div>
+					<button type="submit" id="signUpSubmit" class="btn btn-primary submit_btn w-100 mt-4">Continue</button> 
 
-					<div class="text-danger" id="serverErrMsg">{{signupError}}</div>
-
-					<div class="text-center text-muted text-uppercase mt-5 mb-2">or</div>
+										<div class="text-center text-muted text-uppercase mt-5 mb-2">or</div>
 
 					<div class="fw-normal text-muted mb-2">
 						Already have an account ? <a style="font-size: 15px;" href="/login" class="text-primary fw-bold text-decoration-none">Log in here</a>
