@@ -36,14 +36,14 @@
             <input type="text" class="form-control" name="orderName" oninput="validateName(this.value)" id="orderName" placeholder="Your Full Name" />
               <div class="mb-1" style="color: red;" id="orderNameErr"></div>
             <label class="pt-2" for="address">Address</label>
-            <input type="text" class="form-control" name="address" oninput="validateAddress()" id="address" placeholder="Complete Address Including Landmark"/>
+            <input type="text" class="form-control" name="orderAddress" oninput="validateAddress()" id="orderAddress" placeholder="Complete Address Including Landmark"/>
               <div class="mb-1" style="color: red;" id="orderAddressErr"></div>
             <label class="pt-2" for="pincode">Pincode</label>
-            <input type="text" class="form-control" name="pincode" oninput="validatePincode()" id="pincode" placeholder="40XXXX" maxlength="6"/>
+            <input type="text" class="form-control" name="orderPincode" oninput="validatePincode()" id="orderPincode" placeholder="40XXXX" maxlength="6"/>
               <div class="mb-1" style="color: red;" id="orderPincodeErr"></div>
-            <label class="pt-2" style=" display: block;" for="mobileNo">Mobile No.</label>
+            <label class="pt-2" style=" display: block;" for="orderMobileNo">Mobile No.</label>
             <input style="min-width: 50px; max-width: 15%; display: inline-block;" type="num" class="form-control" disabled placeholder="+91" />
-            <input style="max-width: 82%; display: inline-block;" type="tel" class="form-control ms-1" name="mobile" oninput="validateMobile()" id="mobileNo" placeholder="XXXXXXXXXX" maxlength="10"/>
+            <input style="max-width: 82%; display: inline-block;" type="tel" class="form-control ms-1" name="mobile" oninput="validateMobile()" id="orderMobileNo" placeholder="XXXXXXXXXX" maxlength="10"/>
               <div class="mb-1" style="color: red;" id="orderMobileErr"></div>
 
           </div>
@@ -146,9 +146,9 @@
   let addressValue = document.getElementById('userSavedAddress')
   let checkbox = document.getElementById('selectSavedAddress');
   let addressLine1 = document.getElementById('orderName')
-  let addressLine2 = document.getElementById('address')
-  let addressLine3 = document.getElementById('pincode')
-  let addressLine4 = document.getElementById('mobileNo')
+  let addressLine2 = document.getElementById('orderAddress')
+  let addressLine3 = document.getElementById('orderPincode')
+  let addressLine4 = document.getElementById('orderMobileNo')
   let addressLine1Err = document.getElementById('orderNameErr')
   let addressLine2Err = document.getElementById('orderAddressErr')
   let addressLine3Err = document.getElementById('orderPincodeErr')

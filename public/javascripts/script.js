@@ -141,6 +141,7 @@ let addToCart = (productId)=>{
         success: (response)=>{
             popupAppear();
             document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + 1;
+            document.getElementById('cartCountBadgeMobile').innerHTML = parseInt(document.getElementById('cartCountBadgeMobile').innerHTML) + 1;
         }
     })
 }
@@ -162,6 +163,7 @@ let addToCartFromProPage = (productId)=>{
         success : (response)=>{
             popupAppear();
             document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML) + parseInt(quantity)
+            document.getElementById('cartCountBadgeMobile').innerHTML = parseInt(document.getElementById('cartCountBadgeMobile').innerHTML) + parseInt(quantity)
             // setTimeout(() => {
             //     location.reload()
             // }, 2500);
@@ -198,6 +200,7 @@ let changeProQuantity = (userId, cartId, productId, firstAddedTime, productSize,
                 
                 document.getElementById(firstAddedTime).value = qty+parseInt(count);
                 document.getElementById('cartCountBadge').innerHTML = parseInt(document.getElementById('cartCountBadge').innerHTML)+parseInt(count)
+                document.getElementById('cartCountBadgeMobile').innerHTML = parseInt(document.getElementById('cartCountBadgeMobile').innerHTML)+parseInt(count)
                 document.getElementById('sumTotalId').innerHTML = response.total.sumTotal;
                 document.getElementById('taxAmountId').innerHTML = response.total.taxAmount;
                 document.getElementById('grandTotalId').innerHTML = response.total.grandTotal;
@@ -242,6 +245,7 @@ let addToWishlist = (productId)=>{
             console.log(response);
             if(response.status){
                 document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('wishlistCountBadge').innerHTML) + 1;
+                document.getElementById('wishlistCountBadgeMobile').innerHTML = parseInt(document.getElementById('wishlistCountBadgeMobile').innerHTML) + 1;
             }
         }
     })
@@ -261,6 +265,7 @@ let addToWishlistFromProPage = (productId)=>{
             console.log(response);
             wishlistPopupAppear();
             document.getElementById('wishlistCountBadge').innerHTML = parseInt(document.getElementById('wishlistCountBadge').innerHTML) + 1;
+            document.getElementById('wishlistCountBadgeMobile').innerHTML = parseInt(document.getElementById('wishlistCountBadgeMobile').innerHTML) + 1;
         }
     })
 }
@@ -672,8 +677,8 @@ function validateName() {
   }
 
 
-let validatePincode = ()=>{
-    let pincode = document.getElementById('pincode').value
+function validatePincode (){
+    let pincode = document.getElementById('orderPincode').value
     let pincodeError = document.getElementById('orderPincodeErr')
 
     if(pincode.length == 0){
@@ -687,8 +692,8 @@ let validatePincode = ()=>{
     pincodeError.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
 }
 
-let validateMobile = ()=>{
-    let mobile = document.getElementById('mobileNo').value
+function validateMobile() {
+    let mobile = document.getElementById('orderMobileNo').value
     let mobileErr = document.getElementById('orderMobileErr')
 
     if(mobile.length == 0){
@@ -702,8 +707,8 @@ let validateMobile = ()=>{
     mobileErr.innerHTML = '<i class="fa-solid text-success fa-circle-check"></i>';
 }
 
-let validateAddress = ()=>{
-    let address = document.getElementById('address').value
+function validateAddress (){
+    let address = document.getElementById('orderAddress').value
     let addressErr = document.getElementById('orderAddressErr')
 
     if(address.length == 0){
@@ -733,50 +738,15 @@ let validateAddress = ()=>{
 //     return true;
 // }
 
-
-
-// check if user has entered the minimum required characters.
-// if the user has selected manual address check for it. else, directly call place-order function.
-
-let checkForErrorsAndPlaceOrder = (userId)=>{
-
-    let checkbox = document.getElementById('selectSavedAddress');
-
-    if(checkbox){
-        if(checkbox.checked === false){
-
-            if(!validateName() && !validateAddress() && !validateMobile() && !validatePincode()){
-                document.getElementById('placeOrderError').innerHTML = 'Enter All Required Fields To Continue.'
-    
-            } else {
-                placeOrder(userId)
-    
-            }
-    
-        } else if (checkbox.checked === true){
-            placeOrder(userId)
-    
-        }
-    } else {
-        if(!validateName() && !validateAddress() && !validateMobile() && !validatePincode()){
-            document.getElementById('placeOrderError').innerHTML = 'Enter All Required Fields To Continue.'
-
-        } else {
-            placeOrder(userId)
-
-        }
-    }
-}
-
-let placeOrder = (userId)=>{
+function placeOrder (userId){
     let cod = document.getElementById('codPayment')
     let online = document.getElementById('onlinePayment')
     let couponCode = document.getElementById('discountCoupon').value
     let savedAddressSelection = document.getElementById('selectSavedAddress')
     let userName = (document.getElementById('orderName').value).toUpperCase()
-    let addressLine2 = (document.getElementById('address').value).toUpperCase()
-    let addressLine3 = (document.getElementById('pincode').value).toUpperCase()
-    let userMobile = (document.getElementById('mobileNo').value)
+    let addressLine2 = (document.getElementById('orderAddress').value).toUpperCase()
+    let addressLine3 = (document.getElementById('orderPincode').value).toUpperCase()
+    let userMobile = (document.getElementById('orderMobileNo').value)
     let paymentMethod
     let deliveryAddress
 
@@ -866,7 +836,7 @@ let placeOrder = (userId)=>{
 
 // function to invoke razor payment page
 
-let razorPayment = (order, userDetail, orderId)=>{
+function razorPayment (order, userDetail, orderId){
     let options = {
         "key": "rzp_test_hoA57QfXOzGC2S", // Enter the Key ID generated from the Dashboard
         "amount": parseInt(order.amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -936,6 +906,41 @@ let verifyPayment = (payment, order, orderId)=>{
       }
     })
   }
+
+
+// check if user has entered the minimum required characters.
+// if the user has selected manual address check for it. else, directly call place-order function.
+
+function checkForErrorsAndPlaceOrder (userId){
+
+    let checkbox = document.getElementById('selectSavedAddress');
+
+    if(checkbox){
+        if(checkbox.checked === false){
+
+            if(!validateName() && !validateAddress() && !validateMobile() && !validatePincode()){
+                document.getElementById('placeOrderError').innerHTML = 'Enter All Required Fields To Continue.'
+    
+            } else {
+                placeOrder(userId)
+    
+            }
+    
+        } else if (checkbox.checked === true){
+            placeOrder(userId)
+    
+        }
+    } else {
+        if(!validateName() && !validateAddress() && !validateMobile() && !validatePincode()){
+            document.getElementById('placeOrderError').innerHTML = 'Enter All Required Fields To Continue.'
+
+        } else {
+            placeOrder(userId)
+
+        }
+    }
+}
+
 
 
 //   To request for OTP
