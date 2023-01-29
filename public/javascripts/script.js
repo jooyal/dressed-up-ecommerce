@@ -27,7 +27,7 @@ if (close) {
 
 
 //For alert popup to appear after cart product is added.
-let popupAppear = ()=>{
+function popupAppear (){
     //console.log('Working');
     let lottie = document.querySelector('#lottieAddToCart')
     document.querySelector('.alert-added-to-cart').classList.add('alert-added-to-cart-appear');
@@ -47,7 +47,7 @@ let popupAppear = ()=>{
         },2500)
 }
 
-let removedFromCartPopupAppear = ()=>{
+function removedFromCartPopupAppear (){
     //console.log('Working');
     let lottie = document.querySelector('#lottieRemovedFromCart')
     document.querySelector('.alert-removed-from-cart').classList.add('alert-removed-from-cart-appear');
@@ -62,7 +62,7 @@ let removedFromCartPopupAppear = ()=>{
 
 // popup for product added to cart from wishlist
 
-let movedFromWishlistPopupAppear = ()=>{
+function movedFromWishlistPopupAppear (){
     //console.log('Working');
     let lottie = document.querySelector('#lottieAddToCart')
     document.querySelector('.alert-added-to-cart').classList.add('alert-added-to-cart-appear');
@@ -78,7 +78,7 @@ let movedFromWishlistPopupAppear = ()=>{
 
     // popup for product removed from wishlist
 
-let removedFromWishlistPopupAppear = ()=>{
+function removedFromWishlistPopupAppear  (){
     //console.log('Working');
     let lottie = document.querySelector('#lottieRemovedFromWishlist')
     document.querySelector('.alert-removed-from-wishlist').classList.add('alert-removed-from-wishlist-appear');
@@ -93,7 +93,7 @@ let removedFromWishlistPopupAppear = ()=>{
 
 
 // popup for user logged-out
-let LoggedOutPopupAppear = ()=>{
+function LoggedOutPopupAppear (){
     //console.log('Working');
     let lottie = document.querySelector('#lottieUserLoggedOut')
     document.querySelector('.alert-logged-out').classList.add('alert-logged-out-appear');
@@ -108,7 +108,7 @@ let LoggedOutPopupAppear = ()=>{
 
 
 // popup for coupon applied successfully
-let CouponAppliedSuccessPopupAppear = ()=>{
+function CouponAppliedSuccessPopupAppear (){
     let lottie = document.querySelector('#lottieCouponSuccess')
     document.querySelector('.alert-coupon-applied-successfully').classList.add('alert-coupon-applied-successfully-appear');
       
@@ -121,7 +121,7 @@ let CouponAppliedSuccessPopupAppear = ()=>{
 
 
 // payment successful alert card
-let PaymentSuccessPopupAppear = (orderId)=>{
+function PaymentSuccessPopupAppear (orderId){
     let lottie = document.querySelector('#lottiePaymentSuccess')
     document.querySelector('.alert-payment-success').classList.add('alert-payment-success-appear');
       
@@ -134,7 +134,7 @@ let PaymentSuccessPopupAppear = (orderId)=>{
     }
 
 //function to add a product to cart from product card.
-let addToCart = (productId)=>{
+function addToCart (productId){
     $.ajax({
         url: '/add-to-cart/' + productId,
         method: 'get',
@@ -147,7 +147,7 @@ let addToCart = (productId)=>{
 }
 
 //function to add a product to cart from view-product-details page.
-let addToCartFromProPage = (productId)=>{
+function addToCartFromProPage (productId){
     let size = document.querySelector('#productSizeSelection').value
     let quantity = document.querySelector('#productQuantitySelection').value
 
@@ -172,7 +172,7 @@ let addToCartFromProPage = (productId)=>{
 }
 
 //change Product Quantity when user clicks + and - buttons in cart page.
-let changeProQuantity = (userId, cartId, productId, firstAddedTime, productSize, count)=>{
+function changeProQuantity (userId, cartId, productId, firstAddedTime, productSize, count){
     
     let qty = parseInt(document.getElementById(firstAddedTime).value)
 
@@ -211,7 +211,7 @@ let changeProQuantity = (userId, cartId, productId, firstAddedTime, productSize,
 
 //function to remove a product from cart
 
-let removeCartProduct = (cartId, firstAddedTime, productName)=>{
+function removeCartProduct (cartId, firstAddedTime, productName){
     let confirmation = confirm("Are you sure you want to remove ' "+productName+" ' from cart?");
 
     if(confirmation == true){
@@ -235,7 +235,7 @@ let removeCartProduct = (cartId, firstAddedTime, productName)=>{
 
 //function to add product to wishlist from product card
 
-let addToWishlist = (productId)=>{
+function addToWishlist (productId){
     $.ajax({
         url: '/add-to-wishlist/' + productId,
         method: 'get',
@@ -253,7 +253,7 @@ let addToWishlist = (productId)=>{
 
 //function to add product to wishlist from product details page
 
-let addToWishlistFromProPage = (productId)=>{
+function addToWishlistFromProPage (productId){
     let size = document.querySelector('#productSizeSelection').value
     $.ajax({
         url: '/add-to-wishlist/' + productId,
@@ -272,7 +272,7 @@ let addToWishlistFromProPage = (productId)=>{
 
 //added to wishlist popup
 
-let wishlistPopupAppear = ()=>{
+function wishlistPopupAppear (){
     //console.log('Working');
     let lottie = document.querySelector('#lottieAddToWishlist')
     document.querySelector('.alert-added-to-wishlist').classList.add('alert-added-to-wishlist-appear');
@@ -296,7 +296,7 @@ let wishlistPopupAppear = ()=>{
 // Move wishlisted product to cart 
         //and in the process, remove the product from wishlist.
 
-let moveToCartFromWishlist = (wishlistId, size, item, time)=>{
+function moveToCartFromWishlist (wishlistId, size, item, time){
     $.ajax({
         url: '/move-to-cart-from-wishlist',
         data: {
@@ -318,7 +318,7 @@ let moveToCartFromWishlist = (wishlistId, size, item, time)=>{
 
 //to remove a product from wishlist
 
-let removeProductFromWishlist = (wishlistId, productAddedTime)=>{
+function removeProductFromWishlist (wishlistId, productAddedTime){
     $.ajax({
         url: '/remove-from-wishlist',
         method: 'post',
@@ -338,7 +338,7 @@ let removeProductFromWishlist = (wishlistId, productAddedTime)=>{
 
 // function for performing logout
 
-let doLogOut = ()=>{
+function doLogOut  (){
     let confirmation = confirm("Are you sure you want to Logout ?");
 
     if(confirmation){
@@ -361,7 +361,7 @@ let doLogOut = ()=>{
 
 //function for changing account info of the user.
 
-let changeAccountInfo = (userId)=>{
+function changeAccountInfo  (userId){
     let newUserName = document.getElementById('newUserName').value
     let newUserEmail = document.getElementById('newUserEmail').value
     let newUserMobile = document.getElementById('newUserMobile').value
@@ -392,7 +392,7 @@ let changeAccountInfo = (userId)=>{
 
 // to change user password
 
-let changeUserPassword = (userId)=>{
+function changeUserPassword (userId){
     let currentPass = document.getElementById('currentPassword').value
     let newPass = document.getElementById('newPassword').value
     let newPassConfirm = document.getElementById('newPasswordConfirm').value
@@ -431,7 +431,7 @@ let changeUserPassword = (userId)=>{
 }
 
 //to logout user
-let performLogOut = ()=>{
+function performLogOut (){
     $.ajax({
         url : "/logout",
         method : 'get',
@@ -450,7 +450,7 @@ let performLogOut = ()=>{
 
 // Apply coupon to order in place-order page
 
-let applyCouponDiscount = (userId)=>{
+function applyCouponDiscount (userId){
     let couponCode = document.getElementById('discountCoupon').value
     let couponApplyErr = document.getElementById('couponApplyErr')
     let couponApplySuccess = document.getElementById('couponApplySuccess')
@@ -945,7 +945,7 @@ function checkForErrorsAndPlaceOrder (userId){
 
 //   To request for OTP
 
-let requestOTP = ()=>{
+function requestOTP (){
     let mobileNumber = document.getElementById('phoneForOTP').value
 
     $.ajax({
@@ -966,7 +966,7 @@ let requestOTP = ()=>{
     })
 }
 
-let verifyOTP = (otp, mobile)=>{
+function verifyOTP (otp, mobile){
     $.ajax({
         url: '/OTP-login-verification',
         method: 'post',
@@ -988,7 +988,7 @@ let verifyOTP = (otp, mobile)=>{
 
 // Function to view all products
 
-let viewAllProducts = ()=>{
+function viewAllProducts (){
 
     let category = document.getElementById('productCategoryForAllProductsView').value
     let maxPrice = document.getElementById('priceRangeForProducts').value
