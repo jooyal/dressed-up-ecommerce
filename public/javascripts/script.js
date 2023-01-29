@@ -887,7 +887,7 @@ function razorPayment (order, userDetail, orderId){
 
 // function to verify if the payment is confirmed for the user's order
 
-let verifyPayment = (payment, order, orderId)=>{
+function verifyPayment (payment, order, orderId){
     $.ajax({
       url: '/verify-payment',
       method: 'post',
