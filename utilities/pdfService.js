@@ -25,16 +25,16 @@ function buildPDF(dataToWrite, dataCallback, endCallBack) {
 
     doc.fontSize(14)
    .text('Total number of sales today : '+ dataToWrite.salesNumberToday)
-   .text('Total revenue from sales today : '+ dataToWrite.salesAmountToday.total)
-   .text('Total GST collected today : '+ dataToWrite.salesAmountToday.tax);
+   .text('Total revenue from sales today : Rs.'+ Math.round(dataToWrite.salesAmountToday.total))
+   .text('Total GST collected today : Rs.'+ dataToWrite.salesAmountToday.tax);
 
    doc.moveDown();
    doc.moveDown();
 
    doc.fontSize(14)
    .text('Total number of sales this month : '+ dataToWrite.salesNumberMonth)
-   .text('Total revenue from sales this month : '+ dataToWrite.salesAmountMonth.total)
-   .text('Total GST collected this month : '+ dataToWrite.salesAmountMonth.tax);
+   .text('Total revenue from sales this month : Rs.'+ Math.round(dataToWrite.salesAmountMonth.total))
+   .text('Total GST collected this month : Rs.'+ dataToWrite.salesAmountMonth.tax);
 
 //    doc.font('Helvetica').fontSize(14)
 //    .text(totalSalesToday, doc.x + (doc.page.width - 100) - 20, doc.y + 20, { align: 'right'})
